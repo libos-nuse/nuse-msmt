@@ -28,6 +28,9 @@ def gather_ping_avg (fname) :
                 else :
                     ff = 1
             
+        if bps < 10 :
+            bps = bps * 1000
+
         if max == 0 :
             max = bps
         if min == 0 :
