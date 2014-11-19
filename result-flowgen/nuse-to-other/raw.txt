@@ -1,0 +1,6 @@
+
+      tckets sampled in 10 seconds 
+Traffic average for eth6
+
+      rx       478.52 Mbit/s         59008 packets/s
+      tx         0.00 kbit/s             0 packets/s

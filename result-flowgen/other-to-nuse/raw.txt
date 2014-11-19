@@ -1,0 +1,5 @@
+6156675 packets sampled in 10 seconds
+Traffic average for p1p1
+
+      rx         4.99 Gbit/s         615665 packets/s
+      tx         8.00 kbit/s             2 packets/s

@@ -1,0 +1,5 @@
+317919 packets sampled in 10 seconds 
+Traffic average for eth6
+
+      rx       257.81 Mbit/s         31791 packets/s
+      tx         0.00 kbit/s             0 packets/s
