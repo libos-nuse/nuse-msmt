@@ -1,6 +1,6 @@
 
 
-set terminal postscript eps enhanced color
+set terminal postscript eps enhanced color "Helvetica" 24
 
 set output output
 
