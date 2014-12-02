@@ -1,0 +1,9 @@
+Sampling eth5 (10 seconds average)...                                     6504200 packets sampled in 10 seconds
+Traffic average for eth5
+
+      rx         5.27 Gbit/s         650420 packets/s
+      tx         0.00 kbit/s             0 packets/s
+
+Monitoring eth5...    (press CTRL-C to stop)
+
+   getting traffic...

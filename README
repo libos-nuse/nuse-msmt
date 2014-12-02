@@ -1,0 +1,8 @@
+- execute measurement
+
+./ping.sh
+./flowgen.sh (flowgen in cwd required)
+
+- generate graphs
+
+./all.sh

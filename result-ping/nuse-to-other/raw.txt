@@ -1,51 +1,52 @@
-64 bytes from 172.16.1.2: icmp_seq=10 ttl=64 time=0.498 ms
-64 bytes from 172.16.1.2: icmp_seq=11 ttl=64 time=0.319 ms
-64 bytes from 172.16.1.2: icmp_seq=12 ttl=64 time=0.384 ms
-64 bytes from 172.16.1.2: icmp_seq=13 ttl=64 time=0.426 ms
-64 bytes from 172.16.1.2: icmp_seq=14 ttl=64 time=0.449 ms
-64 bytes from 172.16.1.2: icmp_seq=15 ttl=64 time=0.298 ms
-64 bytes from 172.16.1.2: icmp_seq=16 ttl=64 time=0.290 ms
-64 bytes from 172.16.1.2: icmp_seq=17 ttl=64 time=0.421 ms
-64 bytes from 172.16.1.2: icmp_seq=18 ttl=64 time=0.445 ms
-64 bytes from 172.16.1.2: icmp_seq=19 ttl=64 time=0.420 ms
-64 bytes from 172.16.1.2: icmp_seq=20 ttl=64 time=0.378 ms
-64 bytes from 172.16.1.2: icmp_seq=21 ttl=64 time=0.501 ms
-64 bytes from 172.16.1.2: icmp_seq=22 ttl=64 time=0.315 ms
-64 bytes from 172.16.1.2: icmp_seq=23 ttl=64 time=0.372 ms
-64 bytes from 172.16.1.2: icmp_seq=24 ttl=64 time=0.445 ms
-64 bytes from 172.16.1.2: icmp_seq=25 ttl=64 time=0.490 ms
-64 bytes from 172.16.1.2: icmp_seq=26 ttl=64 time=0.482 ms
-64 bytes from 172.16.1.2: icmp_seq=27 ttl=64 time=0.382 ms
-64 bytes from 172.16.1.2: icmp_seq=28 ttl=64 time=0.350 ms
-64 bytes from 172.16.1.2: icmp_seq=29 ttl=64 time=0.449 ms
-64 bytes from 172.16.1.2: icmp_seq=30 ttl=64 time=0.457 ms
-64 bytes from 172.16.1.2: icmp_seq=31 ttl=64 time=0.483 ms
-64 bytes from 172.16.1.2: icmp_seq=32 ttl=64 time=0.457 ms
-64 bytes from 172.16.1.2: icmp_seq=33 ttl=64 time=0.474 ms
-64 bytes from 172.16.1.2: icmp_seq=34 ttl=64 time=0.395 ms
-64 bytes from 172.16.1.2: icmp_seq=35 ttl=64 time=0.430 ms
-64 bytes from 172.16.1.2: icmp_seq=36 ttl=64 time=0.366 ms
-64 bytes from 172.16.1.2: icmp_seq=37 ttl=64 time=0.360 ms
-64 bytes from 172.16.1.2: icmp_seq=38 ttl=64 time=0.387 ms
-64 bytes from 172.16.1.2: icmp_seq=39 ttl=64 time=0.358 ms
-64 bytes from 172.16.1.2: icmp_seq=40 ttl=64 time=0.412 ms
-64 bytes from 172.16.1.2: icmp_seq=41 ttl=64 time=0.463 ms
-64 bytes from 172.16.1.2: icmp_seq=42 ttl=64 time=0.452 ms
-64 bytes from 172.16.1.2: icmp_seq=43 ttl=64 time=0.378 ms
-64 bytes from 172.16.1.2: icmp_seq=44 ttl=64 time=0.351 ms
-64 bytes from 172.16.1.2: icmp_seq=45 ttl=64 time=0.352 ms
-64 bytes from 172.16.1.2: icmp_seq=46 ttl=64 time=0.345 ms
-64 bytes from 172.16.1.2: icmp_seq=47 ttl=64 time=0.337 ms
-64 bytes from 172.16.1.2: icmp_seq=48 ttl=64 time=0.390 ms
-64 bytes from 172.16.1.2: icmp_seq=49 ttl=64 time=0.323 ms
-64 bytes from 172.16.1.2: icmp_seq=50 ttl=64 time=0.402 ms
-64 bytes from 172.16.1.2: icmp_seq=51 ttl=64 time=0.400 ms
-64 bytes from 172.16.1.2: icmp_seq=52 ttl=64 time=0.331 ms
-64 bytes from 172.16.1.2: icmp_seq=53 ttl=64 time=0.414 ms
-64 bytes from 172.16.1.2: icmp_seq=54 ttl=64 time=0.351 ms
-64 bytes from 172.16.1.2: icmp_seq=55 ttl=64 time=0.391 ms
-64 bytes from 172.16.1.2: icmp_seq=56 ttl=64 time=0.317 ms
-64 bytes from 172.16.1.2: icmp_seq=57 ttl=64 time=0.337 ms
-64 bytes from 172.16.1.2: icmp_seq=58 ttl=64 time=0.386 ms
-64 bytes from 172.16.1.2: icmp_seq=59 ttl=64 time=0.430 ms
-64 bytes from 172.16.1.2: icmp_seq=60 ttl=64 time=0.375 ms
+<6>NET: Registered protocol family 16
+<6>NET: Registered protocol family 2
+<6>TCP established hash table entries: 512 (order: 0, 4096 bytes)
+<6>TCP bind hash table entries: 512 (order: 0, 4096 bytes)
+<6>TCP: Hash tables configured (established 512 bind 512)
+<6>TCP: reno registered
+<6>UDP hash table entries: 128 (order: 0, 4096 bytes)
+<6>UDP-Lite hash table entries: 128 (order: 0, 4096 bytes)
+<6>NET: Registered protocol family 1
+<6>TCP: bic registered
+<6>TCP: cubic registered
+<6>TCP: westwood registered
+<6>TCP: highspeed registered
+<6>TCP: hybla registered
+<6>TCP: htcp registered
+<6>TCP: vegas registered
+<6>TCP: veno registered
+<6>TCP: scalable registered
+<6>TCP: lp registered
+<6>TCP: yeah registered
+<6>TCP: illinois registered
+<6>Initializing XFRM netlink socket
+<6>NET: Registered protocol family 10
+<6>nsc: Mobile IPv6
+<6>nsc: IPv6 over IPv4 tunneling driver
+<6>NET: Registered protocol family 17
+<6>NET: Registered protocol family 15
+<6>DCCP: Activated CCID 2 (TCP-like)
+<6>DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
+<6>nsc: Hash tables configured (established 512 bind 512)
+create vif p1p1
+  address = 172.16.1.1
+  netmask = 255.255.255.0
+  macaddr = 00:01:01:01:01:01
+  type    = 0
+create vif p1p2
+  address = 172.16.2.1
+  netmask = 255.255.255.0
+  macaddr = 00:01:01:01:01:01
+  type    = 0
+PING 172.16.2.5 (172.16.2.5) 56(84) bytes of data.
+64 bytes from 172.16.2.5: icmp_seq=1 ttl=64 time=0.646 ms
+64 bytes from 172.16.2.5: icmp_seq=2 ttl=64 time=0.306 ms
+64 bytes from 172.16.2.5: icmp_seq=3 ttl=64 time=0.289 ms
+64 bytes from 172.16.2.5: icmp_seq=4 ttl=64 time=0.301 ms
+64 bytes from 172.16.2.5: icmp_seq=5 ttl=64 time=0.289 ms
+64 bytes from 172.16.2.5: icmp_seq=6 ttl=64 time=0.279 ms
+64 bytes from 172.16.2.5: icmp_seq=7 ttl=64 time=0.293 ms
+64 bytes from 172.16.2.5: icmp_seq=8 ttl=64 time=0.314 ms
+64 bytes from 172.16.2.5: icmp_seq=9 ttl=64 time=0.313 ms
+64 bytes from 172.16.2.5: icmp_seq=10 ttl=64 time=0.335 ms
+64 bytes from 172.16.2.5: icmp_seq=11 ttl=64 time=0.362 ms

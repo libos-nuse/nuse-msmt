@@ -1,7 +1,9 @@
-215181 packets sampled in 10 seconds 
-Traffic average for eth6
+Sampling eth5 (10 seconds average)...                                     315119 packets sampled in 10 seconds
+Traffic average for eth5
 
-      rx       174.50 Mbit/s         21518 packets/s
+      rx       255.54 Mbit/s         31511 packets/s
       tx         0.00 kbit/s             0 packets/s
 
+Monitoring eth5...    (press CTRL-C to stop)
 
+   getting traffic...

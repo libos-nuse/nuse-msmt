@@ -1,51 +1,128 @@
-64 bytes from 172.16.1.2: icmp_seq=10 ttl=64 time=0.156 ms
-64 bytes from 172.16.1.2: icmp_seq=11 ttl=64 time=0.182 ms
-64 bytes from 172.16.1.2: icmp_seq=12 ttl=64 time=0.248 ms
-64 bytes from 172.16.1.2: icmp_seq=13 ttl=64 time=4.54 ms
-64 bytes from 172.16.1.2: icmp_seq=14 ttl=64 time=0.670 ms
-64 bytes from 172.16.1.2: icmp_seq=15 ttl=64 time=0.186 ms
-64 bytes from 172.16.1.2: icmp_seq=16 ttl=64 time=0.715 ms
-64 bytes from 172.16.1.2: icmp_seq=17 ttl=64 time=4.22 ms
-64 bytes from 172.16.1.2: icmp_seq=18 ttl=64 time=4.01 ms
-64 bytes from 172.16.1.2: icmp_seq=19 ttl=64 time=1.02 ms
-64 bytes from 172.16.1.2: icmp_seq=20 ttl=64 time=4.05 ms
-64 bytes from 172.16.1.2: icmp_seq=21 ttl=64 time=1.04 ms
-64 bytes from 172.16.1.2: icmp_seq=22 ttl=64 time=1.08 ms
-64 bytes from 172.16.1.2: icmp_seq=23 ttl=64 time=4.12 ms
-64 bytes from 172.16.1.2: icmp_seq=24 ttl=64 time=1.22 ms
-64 bytes from 172.16.1.2: icmp_seq=25 ttl=64 time=0.950 ms
-64 bytes from 172.16.1.2: icmp_seq=26 ttl=64 time=1.34 ms
-64 bytes from 172.16.1.2: icmp_seq=27 ttl=64 time=0.936 ms
-64 bytes from 172.16.1.2: icmp_seq=28 ttl=64 time=4.09 ms
-64 bytes from 172.16.1.2: icmp_seq=29 ttl=64 time=1.43 ms
-64 bytes from 172.16.1.2: icmp_seq=30 ttl=64 time=8.00 ms
-64 bytes from 172.16.1.2: icmp_seq=31 ttl=64 time=1.53 ms
-64 bytes from 172.16.1.2: icmp_seq=32 ttl=64 time=4.05 ms
-64 bytes from 172.16.1.2: icmp_seq=33 ttl=64 time=5.51 ms
-64 bytes from 172.16.1.2: icmp_seq=34 ttl=64 time=5.50 ms
-64 bytes from 172.16.1.2: icmp_seq=35 ttl=64 time=1.35 ms
-64 bytes from 172.16.1.2: icmp_seq=36 ttl=64 time=4.49 ms
-64 bytes from 172.16.1.2: icmp_seq=37 ttl=64 time=4.98 ms
-64 bytes from 172.16.1.2: icmp_seq=38 ttl=64 time=8.00 ms
-64 bytes from 172.16.1.2: icmp_seq=39 ttl=64 time=1.39 ms
-64 bytes from 172.16.1.2: icmp_seq=40 ttl=64 time=0.192 ms
-64 bytes from 172.16.1.2: icmp_seq=41 ttl=64 time=3.80 ms
-64 bytes from 172.16.1.2: icmp_seq=42 ttl=64 time=4.13 ms
-64 bytes from 172.16.1.2: icmp_seq=43 ttl=64 time=0.614 ms
-64 bytes from 172.16.1.2: icmp_seq=44 ttl=64 time=0.593 ms
-64 bytes from 172.16.1.2: icmp_seq=45 ttl=64 time=4.70 ms
-64 bytes from 172.16.1.2: icmp_seq=46 ttl=64 time=0.543 ms
-64 bytes from 172.16.1.2: icmp_seq=47 ttl=64 time=7.99 ms
-64 bytes from 172.16.1.2: icmp_seq=48 ttl=64 time=1.26 ms
-64 bytes from 172.16.1.2: icmp_seq=49 ttl=64 time=4.19 ms
-64 bytes from 172.16.1.2: icmp_seq=50 ttl=64 time=7.99 ms
-64 bytes from 172.16.1.2: icmp_seq=51 ttl=64 time=1.24 ms
-64 bytes from 172.16.1.2: icmp_seq=52 ttl=64 time=0.175 ms
-64 bytes from 172.16.1.2: icmp_seq=53 ttl=64 time=0.176 ms
-64 bytes from 172.16.1.2: icmp_seq=54 ttl=64 time=4.01 ms
-64 bytes from 172.16.1.2: icmp_seq=55 ttl=64 time=4.71 ms
-64 bytes from 172.16.1.2: icmp_seq=56 ttl=64 time=0.758 ms
-64 bytes from 172.16.1.2: icmp_seq=57 ttl=64 time=0.175 ms
-64 bytes from 172.16.1.2: icmp_seq=58 ttl=64 time=1.93 ms
-64 bytes from 172.16.1.2: icmp_seq=59 ttl=64 time=1.91 ms
-64 bytes from 172.16.1.2: icmp_seq=60 ttl=64 time=1.02 ms
+<6>NET: Registered protocol family 16
+<6>NET: Registered protocol family 2
+<6>TCP established hash table entries: 512 (order: 0, 4096 bytes)
+<6>TCP bind hash table entries: 512 (order: 0, 4096 bytes)
+<6>TCP: Hash tables configured (established 512 bind 512)
+<6>TCP: reno registered
+<6>UDP hash table entries: 128 (order: 0, 4096 bytes)
+<6>UDP-Lite hash table entries: 128 (order: 0, 4096 bytes)
+<6>NET: Registered protocol family 1
+<6>TCP: bic registered
+<6>TCP: cubic registered
+<6>TCP: westwood registered
+<6>TCP: highspeed registered
+<6>TCP: hybla registered
+<6>TCP: htcp registered
+<6>TCP: vegas registered
+<6>TCP: veno registered
+<6>TCP: scalable registered
+<6>TCP: lp registered
+<6>TCP: yeah registered
+<6>TCP: illinois registered
+<6>Initializing XFRM netlink socket
+<6>NET: Registered protocol family 10
+<6>nsc: Mobile IPv6
+<6>nsc: IPv6 over IPv4 tunneling driver
+<6>NET: Registered protocol family 17
+<6>NET: Registered protocol family 15
+<6>DCCP: Activated CCID 2 (TCP-like)
+<6>DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
+<6>nsc: Hash tables configured (established 512 bind 512)
+create vif dpdk0
+  address = 172.16.1.1
+  netmask = 255.255.255.0
+  macaddr = 00:01:01:01:01:01
+  type    = 2
+failed to get interface statusEAL: Detected lcore 0 as core 0 on socket 0
+EAL: Detected lcore 1 as core 0 on socket 1
+EAL: Detected lcore 2 as core 1 on socket 0
+EAL: Detected lcore 3 as core 1 on socket 1
+EAL: Detected lcore 4 as core 2 on socket 0
+EAL: Detected lcore 5 as core 2 on socket 1
+EAL: Detected lcore 6 as core 3 on socket 0
+EAL: Detected lcore 7 as core 3 on socket 1
+EAL: Detected lcore 8 as core 4 on socket 0
+EAL: Detected lcore 9 as core 4 on socket 1
+EAL: Detected lcore 10 as core 5 on socket 0
+EAL: Detected lcore 11 as core 5 on socket 1
+EAL: Detected lcore 12 as core 6 on socket 0
+EAL: Detected lcore 13 as core 6 on socket 1
+EAL: Detected lcore 14 as core 7 on socket 0
+EAL: Detected lcore 15 as core 7 on socket 1
+EAL: Support maximum 64 logical core(s) by configuration.
+EAL: Detected 16 lcore(s)
+EAL:   cannot open VFIO container, error 2 (No such file or directory)
+EAL: VFIO support could not be initialized
+EAL: Setting up memory...
+EAL: Ask a virtual area of 0x200000 bytes
+EAL: Virtual area found at 0x7f5394c00000 (size = 0x200000)
+EAL: Ask a virtual area of 0x2000000 bytes
+EAL: Virtual area found at 0x7f5392a00000 (size = 0x2000000)
+EAL: Ask a virtual area of 0x5c00000 bytes
+EAL: Virtual area found at 0x7f538cc00000 (size = 0x5c00000)
+EAL: Ask a virtual area of 0x200000 bytes
+EAL: Virtual area found at 0x7f538c800000 (size = 0x200000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f538c200000 (size = 0x400000)
+EAL: Ask a virtual area of 0x200000 bytes
+EAL: Virtual area found at 0x7f538be00000 (size = 0x200000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f538b800000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f538b200000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f538ac00000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f538a600000 (size = 0x400000)
+EAL: Ask a virtual area of 0x2600000 bytes
+EAL: Virtual area found at 0x7f5387e00000 (size = 0x2600000)
+EAL: Ask a virtual area of 0x800000 bytes
+EAL: Virtual area found at 0x7f5387400000 (size = 0x800000)
+EAL: Ask a virtual area of 0x800000 bytes
+EAL: Virtual area found at 0x7f5386a00000 (size = 0x800000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5386400000 (size = 0x400000)
+EAL: Ask a virtual area of 0x800000 bytes
+EAL: Virtual area found at 0x7f5385a00000 (size = 0x800000)
+EAL: Ask a virtual area of 0xc00000 bytes
+EAL: Virtual area found at 0x7f5384c00000 (size = 0xc00000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5384600000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5384000000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5383a00000 (size = 0x400000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5383400000 (size = 0x400000)
+EAL: Ask a virtual area of 0x800000 bytes
+EAL: Virtual area found at 0x7f5382a00000 (size = 0x800000)
+EAL: Ask a virtual area of 0x400000 bytes
+EAL: Virtual area found at 0x7f5382400000 (size = 0x400000)
+EAL: Requesting 64 pages of size 2MB from socket 0
+EAL: Requesting 64 pages of size 2MB from socket 1
+EAL: TSC frequency is ~2599989 KHz
+EAL: Master core 0 is ready (tid=98abc880)
+EAL: PCI device 0000:41:00.0 on NUMA socket 1
+EAL:   probe driver: 8086:10fb rte_ixgbe_pmd
+EAL:   PCI memory mapped at 0x7f53989fe000
+EAL:   PCI memory mapped at 0x7f5398976000
+EAL: PCI device 0000:41:00.1 on NUMA socket 1
+EAL:   probe driver: 8086:10fb rte_ixgbe_pmd
+EAL:   PCI memory mapped at 0x7f53988f6000
+EAL:   PCI memory mapped at 0x7f53988f2000
+create vif dpdk1
+  address = 172.16.2.1
+  netmask = 255.255.255.0
+  macaddr = 00:01:01:01:01:01
+  type    = 2
+failed to get interface statusPING 172.16.2.5 (172.16.2.5) 56(84) bytes of data.
+64 bytes from 172.16.2.5: icmp_seq=1 ttl=64 time=1024 ms
+64 bytes from 172.16.2.5: icmp_seq=2 ttl=64 time=8.27 ms
+64 bytes from 172.16.2.5: icmp_seq=3 ttl=64 time=0.165 ms
+64 bytes from 172.16.2.5: icmp_seq=4 ttl=64 time=4.01 ms
+64 bytes from 172.16.2.5: icmp_seq=5 ttl=64 time=4.01 ms
+64 bytes from 172.16.2.5: icmp_seq=6 ttl=64 time=4.00 ms
+64 bytes from 172.16.2.5: icmp_seq=7 ttl=64 time=4.02 ms
+64 bytes from 172.16.2.5: icmp_seq=8 ttl=64 time=0.251 ms
+64 bytes from 172.16.2.5: icmp_seq=9 ttl=64 time=4.44 ms
+64 bytes from 172.16.2.5: icmp_seq=10 ttl=64 time=0.330 ms

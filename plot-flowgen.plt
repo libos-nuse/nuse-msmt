@@ -6,7 +6,7 @@ set output output
 
 
 set ylabel "Throughput (Mbps)"
-set yrange [0:]
+set yrange [0:6000]
 
 set boxwidth 0.6 
 set style fill solid 0.6

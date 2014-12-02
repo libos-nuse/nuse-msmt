@@ -19,6 +19,9 @@ def gather_ping_avg (fname) :
         if not re.match (r'64 bytes from', l) :
             continue
 
+        if re.search (r'seq=1', l) :
+            continue
+
         rtt = float (l.split (' ')[6].split ('=')[1])
 
         if max == 0 :
