@@ -1,6 +1,9 @@
-okzw5:/home/upa/work/ifc % vnstat -l -i eth6 -tr 10                     <23:06>
-592800 packets sampled in 10 seconds 
-Traffic average for eth6
+Sampling eth5 (10 seconds average)...                                     838082 packets sampled in 10 seconds
+Traffic average for eth5
 
-      rx       480.72 Mbit/s         59280 packets/s
+      rx       679.63 Mbit/s         83808 packets/s
       tx         0.00 kbit/s             0 packets/s
+
+Monitoring eth5...    (press CTRL-C to stop)
+
+   getting traffic...
