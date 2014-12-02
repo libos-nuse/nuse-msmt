@@ -1,20 +1,20 @@
 
-set terminal postscript eps enhanced color "Helvetica" 28
+set terminal postscript eps enhanced color "Helvetica" 24
 
 set output output
 
 
-#set yrange [0:15]
+set yrange [0:1.1]
 set ylabel "RTT (ms)"
 
-#set boxwidth 0.6 
+set boxwidth 1.6 
 set style fill solid 0.6
 
 unset key
 
 #set size 0.7,0.7
 
-set xtics offset first 0.15,0
+set xtics offset first 0.2,0
 
 set style data histogram
 set style histogram errorbars 

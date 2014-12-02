@@ -16,8 +16,9 @@ def gather_ping_avg (fname) :
     cnt = 0
     for l in f :
 
-        if not re.search (r'rx', l) :
+        if not re.search (r'rx.*packet', l) :
             continue
+
 
         ff = 0
         for w in l.split (' ') :
