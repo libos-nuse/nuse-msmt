@@ -52,6 +52,9 @@ def gather_ping_avg (fname) :
 sys.argv.pop (0)
 
 for fname in sys.argv :
+    if os.path.exists(fname) is False:
+        continue
+
     (bpsavg, bpsmax, bpsmin) = gather_ping_avg (fname)
 
     si = fname.split('.')[0]
