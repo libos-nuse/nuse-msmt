@@ -1,5 +1,5 @@
 
-set terminal postscript eps enhanced color "Helvetica" 24 fontscale 1.16
+set terminal postscript eps enhanced color "Helvetica" 24 lw 3
 
 set output output
 
@@ -21,5 +21,5 @@ set xtics offset first 0.2,0
 
 set style data histogram
 set style histogram errorbars 
-plot input using 2:3:4:xticlabels(1) linecolor rgb "gray" lw 3 notitle
+plot input using 2:3:4:xticlabels(1) linecolor rgb "gray" notitle
 
