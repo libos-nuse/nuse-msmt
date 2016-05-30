@@ -37,4 +37,4 @@ ${NATIVE_NETPERF} ${NETPERF_ARGS} |& tee ${OUTPUT}/netperf-$test-native-$num.dat
 done
 done
 
-sh netperf-plot.sh ${OUTPUT}
+sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot.sh ${OUTPUT}
