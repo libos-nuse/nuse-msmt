@@ -8,6 +8,9 @@ export FIXED_ADDRESS=1.1.1.3
 export FIXED_MASK=24
 TRIALS=1
 
+# disable offload
+sudo ethtool -K br0 tso off gso off rx off tx off
+
 LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lkl/orig/netperf
 LKLMUSL_NETPERF_skb_pre=/home/tazaki/work/netperf2/lkl/src/netperf
 LKLMUSL_NETPERF_mmsg=/home/tazaki/work/netperf2/sendmmsg/src/netperf
@@ -30,28 +33,28 @@ ex_arg=$3
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 
 echo "== lkl-musl ($test-$num) =="
-rexec ${LKLMUSL_NETPERF} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-$num.dat
+taskset 3 rexec ${LKLMUSL_NETPERF} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-$num.dat
 
 echo "== lkl-musl (skb pre allocation) ($test-$num) =="
-rexec ${LKLMUSL_NETPERF_skb_pre} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-skbpre-$num.dat
+taskset 3 rexec ${LKLMUSL_NETPERF_skb_pre} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-skbpre-$num.dat
 
 echo "== lkl-musl (sendmmsg) ($test-$num) =="
-rexec ${LKLMUSL_NETPERF_mmsg} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-sendmmsg-$num.dat
+taskset 3 rexec ${LKLMUSL_NETPERF_mmsg} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-sendmmsg-$num.dat
 
 echo "== lkl-hijack ($test-$num)  =="
 LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IFPARAMS=tap0 \
  LKL_HIJACK_NET_IP=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
- lkl-hijack.sh \
+taskset 3 lkl-hijack.sh \
  ${NATIVE_NETPERF} ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/netperf-$test-hijack-$num.dat
 
 echo "== native ($test-$num)  =="
-${NATIVE_NETPERF} ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
+taskset 3 ${NATIVE_NETPERF} ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
 
 echo "== native (sendmmsg) ($test-$num)  =="
-${NATIVE_NETPERF_mmsg} ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-mmsg-$num.dat
+taskset 3 ${NATIVE_NETPERF_mmsg} ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-mmsg-$num.dat
 
 
 }
