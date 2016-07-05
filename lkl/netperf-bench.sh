@@ -41,14 +41,23 @@ taskset 3 rexec ${LKLMUSL_NETPERF_skb_pre} tap:tap0 -- ${NETPERF_ARGS} |& tee -a
 echo "== lkl-musl (sendmmsg) ($test-$num) =="
 taskset 3 rexec ${LKLMUSL_NETPERF_mmsg} tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-sendmmsg-$num.dat
 
-echo "== lkl-hijack ($test-$num)  =="
+echo "== lkl-hijack tap ($test-$num)  =="
 LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IFPARAMS=tap0 \
  LKL_HIJACK_NET_IP=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
 taskset 3 lkl-hijack.sh \
  ${NATIVE_NETPERF} ${NETPERF_ARGS} \
- |& tee -a ${OUTPUT}/netperf-$test-hijack-$num.dat
+ |& tee -a ${OUTPUT}/netperf-$test-hijack-tap-$num.dat
+
+echo "== lkl-hijack raw ($test-$num)  =="
+sudo LKL_HIJACK_NET_IFTYPE=raw \
+ LKL_HIJACK_NET_IFPARAMS=ens3f1 \
+ LKL_HIJACK_NET_IP=${SELF_ADDR} \
+ LKL_HIJACK_NET_NETMASK_LEN=24 \
+taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+ ${NATIVE_NETPERF} ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/netperf-$test-hijack-raw-$num.dat
 
 echo "== native ($test-$num)  =="
 taskset 3 ${NATIVE_NETPERF} ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
