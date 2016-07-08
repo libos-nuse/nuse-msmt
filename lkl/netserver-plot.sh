@@ -70,19 +70,23 @@ set grid ytics
 set boxwidth 0.2
 set style fill pattern
 
-
+set yrange [:10000]
 set ylabel "Rx Goodput (Mbps)"
 unset xlabel 
 unset xtics
 plot \
-   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin 1:2 w boxerror  title "hijack(tap)"
-
-#, \
-#   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1:2 w boxerror  title "hijack(raw)", \
-#   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):1:2 w boxerror  title "lkl-musl", \
-#   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1:2 w boxerror  title "lkl-musl (skb prealloc)", \
-#   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1:2 w boxerror  title "lkl-musl (sendmmsg)", \
-#   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):1:2 w boxerror  title "native"
+   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1 w boxes notitle , \
+   '' usin (\$0-0.5):1:2 w yerror  title "hijack(tap)" , \
+   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1 w boxes notitle,\
+   '' usin (\$0-0.3):1:2 w yerrorb  title "hijack(raw)", \
+   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):1 w boxes notitle,\
+   '' usin (\$0-0.1):1:2 w yerrorb  title "lkl-musl", \
+   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1 w boxes notitle,\
+   '' usin (\$0+0.1):1:2 w yerrorb  title "lkl-musl (skb-prealloc)" ,\
+   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1 w boxes notitle,\
+   '' usin (\$0+0.3):1:2 w yerrorb  title "lkl-musl (sendmmsg)"
+   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):1 w boxes notitle,\
+   '' usin (\$0+0.5):1:2 w yerrorb  title "native"
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
