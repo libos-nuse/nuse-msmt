@@ -149,7 +149,6 @@ set output "${OUTPUT}/rx/tcp-rr.png"
 replot
 
 
-set datafile separator "," 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/rx/udp-stream.eps"
 set ylabel "Rx Goodput (Mbps)"

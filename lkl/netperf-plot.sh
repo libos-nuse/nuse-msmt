@@ -45,37 +45,37 @@ grep -h bits ${OUTPUT}/netperf-TCP_ST*-native-mmsg* \
 grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-tap* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-hijack-tap.dat
+> ${OUTPUT}/tcp-rr-hijack-tap.dat
 
 grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-raw* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-hijack-raw.dat
+> ${OUTPUT}/tcp-rr-hijack-raw.dat
 
 grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-musl.dat
+> ${OUTPUT}/tcp-rr-musl.dat
 
 grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-skbpre* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-musl-skbpre.dat
+> ${OUTPUT}/tcp-rr-musl-skbpre.dat
 
 grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-sendmmsg* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-musl-sendmmsg.dat
+> ${OUTPUT}/tcp-rr-musl-sendmmsg.dat
 
 grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-[0-9]* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-native.dat
+> ${OUTPUT}/tcp-rr-native.dat
 
 grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-mmsg* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/rx/tcp-rr-native-sendmmsg.dat
+> ${OUTPUT}/tcp-rr-native-sendmmsg.dat
 
 
 # UDP_STREAM
@@ -185,7 +185,6 @@ set output "${OUTPUT}/tcp-stream.png"
 replot
 
 
-set datafile separator "," 
 set xtics ("1" 0, "64" 1, "128" 2, "256" 3, "512" 4, "1024" 5, "1500" 6, "2048" 7, "65507" 8)
 set xlabel "Payload size (bytes)"
 set xrange [-1:9]
