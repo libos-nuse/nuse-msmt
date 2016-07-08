@@ -4,13 +4,40 @@ OUTPUT=$1
 
 # parse outputs
 
-grep -h bits ${OUTPUT}/netperf-TCP_ST*-hijack-tap* > ${OUTPUT}/tcp-stream-hijack-tap.dat
-grep -h bits ${OUTPUT}/netperf-TCP_ST*-hijack-raw* > ${OUTPUT}/tcp-stream-hijack-raw.dat
-grep -E -h bits ${OUTPUT}/netperf-TCP_ST*-musl-[0-9].* > ${OUTPUT}/tcp-stream-musl.dat
-grep -h bits ${OUTPUT}/netperf-TCP_ST*-musl-skbpre* > ${OUTPUT}/tcp-stream-musl-skbpre.dat
-grep -h bits ${OUTPUT}/netperf-TCP_ST*-musl-sendmmsg* > ${OUTPUT}/tcp-stream-musl-sendmmsg.dat
-grep -E -h bits ${OUTPUT}/netperf-TCP_ST*-native-[0-9]* > ${OUTPUT}/tcp-stream-native.dat
-grep -h bits ${OUTPUT}/netperf-TCP_ST*-native-mmsg* > ${OUTPUT}/tcp-stream-native-sendmmsg.dat
+grep -h bits ${OUTPUT}/netperf-TCP_ST*-hijack-tap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-hijack-tap.dat
+
+grep -h bits ${OUTPUT}/netperf-TCP_ST*-hijack-raw* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-hijack-raw.dat
+
+grep -E -h bits ${OUTPUT}/netperf-TCP_ST*-musl-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-musl.dat
+
+grep -h bits ${OUTPUT}/netperf-TCP_ST*-musl-skbpre* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-musl-skbpre.dat
+
+grep -h bits ${OUTPUT}/netperf-TCP_ST*-musl-sendmmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-musl-sendmmsg.dat
+
+grep -E -h bits ${OUTPUT}/netperf-TCP_ST*-native-[0-9]* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-native.dat
+
+grep -h bits ${OUTPUT}/netperf-TCP_ST*-native-mmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/tcp-stream-native-sendmmsg.dat
 
 
 grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-tap* > ${OUTPUT}/tcp-rr-hijack-tap.dat
@@ -42,16 +69,22 @@ set grid ytics
 set boxwidth 0.2
 set style fill pattern
 
-set datafile separator "," 
 
 set ylabel "Goodput (Mbps)"
 plot \
-   '${OUTPUT}/tcp-stream-hijack-tap.dat' usin (\$0-0.5):5 w boxes  title "hijack(tap)", \
-   '${OUTPUT}/tcp-stream-hijack-raw.dat' usin (\$0-0.3):5 w boxes  title "hijack(raw)", \
-   '${OUTPUT}/tcp-stream-musl.dat' usin (\$0-0.1):5 w boxes  title "lkl-musl", \
-   '${OUTPUT}/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):5 w boxes  title "lkl-musl (skb prealloc)", \
-   '${OUTPUT}/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):5 w boxes  title "lkl-musl (sendmmsg)", \
-   '${OUTPUT}/tcp-stream-native.dat' usin (\$0+0.5):5 w boxes  title "native"
+   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1 w boxes notitle , \
+   '' usin (\$0-0.5):1:2 w yerror  title "hijack(tap)" , \
+   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1 w boxes notitle,\
+   '' usin (\$0-0.3):1:2 w yerrorb  title "hijack(raw)", \
+   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):1 w boxes notitle,\
+   '' usin (\$0-0.1):1:2 w yerrorb  title "lkl-musl", \
+   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1 w boxes notitle,\
+   '' usin (\$0+0.1):1:2 w yerrorb  title "lkl-musl (skb-prealloc)" ,\
+   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1 w boxes notitle,\
+   '' usin (\$0+0.3):1:2 w yerrorb  title "lkl-musl (sendmmsg)"
+   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):1 w boxes notitle,\
+   '' usin (\$0+0.5):1:2 w yerrorb  title "native"
+
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
@@ -59,6 +92,7 @@ set output "${OUTPUT}/tcp-stream.png"
 replot
 
 
+set datafile separator "," 
 set xtics ("1" 0, "64" 1, "128" 2, "256" 3, "512" 4, "1024" 5, "1500" 6, "2048" 7, "65507" 8)
 set xlabel "Payload size (bytes)"
 set xrange [-1:9]
