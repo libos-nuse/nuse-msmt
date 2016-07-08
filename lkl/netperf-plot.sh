@@ -4,6 +4,7 @@ OUTPUT=$1
 
 # parse outputs
 
+# TCP_STREAM
 grep -h bits ${OUTPUT}/netperf-TCP_ST*-hijack-tap* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
@@ -40,15 +41,44 @@ grep -h bits ${OUTPUT}/netperf-TCP_ST*-native-mmsg* \
 > ${OUTPUT}/tcp-stream-native-sendmmsg.dat
 
 
-grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-tap* > ${OUTPUT}/tcp-rr-hijack-tap.dat
-grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-raw* > ${OUTPUT}/tcp-rr-hijack-raw.dat
-grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-[0-9].* > ${OUTPUT}/tcp-rr-musl.dat
-grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-skbpre* > ${OUTPUT}/tcp-rr-musl-skbpre.dat
-grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-sendmmsg* > ${OUTPUT}/tcp-rr-musl-sendmmsg.dat
-grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-[0-9]* > ${OUTPUT}/tcp-rr-native.dat
-grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-mmsg* > ${OUTPUT}/tcp-rr-native-sendmmsg.dat
+# TCP_RR
+grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-tap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-hijack-tap.dat
+
+grep -h Trans ${OUTPUT}/netperf-TCP_RR*-hijack-raw* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-hijack-raw.dat
+
+grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-musl.dat
+
+grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-skbpre* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-musl-skbpre.dat
+
+grep -h Trans ${OUTPUT}/netperf-TCP_RR*-musl-sendmmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-musl-sendmmsg.dat
+
+grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-[0-9]* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-native.dat
+
+grep -E -h Trans ${OUTPUT}/netperf-TCP_RR*-native-mmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbcol mean stddev | dbsort -n psize \
+> ${OUTPUT}/rx/tcp-rr-native-sendmmsg.dat
 
 
+# UDP_STREAM
 grep -h bits ${OUTPUT}/netperf-UDP_ST*-hijack-tap* > ${OUTPUT}/udp-stream-hijack-tap.dat
 grep -h bits ${OUTPUT}/netperf-UDP_ST*-hijack-raw* > ${OUTPUT}/udp-stream-hijack-raw.dat
 grep -E -h bits ${OUTPUT}/netperf-UDP_ST*-musl-[0-9].* > ${OUTPUT}/udp-stream-musl.dat
@@ -72,18 +102,18 @@ set style fill pattern
 
 set ylabel "Goodput (Mbps)"
 plot \
-   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1 w boxes notitle , \
-   '' usin (\$0-0.5):1:2 w yerror  title "hijack(tap)" , \
-   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1 w boxes notitle,\
-   '' usin (\$0-0.3):1:2 w yerrorb  title "hijack(raw)", \
-   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):1 w boxes notitle,\
-   '' usin (\$0-0.1):1:2 w yerrorb  title "lkl-musl", \
-   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1 w boxes notitle,\
-   '' usin (\$0+0.1):1:2 w yerrorb  title "lkl-musl (skb-prealloc)" ,\
-   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1 w boxes notitle,\
-   '' usin (\$0+0.3):1:2 w yerrorb  title "lkl-musl (sendmmsg)"
-   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):1 w boxes notitle,\
-   '' usin (\$0+0.5):1:2 w yerrorb  title "native"
+   '${OUTPUT}/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1 w boxes fill patter 0 title "hijack(tap)" , \
+   '' usin (\$0-0.5):1:2 w yerror  notitle , \
+   '${OUTPUT}/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1 w boxes fill patter 1 title "hijack(raw)",\
+   '' usin (\$0-0.3):1:2 w yerrorb  notitle, \
+   '${OUTPUT}/tcp-stream-musl.dat' usin (\$0-0.1):1 w boxes fill patter 4 title "lkl-musl",\
+   '' usin (\$0-0.1):1:2 w yerrorb  notitle, \
+   '${OUTPUT}/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1 w boxes fill patter 6 title "lkl-musl (skb-prealloc)",\
+   '' usin (\$0+0.1):1:2 w yerrorb  notitle ,\
+   '${OUTPUT}/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1 w boxes fill patter 7 title "lkl-musl (sendmmsg)",\
+   '' usin (\$0+0.3):1:2 w yerrorb  notitle ,\
+   '${OUTPUT}/tcp-stream-native.dat' usin (\$0+0.5):1 w boxes fill patter 3 title "native",\
+   '' usin (\$0+0.5):1:2 w yerrorb  notitle
 
 
 set terminal png lw 3 14
@@ -101,11 +131,16 @@ set output "${OUTPUT}/tcp-rr.eps"
 set ylabel "Goodput (Trans/sec)"
 
 plot \
-   '${OUTPUT}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):8 w boxes  title "hijack(tap)", \
-   '${OUTPUT}/tcp-rr-hijack-raw.dat' usin (\$0-0.2):8 w boxes  title "hijack(raw)", \
-   '${OUTPUT}/tcp-rr-musl.dat' usin (\$0-0.0):8 w boxes  title "lkl-musl", \
-   '${OUTPUT}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):8 w boxes  title "lkl-musl (skb prealloc)", \
-   '${OUTPUT}/tcp-rr-native.dat' usin (\$0+0.4):8 w boxes  title "native"
+   '${OUTPUT}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
+   '' usin (\$0-0.4):1:2 w yerror  notitle , \
+   '${OUTPUT}/tcp-rr-hijack-raw.dat' usin (\$0-0.2):1 w boxes fill patter 1 title "hijack(raw)",\
+   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
+   '${OUTPUT}/tcp-rr-musl.dat' usin (\$0-0.0):1 w boxes fill patter 5 lw 1 title "lkl-musl",\
+   '' usin (\$0-0.0):1:2 w yerrorb  notitle, \
+   '${OUTPUT}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):1 w boxes fill patter 6 title "lkl-musl (skb-prealloc)",\
+   '' usin (\$0+0.2):1:2 w yerrorb  notitle ,\
+   '${OUTPUT}/tcp-rr-native.dat' usin (\$0+0.4):1 w boxes fill patter 3 title "native",\
+   '' usin (\$0+0.4):1:2 w yerrorb  notitle
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
