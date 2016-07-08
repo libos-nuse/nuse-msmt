@@ -1,6 +1,5 @@
 
 OUTPUT=$1
-PKG_SIZES="64 128 256 512 1024 1500 2048"
 
 
 # parse outputs
@@ -60,9 +59,9 @@ set output "${OUTPUT}/tcp-stream.png"
 replot
 
 
-set xtics ("64" 0, "128" 1, "256" 2, "512" 3, "1024" 4, "1500" 5, "2048" 6, "65507" 7)
+set xtics ("1" 0, "64" 1, "128" 2, "256" 3, "512" 4, "1024" 5, "1500" 6, "2048" 7, "65507" 8)
 set xlabel "Payload size (bytes)"
-set xrange [-1:8]
+set xrange [-1:9]
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/tcp-rr.eps"
 set ylabel "Goodput (Trans/sec)"

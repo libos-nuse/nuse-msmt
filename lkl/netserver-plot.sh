@@ -1,18 +1,44 @@
 
 OUTPUT=$1
 mkdir -p ${OUTPUT}/rx
-PKG_SIZES="64 128 256 512 1024 1500 2048"
 
 
 # parse outputs
 
-grep -h bits ${OUTPUT}/netserver-TCP_ST*-hijack-tap* > ${OUTPUT}/rx/tcp-stream-hijack-tap.dat
-grep -h bits ${OUTPUT}/netserver-TCP_ST*-hijack-raw* > ${OUTPUT}/rx/tcp-stream-hijack-raw.dat
-grep -E -h bits ${OUTPUT}/netserver-TCP_ST*-musl-[0-9].* > ${OUTPUT}/rx/tcp-stream-musl.dat
-grep -h bits ${OUTPUT}/netserver-TCP_ST*-musl-skbpre* > ${OUTPUT}/rx/tcp-stream-musl-skbpre.dat
-grep -h bits ${OUTPUT}/netserver-TCP_ST*-musl-sendmmsg* > ${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat
-grep -E -h bits ${OUTPUT}/netserver-TCP_ST*-native-[0-9]* > ${OUTPUT}/rx/tcp-stream-native.dat
-grep -h bits ${OUTPUT}/netserver-TCP_ST*-native-mmsg* > ${OUTPUT}/rx/tcp-stream-native-sendmmsg.dat
+grep -h bits ${OUTPUT}/netserver-TCP_ST*-hijack-tap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-hijack-tap.dat
+
+grep -h bits ${OUTPUT}/netserver-TCP_ST*-hijack-raw* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+ > ${OUTPUT}/rx/tcp-stream-hijack-raw.dat
+
+grep -E -h bits ${OUTPUT}/netserver-TCP_ST*-musl-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-musl.dat
+
+grep -h bits ${OUTPUT}/netserver-TCP_ST*-musl-skbpre* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-musl-skbpre.dat
+
+grep -h bits ${OUTPUT}/netserver-TCP_ST*-musl-sendmmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat
+
+grep -E -h bits ${OUTPUT}/netserver-TCP_ST*-native-[0-9]* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-native.dat
+
+grep -h bits ${OUTPUT}/netserver-TCP_ST*-native-mmsg* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/rx/tcp-stream-native-sendmmsg.dat
 
 
 grep -h Trans ${OUTPUT}/netserver-TCP_RR*-hijack-tap* > ${OUTPUT}/rx/tcp-rr-hijack-tap.dat
@@ -44,16 +70,19 @@ set grid ytics
 set boxwidth 0.2
 set style fill pattern
 
-set datafile separator "," 
 
 set ylabel "Rx Goodput (Mbps)"
+unset xlabel 
+unset xtics
 plot \
-   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin (\$0-0.5):5 w boxes  title "hijack(tap)", \
-   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):5 w boxes  title "hijack(raw)", \
-   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):5 w boxes  title "lkl-musl", \
-   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):5 w boxes  title "lkl-musl (skb prealloc)", \
-   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):5 w boxes  title "lkl-musl (sendmmsg)", \
-   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):5 w boxes  title "native"
+   '${OUTPUT}/rx/tcp-stream-hijack-tap.dat' usin 1:2 w boxerror  title "hijack(tap)"
+
+#, \
+#   '${OUTPUT}/rx/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1:2 w boxerror  title "hijack(raw)", \
+#   '${OUTPUT}/rx/tcp-stream-musl.dat' usin (\$0-0.1):1:2 w boxerror  title "lkl-musl", \
+#   '${OUTPUT}/rx/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1:2 w boxerror  title "lkl-musl (skb prealloc)", \
+#   '${OUTPUT}/rx/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1:2 w boxerror  title "lkl-musl (sendmmsg)", \
+#   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):1:2 w boxerror  title "native"
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
@@ -61,9 +90,11 @@ set output "${OUTPUT}/rx/tcp-stream.png"
 replot
 
 
-set xtics ("64" 0, "128" 1, "256" 2, "512" 3, "1024" 4, "1500" 5, "2048" 6, "65507" 7)
+set datafile separator "," 
+
+set xtics ("1" 0, "64" 1, "128" 2, "256" 3, "512" 4, "1024" 5, "1500" 6, "2048" 7, "65507" 8)
 set xlabel "Payload size (bytes)"
-set xrange [-1:8]
+set xrange [-1:9]
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/rx/tcp-rr.eps"
 set ylabel "Rx Goodput (Trans/sec)"

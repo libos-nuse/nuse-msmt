@@ -7,11 +7,14 @@ SELF_ADDR="1.1.1.3"
 HOST_ADDR="1.1.1.1"
 export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
-TRIALS=1
+TRIALS=3
 
 # disable offload
 sudo ethtool -K br0 tso off gro off gso off rx off tx off
 sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
+
+# disable c-state
+sudo tuned-adm profile latency-performance
 
 LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lklorig/src/
 LKLMUSL_NETPERF_skb_pre=/home/tazaki/work/netperf2/lkl/src/
@@ -154,11 +157,13 @@ run_netserver_turn $test $num
 done
 done
 
+#exit
+
 # UDP_STREAM with different packet size
 
 for num in `seq 1 ${TRIALS}`
 do
-for size in 64 128 256 512 1024 1500 2048 65507
+for size in 1 64 128 256 512 1024 1500 2048 65507
 do
 
 run_netserver_turn TCP_RR $num " -r $size,$size"
@@ -186,7 +191,7 @@ done
 
 for num in `seq 1 ${TRIALS}`
 do
-for size in 64 128 256 512 1024 1500 2048 65507
+for size in 1 64 128 256 512 1024 1500 2048 65507
 do
 
 run_netperf_turn TCP_RR $num " -r $size,$size"
