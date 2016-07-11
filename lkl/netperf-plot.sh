@@ -208,16 +208,11 @@ set ylabel "${DIR} Goodput (Trans/sec)"
 set yrange [0:20000]
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
-   '' usin (\$0-0.4):1:2 w yerror  notitle , \
-   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.2):1 w boxes fill patter 1 title "hijack(raw)",\
-   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/tcp-rr-musl.dat' usin (\$0-0.0):1 w boxes fill patter 5 lw 1 title "lkl-musl",\
-   '' usin (\$0-0.0):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):1 w boxes fill patter 6 title "lkl-musl (skb-prealloc)",\
-   '' usin (\$0+0.2):1:2 w yerrorb  notitle ,\
-   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.4):1 w boxes fill patter 3 title "native",\
-   '' usin (\$0+0.4):1:2 w yerrorb  notitle
+   '${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/tcp-rr-musl.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl",\
+   '${OUTPUT}/${DIR}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
+   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
@@ -225,24 +220,18 @@ set output "${OUTPUT}/${DIR}/tcp-rr.png"
 replot
 
 
+set autoscale y
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream.eps"
 set ylabel "${DIR} Goodput (Mbps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
-   '' usin (\$0-0.4):1:2 w yerror  notitle , \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.2):1 w boxes fill patter 1 title "hijack(raw)",\
-   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-musl.dat' usin (\$0-0.0):1 w boxes fill patter 5 lw 1 title "lkl-musl",\
-   '' usin (\$0-0.0):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.2):1 w boxes  title "lkl-musl (sendmmsg+skb prealloc)", \
-   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.4):1 w boxes fill patter 3 title "native (sendmmsg)",\
-   '' usin (\$0+0.4):1:2 w yerrorb  notitle
+   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-musl.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
+   '${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
 
-   #'${OUTPUT}/${DIR}/udp-stream-musl-skbpre.dat' usin (\$0-0.1):2 w boxes  title "lkl-musl (skb prealloc)", \
-   #'${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.4):2 w boxes  title "native"
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
@@ -254,16 +243,11 @@ set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
 set ylabel "${DIR} Throughput (pps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
-   '' usin (\$0-0.4):1:2 w yerror  notitle , \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.2):1 w boxes fill patter 1 title "hijack(raw)",\
-   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl.dat' usin (\$0-0.0):1 w boxes fill patter 5 lw 1 title "lkl-musl",\
-   '' usin (\$0-0.0):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.2):1 w boxes  title "lkl-musl (sendmmsg+skb prealloc)", \
-   '' usin (\$0-0.2):1:2 w yerrorb  notitle, \
-   '${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.4):1 w boxes fill patter 3 title "native (sendmmsg)",\
-   '' usin (\$0+0.4):1:2 w yerrorb  notitle
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
+   '${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
 
 
 set terminal png lw 3 14
