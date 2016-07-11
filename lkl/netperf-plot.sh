@@ -179,7 +179,7 @@ set style fill pattern
 
 set xrange [-1:1]
 set yrange [:10000]
-set ylabel "Goodput (Mbps)"
+set ylabel "${DIR} Goodput (Mbps)"
 unset xlabel
 unset xtics
 
@@ -204,7 +204,7 @@ set xlabel "Payload size (bytes)"
 set xrange [-1:9]
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/tcp-rr.eps"
-set ylabel "Goodput (Trans/sec)"
+set ylabel "${DIR} Goodput (Trans/sec)"
 set yrange [0:20000]
 
 plot \
@@ -227,7 +227,7 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream.eps"
-set ylabel "Goodput (Mbps)"
+set ylabel "${DIR} Goodput (Mbps)"
 
 plot \
    '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
@@ -251,7 +251,7 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
-set ylabel "Throughput (pps)"
+set ylabel "${DIR} Throughput (pps)"
 
 plot \
    '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1 w boxes fill patter 0 title "hijack(tap)" , \
