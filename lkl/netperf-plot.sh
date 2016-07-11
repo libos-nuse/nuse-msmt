@@ -205,8 +205,8 @@ unset xtics
 
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
+   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/tcp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(raw)",\
    '${OUTPUT}/${DIR}/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
    '${OUTPUT}/${DIR}/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 7 title "lkl-musl (sendmmsg)",\
@@ -229,8 +229,8 @@ set ylabel "${DIR} Goodput (Trans/sec)"
 set yrange [0:20000]
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
+   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/tcp-rr-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
    '${OUTPUT}/${DIR}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
    '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
@@ -249,8 +249,8 @@ set output "${OUTPUT}/${DIR}/udp-stream.eps"
 set ylabel "${DIR} Goodput (Mbps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
+   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
    '${OUTPUT}/${DIR}/udp-stream-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
    '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
    '${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
@@ -268,8 +268,8 @@ set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
 set ylabel "${DIR} Throughput (pps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/udp-stream-pps-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
    '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
    '${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
