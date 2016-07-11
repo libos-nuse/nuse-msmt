@@ -37,8 +37,11 @@ ex_arg=$3
 
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 
-echo "== lkl-musl ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-$num.dat
+echo "== lkl-musl (tap) ($test-$num) =="
+taskset 3 rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-tap-$num.dat
+
+echo "== lkl-musl (raw) ($test-$num) =="
+taskset 3 rexec ${LKLMUSL_NETPERF}/netperf packet:ens3f1 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-raw-$num.dat
 
 echo "== lkl-musl (skb pre allocation) ($test-$num) =="
 taskset 3 rexec ${LKLMUSL_NETPERF_skb_pre}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-skbpre-$num.dat
@@ -85,10 +88,17 @@ ex_arg=$3
 NETSERVER_ARGS="-D -f"
 NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 
-echo "== lkl-musl ($test-$num) =="
+echo "== lkl-musl (tap) ($test-$num) =="
 taskset 3 rexec ${LKLMUSL_NETPERF}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
-ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-$num.dat
+ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-tap-$num.dat
+
+pkill netserver
+
+echo "== lkl-musl (raw) ($test-$num) =="
+taskset 3 rexec ${LKLMUSL_NETPERF}/netserver packet:ens3f1 -- ${NETSERVER_ARGS} &
+ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
+ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-raw-$num.dat
 
 pkill netserver
 
