@@ -203,5 +203,5 @@ done
 
 
 
-sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot.sh ${OUTPUT}
-sh `dirname ${BASH_SOURCE:-$0}`/netserver-plot.sh ${OUTPUT}
+sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot.sh ${OUTPUT} tx
+sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot.sh ${OUTPUT} rx
