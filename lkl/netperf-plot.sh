@@ -3,10 +3,10 @@ OUTPUT=$1
 DIR=tx
 PREFIX=netpert
 
-if [ $2 == "rx" ] ; then
+if [ "$2" == "rx" ] ; then
     DIR=rx
     PREFIX=netserver
-elif [ $2 == "tx" ] ; then
+elif [ "$2" == "tx" ] ; then
     DIR=tx
     PREFIX=netperf
 else
