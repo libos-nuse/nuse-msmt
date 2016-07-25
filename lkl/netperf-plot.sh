@@ -248,12 +248,13 @@ set output "${OUTPUT}/${DIR}/udp-stream.eps"
 set ylabel "${DIR} Goodput (Mbps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.1):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
-   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 3 title "native", \
-   '${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
+   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
+   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
+
+   #'${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
 
 #   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
 
@@ -268,12 +269,13 @@ set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
 set ylabel "${DIR} Throughput (pps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.1):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
-   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 3 title "native", \
-   '${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
+   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
+
+   #'${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
 
 #   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
 
