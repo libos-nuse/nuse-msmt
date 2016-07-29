@@ -4,14 +4,17 @@ TESTNAMES="TCP_STREAM"
 #TESTNAMES=""
 DEST_ADDR="1.1.1.2"
 SELF_ADDR="1.1.1.3"
+DEST_ADDR2="2.1.1.2"
+SELF_ADDR2="2.1.1.3"
 HOST_ADDR="1.1.1.1"
 export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
 TRIALS=3
 
-# disable offload
-sudo ethtool -K br0 tso off gro off gso off rx off tx off
-sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
+# enable offload
+sudo ethtool -K br0 tso on gro on gso on rx on tx on
+sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
+sudo ethtool -K ens3f1 tso on gro on gso on rx on tx on
 
 # disable c-state
 sudo tuned-adm profile latency-performance
@@ -24,6 +27,10 @@ NATIVE_NETPERF_mmsg=/home/tazaki/work/netperf2/native-mmsg/src/
 PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:/home/tazaki/work/lkl-linux/tools/lkl/bin/
 
 OUTPUT=`date -I`
+
+# VIRTIO offloads, CSUM/TSO4/MRGRCVBUF
+export LKL_HIJACK_OFFLOAD=0x8803
+export VTAP_DEV=/dev/tap67
 
 mkdir -p ${OUTPUT}
 
@@ -58,16 +65,27 @@ taskset 3 lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/netperf-$test-hijack-tap-$num.dat
 
-echo "== lkl-hijack raw ($test-$num)  =="
-sudo LKL_HIJACK_NET_IFTYPE=raw \
- LKL_HIJACK_NET_IFPARAMS=ens3f1 \
- LKL_HIJACK_NET_IP=${SELF_ADDR} \
+echo "== lkl-hijack macvtap ($test-$num)  =="
+NETPERF_ARGS="-H ${DEST_ADDR2} -t $test -- -o $ex_arg"
+LKL_HIJACK_NET_IFTYPE=macvtap \
+ LKL_HIJACK_NET_IFPARAMS=${VTAP_DEV} \
+ LKL_HIJACK_NET_IP=${SELF_ADDR2} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+taskset 3 lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
- |& tee -a ${OUTPUT}/netperf-$test-hijack-raw-$num.dat
+ |& tee -a ${OUTPUT}/netperf-$test-hijack-macvtap-$num.dat
+
+# echo "== lkl-hijack raw ($test-$num)  =="
+# sudo LKL_HIJACK_NET_IFTYPE=raw \
+#  LKL_HIJACK_NET_IFPARAMS=ens3f1 \
+#  LKL_HIJACK_NET_IP=${SELF_ADDR} \
+#  LKL_HIJACK_NET_NETMASK_LEN=24 \
+# taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+#  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
+#  |& tee -a ${OUTPUT}/netperf-$test-hijack-raw-$num.dat
 
 echo "== native ($test-$num)  =="
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 taskset 3 ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
 
 echo "== native (sendmmsg) ($test-$num)  =="
@@ -125,16 +143,29 @@ ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-tap-$num.dat
 pkill netserver
 
-echo "== lkl-hijack raw ($test-$num)  =="
-sudo LKL_HIJACK_NET_IFTYPE=raw \
- LKL_HIJACK_NET_IFPARAMS=ens3f1 \
- LKL_HIJACK_NET_IP=${SELF_ADDR} \
+echo "== lkl-hijack macvtap ($test-$num)  =="
+NETPERF_ARGS="-H ${SELF_ADDR2} -t $test -- -o $ex_arg"
+LKL_HIJACK_NET_IFTYPE=macvtap \
+ LKL_HIJACK_NET_IFPARAMS=${VTAP_DEV} \
+ LKL_HIJACK_NET_IP=${SELF_ADDR2} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+taskset 3 lkl-hijack.sh \
  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
-ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
-ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-raw-$num.dat
-sudo pkill netserver
+ssh -t ${DEST_ADDR} sudo arp -d ${SELF_ADDR2}
+ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-macvtap-$num.dat
+pkill netserver
+
+NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
+# echo "== lkl-hijack raw ($test-$num)  =="
+# sudo LKL_HIJACK_NET_IFTYPE=raw \
+#  LKL_HIJACK_NET_IFPARAMS=ens3f1 \
+#  LKL_HIJACK_NET_IP=${SELF_ADDR} \
+#  LKL_HIJACK_NET_NETMASK_LEN=24 \
+# taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+#  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+# ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
+# ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-raw-$num.dat
+# sudo pkill netserver
 
 echo "== native ($test-$num)  =="
 NETPERF_ARGS="-H ${HOST_ADDR} -t $test -- -o $ex_arg"

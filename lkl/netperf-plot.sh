@@ -24,6 +24,11 @@ grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap* \
 | dbcolstats thpt | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat
 
+grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-macvtap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-stream-hijack-macvtap.dat
+
 grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-raw* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
@@ -33,6 +38,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat
+
+grep -E -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-macvtap-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
+| dbcolstats thpt | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-stream-musl-macvtap.dat
 
 grep -E -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-raw-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
@@ -66,6 +76,11 @@ grep -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-hijack-tap* \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat
 
+grep -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-hijack-macvtap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-rr-hijack-macvtap.dat
+
 grep -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-hijack-raw* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
@@ -75,6 +90,11 @@ grep -E -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-musl-tap-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat
+
+grep -E -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-musl-macvtap-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-rr-musl-macvtap.dat
 
 grep -E -h Trans ${OUTPUT}/${PREFIX}-TCP_RR*-musl-raw-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
@@ -108,6 +128,11 @@ grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-tap* \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat
 
+grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-macvtap* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-hijack-macvtap.dat
+
 grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-raw* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
@@ -117,6 +142,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-tap-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-musl-tap.dat
+
+grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-macvtap-[0-9].* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-musl-macvtap.dat
 
 grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-raw-[0-9].* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
@@ -149,6 +179,11 @@ grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-tap* \
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat
 
+grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-macvtap* \
+| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval '_npkt=_npkt/10'\
+| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-pps-hijack-macvtap.dat
+
 grep -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-hijack-raw* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
@@ -158,6 +193,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-tap-[0-9].* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat
+
+grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-macvtap-[0-9].* \
+| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
+| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-pps-musl-macvtap.dat
 
 grep -E -h bits ${OUTPUT}/${PREFIX}-UDP_ST*-musl-raw-[0-9].* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
@@ -205,14 +245,15 @@ unset xtics
 
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
-   '${OUTPUT}/${DIR}/tcp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/tcp-stream-hijack-macvtap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
+   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
    '${OUTPUT}/${DIR}/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 7 title "lkl-musl (sendmmsg)",\
    '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native"
 
-#   '${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+#   '${OUTPUT}/${DIR}/tcp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(raw)",\
+#   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 
 set terminal png lw 3 14
 set output "${OUTPUT}/${DIR}/tcp-stream.png"
@@ -228,13 +269,14 @@ set ylabel "${DIR} Goodput (Trans/sec)"
 set yrange [0:20000]
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
-   '${OUTPUT}/${DIR}/tcp-rr-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/tcp-rr-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
+   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/tcp-rr-musl-skbpre.dat' usin (\$0+0.2):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
    '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
 
-#   '${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+#   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
+   #'${OUTPUT}/${DIR}/tcp-rr-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"
@@ -248,15 +290,16 @@ set output "${OUTPUT}/${DIR}/udp-stream.eps"
 set ylabel "${DIR} Goodput (Mbps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
-   '${OUTPUT}/${DIR}/udp-stream-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/udp-stream-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
+   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
    '${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
    '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
 
+   #'${OUTPUT}/${DIR}/udp-stream-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
    #'${OUTPUT}/${DIR}/udp-stream-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
+#   '${OUTPUT}/${DIR}/udp-stream-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 
-#   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
 
 
 set terminal png lw 3 14
@@ -269,15 +312,16 @@ set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
 set ylabel "${DIR} Throughput (pps)"
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
+   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
    '${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat' usin (\$0+0.2):1:2 w boxerrorbar title "lkl-musl (sendmmsg+skb prealloc)", \
    '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.4):1:2 w boxerrorbar fill patter 3 title "native"
 
+   #'${OUTPUT}/${DIR}/udp-stream-pps-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
    #'${OUTPUT}/${DIR}/udp-stream-pps-native-sendmmsg.dat' usin (\$0+0.5):1:2 w boxerrorbar fill patter 3 title "native (sendmmsg)"
+   #'${OUTPUT}/${DIR}/udp-stream-pps-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 
-#   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 0 title "hijack(tap)" , \
 
 
 set terminal png lw 3 14
