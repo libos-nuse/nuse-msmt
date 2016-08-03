@@ -9,7 +9,7 @@ SELF_ADDR2="2.1.1.3"
 HOST_ADDR="1.1.1.1"
 export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
-TRIALS=3
+TRIALS=1
 
 # enable offload
 sudo ethtool -K br0 tso on gro on gso on rx on tx on
@@ -26,10 +26,11 @@ NATIVE_NETPERF=/home/tazaki/work/netperf-2.7.0/src/
 NATIVE_NETPERF_mmsg=/home/tazaki/work/netperf2/native-mmsg/src/
 PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:/home/tazaki/work/lkl-linux/tools/lkl/bin/
 
+TASKSET="taskset -c 0"
 OUTPUT=`date -I`
 
-# VIRTIO offloads, CSUM/TSO4/MRGRCVBUF
-export LKL_HIJACK_OFFLOAD=0x8803
+# VIRTIO offloads, CSUM/TSO4/MRGRCVBUF/UFO
+export LKL_HIJACK_OFFLOAD=0xc803
 export VTAP_DEV=/dev/tap67
 
 mkdir -p ${OUTPUT}
@@ -44,24 +45,26 @@ ex_arg=$3
 
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 
+sudo ethtool -K ens3f1 tso on gro on gso on rx on tx on
 echo "== lkl-musl (tap) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-tap-$num.dat
+${TASKSET} rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-tap-$num.dat
 
-echo "== lkl-musl (raw) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF}/netperf packet:ens3f1 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-raw-$num.dat
-
+#echo "== lkl-musl (raw) ($test-$num) =="
+#${TASKSET} rexec ${LKLMUSL_NETPERF}/netperf packet:ens3f1 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-raw-$num.dat
+#
 echo "== lkl-musl (skb pre allocation) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF_skb_pre}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-skbpre-$num.dat
+${TASKSET} rexec ${LKLMUSL_NETPERF_skb_pre}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-skbpre-$num.dat
 
 echo "== lkl-musl (sendmmsg) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF_mmsg}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-sendmmsg-$num.dat
+${TASKSET} rexec ${LKLMUSL_NETPERF_mmsg}/netperf tap:tap0 -- ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-musl-sendmmsg-$num.dat
 
+sudo ethtool -K ens3f1 tso on gro on gso on rx on tx on
 echo "== lkl-hijack tap ($test-$num)  =="
 LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IFPARAMS=tap0 \
  LKL_HIJACK_NET_IP=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 lkl-hijack.sh \
+${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/netperf-$test-hijack-tap-$num.dat
 
@@ -71,7 +74,7 @@ LKL_HIJACK_NET_IFTYPE=macvtap \
  LKL_HIJACK_NET_IFPARAMS=${VTAP_DEV} \
  LKL_HIJACK_NET_IP=${SELF_ADDR2} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 lkl-hijack.sh \
+${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/netperf-$test-hijack-macvtap-$num.dat
 
@@ -80,17 +83,17 @@ taskset 3 lkl-hijack.sh \
 #  LKL_HIJACK_NET_IFPARAMS=ens3f1 \
 #  LKL_HIJACK_NET_IP=${SELF_ADDR} \
 #  LKL_HIJACK_NET_NETMASK_LEN=24 \
-# taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+# ${TASKSET} /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
 #  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
 #  |& tee -a ${OUTPUT}/netperf-$test-hijack-raw-$num.dat
 
 echo "== native ($test-$num)  =="
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
-taskset 3 ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
+${TASKSET} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-$num.dat
 
-echo "== native (sendmmsg) ($test-$num)  =="
-taskset 3 ${NATIVE_NETPERF_mmsg}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-mmsg-$num.dat
-
+#echo "== native (sendmmsg) ($test-$num)  =="
+#${TASKSET} ${NATIVE_NETPERF_mmsg}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netperf-$test-native-mmsg-$num.dat
+#
 
 }
 
@@ -106,38 +109,40 @@ ex_arg=$3
 NETSERVER_ARGS="-D -f"
 NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 
+sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
 echo "== lkl-musl (tap) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
+${TASKSET} rexec ${LKLMUSL_NETPERF}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-tap-$num.dat
 
 pkill netserver
 
-echo "== lkl-musl (raw) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF}/netserver packet:ens3f1 -- ${NETSERVER_ARGS} &
-ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
-ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-raw-$num.dat
-
-pkill netserver
+# echo "== lkl-musl (raw) ($test-$num) =="
+# ${TASKSET} rexec ${LKLMUSL_NETPERF}/netserver packet:ens3f1 -- ${NETSERVER_ARGS} &
+# ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
+# ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-raw-$num.dat
+# 
+# pkill netserver
 
 echo "== lkl-musl (skb pre allocation) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF_skb_pre}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
+${TASKSET} rexec ${LKLMUSL_NETPERF_skb_pre}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-skbpre-$num.dat
 pkill netserver
 
 echo "== lkl-musl (sendmmsg) ($test-$num) =="
-taskset 3 rexec ${LKLMUSL_NETPERF_mmsg}/netserver tap:tap0 -- ${NETSERVER_ARGS}&
+${TASKSET} rexec ${LKLMUSL_NETPERF_mmsg}/netserver tap:tap0 -- ${NETSERVER_ARGS}&
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-sendmmsg-$num.dat
 pkill netserver
 
+sudo ethtool -K ens3f1 tso on gro on gso on rx on tx on
 echo "== lkl-hijack tap ($test-$num)  =="
 LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IFPARAMS=tap0 \
  LKL_HIJACK_NET_IP=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 lkl-hijack.sh \
+${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-tap-$num.dat
@@ -149,7 +154,7 @@ LKL_HIJACK_NET_IFTYPE=macvtap \
  LKL_HIJACK_NET_IFPARAMS=${VTAP_DEV} \
  LKL_HIJACK_NET_IP=${SELF_ADDR2} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
-taskset 3 lkl-hijack.sh \
+${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
 ssh -t ${DEST_ADDR} sudo arp -d ${SELF_ADDR2}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-macvtap-$num.dat
@@ -161,7 +166,7 @@ NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 #  LKL_HIJACK_NET_IFPARAMS=ens3f1 \
 #  LKL_HIJACK_NET_IP=${SELF_ADDR} \
 #  LKL_HIJACK_NET_NETMASK_LEN=24 \
-# taskset 3 /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
+# ${TASKSET} /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
 #  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
 # ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 # ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-raw-$num.dat
@@ -169,16 +174,16 @@ NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 
 echo "== native ($test-$num)  =="
 NETPERF_ARGS="-H ${HOST_ADDR} -t $test -- -o $ex_arg"
-taskset 3 ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+${TASKSET} ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-native-$num.dat
 pkill netserver
 
-echo "== native (sendmmsg) ($test-$num)  =="
-taskset 3 ${NATIVE_NETPERF_mmsg}/netserver ${NETSERVER_ARGS} &
-ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
-ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-native-mmsg-$num.dat
-pkill netserver
-
+# echo "== native (sendmmsg) ($test-$num)  =="
+# ${TASKSET} ${NATIVE_NETPERF_mmsg}/netserver ${NETSERVER_ARGS} &
+# ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
+# ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-native-mmsg-$num.dat
+# pkill netserver
+# 
 
 }
 
