@@ -31,7 +31,11 @@ OUTPUT=`date -I`
 
 # VIRTIO offloads, CSUM/TSO4/MRGRCVBUF/UFO
 export LKL_HIJACK_OFFLOAD=0xc803
-export VTAP_DEV=/dev/tap67
+sudo ip link del dev vtap0 type macvtap
+sudo ip link add link ens3f0 name vtap0 type macvtap mode passthru
+sudo ifconfig vtap0 up
+export VTAP_DEV=`ls /dev/tap*`
+sudo chown ${USER} ${VTAP_DEV}
 
 mkdir -p ${OUTPUT}
 
@@ -112,6 +116,7 @@ NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
 echo "== lkl-musl (tap) ($test-$num) =="
 ${TASKSET} rexec ${LKLMUSL_NETPERF}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
+sleep 3
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-tap-$num.dat
 
@@ -126,12 +131,14 @@ pkill netserver
 
 echo "== lkl-musl (skb pre allocation) ($test-$num) =="
 ${TASKSET} rexec ${LKLMUSL_NETPERF_skb_pre}/netserver tap:tap0 -- ${NETSERVER_ARGS} &
+sleep 3
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-skbpre-$num.dat
 pkill netserver
 
 echo "== lkl-musl (sendmmsg) ($test-$num) =="
 ${TASKSET} rexec ${LKLMUSL_NETPERF_mmsg}/netserver tap:tap0 -- ${NETSERVER_ARGS}&
+sleep 3
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-musl-sendmmsg-$num.dat
 pkill netserver
@@ -144,6 +151,7 @@ LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
 ${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+sleep 3
 ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-tap-$num.dat
 pkill netserver
@@ -156,6 +164,7 @@ LKL_HIJACK_NET_IFTYPE=macvtap \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
 ${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+sleep 3
 ssh -t ${DEST_ADDR} sudo arp -d ${SELF_ADDR2}
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-macvtap-$num.dat
 pkill netserver
@@ -168,6 +177,7 @@ NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 #  LKL_HIJACK_NET_NETMASK_LEN=24 \
 # ${TASKSET} /home/tazaki/work/lkl-linux/tools/lkl/bin/lkl-hijack.sh \
 #  ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+sleep 3
 # ssh -t ${DEST_ADDR} sudo arp -d ${FIXED_ADDRESS}
 # ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-hijack-raw-$num.dat
 # sudo pkill netserver
@@ -175,6 +185,7 @@ NETPERF_ARGS="-H ${FIXED_ADDRESS} -t $test -- -o $ex_arg"
 echo "== native ($test-$num)  =="
 NETPERF_ARGS="-H ${HOST_ADDR} -t $test -- -o $ex_arg"
 ${TASKSET} ${NATIVE_NETPERF}/netserver ${NETSERVER_ARGS} &
+sleep 3
 ssh ${DEST_ADDR} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/netserver-$test-native-$num.dat
 pkill netserver
 
