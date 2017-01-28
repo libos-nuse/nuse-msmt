@@ -55,6 +55,8 @@ set grid ytics
 
 set boxwidth 0.2
 set style fill pattern
+set key top left
+set size 1.0,0.6
 
 
 set xrange [-1:4]
@@ -65,10 +67,10 @@ set xtics ("4M" 0, "30M" 1, "100M" 2, "2G" 3)
 
 
 plot \
-   '${OUTPUT}/tcp-stream-hijack-tap-bbr-fq-1G.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 0 title "bbr+fq (lkl,sysmem=1G)", \
-   '${OUTPUT}/tcp-stream-hijack-tap-cubic-fq-1G.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "cubic+fq (lkl,sysmem=1G)" ,\
-   '${OUTPUT}/tcp-stream-native-bbr-fq-1G.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "bbr+fq (native)", \
-   '${OUTPUT}/tcp-stream-native-cubic-fq-1G.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 0 title "cubic+fq (native)" 
+   '${OUTPUT}/tcp-stream-hijack-tap-bbr-fq-1G.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 0 title "LKL(bbr)", \
+   '${OUTPUT}/tcp-stream-hijack-tap-cubic-fq-1G.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "LKL(cubic)" ,\
+   '${OUTPUT}/tcp-stream-native-bbr-fq-1G.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux(bbr)", \
+   '${OUTPUT}/tcp-stream-native-cubic-fq-1G.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 0 title "Linux(cubic)" 
 
 #   '${OUTPUT}/tcp-stream-hijack-tap-bbr-none-1G.dat' usin (\$0-0.15):1:2 w boxerrorbar fill patter 0 title "bbr (lkl,sysmem=1G)", \
 #   '${OUTPUT}/tcp-stream-hijack-tap-cubic-none-1G.dat' usin (\$0-0.05):1:2 w boxerrorbar fill patter 0 title "cubic (lkl,sysmem=1G)" ,\

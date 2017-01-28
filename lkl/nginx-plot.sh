@@ -19,8 +19,10 @@ set pointsize 2
 set xzeroaxis
 set grid ytics
 
-set boxwidth 0.2
+set boxwidth 0.45
 set style fill pattern
+set key top left
+set size 1.0,0.6
 
 set ylabel "Latency (usec)"
 set xtics ("64" 0, "128" 1, "256" 2, "512" 3, "1024" 4, "1500" 5, "2048" 6)
@@ -30,10 +32,8 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/nginx-wrk.eps"
 
 plot \
-   '${OUTPUT}/nginx-musl.dat' usin 1 w l  title "lkl-musl", \
-   '${OUTPUT}/nginx-musl.dat' usin 1:2 w errorbar  notitle, \
-   '${OUTPUT}/nginx-native.dat' usin 1 w l  title "native", \
-   '${OUTPUT}/nginx-native.dat' usin 1:2 w yerrorbar  notitle
+   '${OUTPUT}/nginx-musl.dat' usin (\$0-0.225):1:2 w boxerrorbar  title "LKL", \
+   '${OUTPUT}/nginx-native.dat' usin (\$0+0.225):1:2 w boxerrorbar  title "Linux"
 
 set terminal png lw 3 14
 set xtics nomirror rotate by -45 font ",14"

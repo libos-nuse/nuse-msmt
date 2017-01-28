@@ -62,6 +62,7 @@ set grid ytics
 
 set boxwidth 0.2
 set style fill pattern
+set size 1.0,0.6
 
 
 set xrange [-1:2]
@@ -72,8 +73,8 @@ set xtics ("disable" 0, "TSO6" 1)
 
 
 plot \
-   '${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-bbr-fq-1G.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "bbr+fq (lkl,sysmem=1G)", \
-   '${OUTPUT}/${PREFIX}-tcp6-stream-native-bbr-fq-1G.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "bbr+fq (native)"
+   '${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-bbr-fq-1G.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "LKL", \
+   '${OUTPUT}/${PREFIX}-tcp6-stream-native-bbr-fq-1G.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux"
 
 set terminal png lw 3 14
 set output "${OUTPUT}/tcp6-stream-1G-fq.png"

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ./netperf-common.sh
+
 TESTNAMES="TCP_STREAM"
 #TESTNAMES=""
 DEST_ADDR="1.1.1.2"
@@ -9,14 +11,9 @@ export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
 TRIALS=1
 
-# disable offload
-sudo ethtool -K br0 tso off gso off rx off tx off
-sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
-
 LKLMUSL_NGINX=/home/tazaki/work/rump-nginx/
 NATIVE_WRK=/home/tazaki/work/wrk/
 PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:/home/tazaki/work/lkl-linux/tools/lkl/bin/
-/wrk 
 
 OUTPUT=`date -I`
 

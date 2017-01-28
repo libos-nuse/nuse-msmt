@@ -67,22 +67,20 @@ rm -f ${OUTPUT}/${PREFIX}-*.dat
 # for netperf tests
 for num in `seq 1 ${TRIALS}`
 do
-for test in ${TESTNAMES}
-do
 for size in ${PSIZES}
 do
 
+for test in ${TESTNAMES}
+do
+
 run_netperf_turn $test $num $size "-m $size,$size"
-#run_netperf_turn TCP_RR $num " -r $size,$size"
-#run_netperf_turn UDP_STREAM $num "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size"
 
 done
+
+run_netperf_turn TCP_RR $num $size " -r $size,$size"
+run_netperf_turn UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size"
 done
 done
-
-
-
-
 
 
 sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot.sh ${OUTPUT} tx
