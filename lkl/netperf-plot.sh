@@ -292,13 +292,13 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream.eps"
-set ylabel "Goodput (Mbps)"
-set yrange [0:10000]
+set ylabel "Goodput (Gbps)"
+set yrange [0:10]
 set key top left
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.225):1:2 w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
 #   '${OUTPUT}/${DIR}/udp-stream-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
