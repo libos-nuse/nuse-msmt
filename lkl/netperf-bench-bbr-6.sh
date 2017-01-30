@@ -11,9 +11,10 @@ export FIXED_MASK=24
 
 SYS_MEM="1G"
 TCP_WMEM="100000000"
-QDISC_PARAMS="root|fq"
-CC_ALGO="bbr"
-OFFLOADS="0 d903" #disable, CSUM/TSO4/MRGRCVBUF/UFO + TSO6
+QDISC_PARAMS="none"
+CC_ALGO="cubic"
+
+OIF=br0
 
 
 # disable c-state
@@ -46,10 +47,15 @@ offload=$8
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l 30 -- -K $cc -o $ex_arg"
 
 # enable offload
-if [ $offload != "0" ] ; then
-sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
+if [ $offload == "0" ] ; then
+sudo ethtool -K ${OIF} tso off gro off gso off rx off tx off
+sudo ethtool -K ens3f1 tso off gro off gso off rx off tx off
+elif [ $offload == "0003" ] ; then
+sudo ethtool -K ${OIF} tso off gro off gso off rx on tx on
+sudo ethtool -K ens3f1 tso off gro off gso off rx on tx on
 else
-sudo ethtool -K ens3f0 tso off gro off gso off rx off tx off
+sudo ethtool -K ${OIF} tso on gro on gso on rx on tx on
+sudo ethtool -K ens3f1 tso on gro on gso on rx on tx on
 fi
 sudo tc qdisc del dev ens3f0 root fq pacing
 
@@ -58,7 +64,7 @@ echo "== lkl-hijack tap ($test-$num, $*)  =="
 export LKL_HIJACK_OFFLOAD=0x$offload
 
 LKL_HIJACK_NET_IFTYPE=tap \
- LKL_HIJACK_NET_IFPARAMS=tap1 \
+ LKL_HIJACK_NET_IFPARAMS=tap0 \
  LKL_HIJACK_NET_IPV6=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK6_LEN=64 \
  LKL_HIJACK_MEMSIZE=${mem} \

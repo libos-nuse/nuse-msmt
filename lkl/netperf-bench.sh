@@ -9,6 +9,10 @@ SELF_ADDR="1.1.1.3"
 export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
 OIF=ens3f1
+OIF=br0
+
+export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 100000000"
+export LKL_HIJACK_MEMSIZE=1G
 
 # enable offload
 

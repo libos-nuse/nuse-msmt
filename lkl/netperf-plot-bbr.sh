@@ -60,7 +60,7 @@ set size 1.0,0.6
 
 
 set xrange [-1:4]
-set yrange [:10000]
+set yrange [:6000]
 set ylabel "Goodput (Mbps)"
 set xlabel "size of sock tx buffer (bytes)"
 set xtics ("4M" 0, "30M" 1, "100M" 2, "2G" 3)

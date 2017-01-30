@@ -233,7 +233,6 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/tcp-stream.eps"
-set yrange [0:]
 #set xtics font "Helvetica,14"
 set pointsize 2
 set xzeroaxis
@@ -248,13 +247,13 @@ set key top left
 set xrange [-1:7]
 set xtics ${PSIZE_XTICS}
 set xlabel "Payload size (bytes)"
-set yrange [:10000]
-set ylabel "${DIR} Goodput (Mbps)"
+set yrange [0:10]
+set ylabel "Goodput (Gbps)"
 
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.225):1:2 w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
 #   '${OUTPUT}/${DIR}/tcp-stream-hijack-macvtap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
@@ -273,7 +272,7 @@ set xrange [-1:7]
 set xtics ${PSIZE_XTICS}
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/tcp-rr.eps"
-set ylabel "${DIR} Goodput (Trans/sec)"
+set ylabel "Goodput (Trans/sec)"
 set yrange [0:20000]
 set key top right
 
@@ -291,10 +290,10 @@ set terminal png lw 3 14
 set output "${OUTPUT}/${DIR}/tcp-rr.png"
 replot
 
-set autoscale y
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream.eps"
-set ylabel "${DIR} Goodput (Mbps)"
+set ylabel "Goodput (Mbps)"
+set yrange [0:10000]
 set key top left
 
 plot \
@@ -316,12 +315,13 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
-set ylabel "${DIR} Throughput (pps)"
+set ylabel "Goodput (Mpps)"
 set key top right
+set yrange [0:1]
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.225):1:2 w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 title "Linux"
 
 #   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\
