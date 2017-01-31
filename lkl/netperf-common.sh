@@ -8,6 +8,16 @@ OFFLOADS="0 0003 d903" #disable, CSUM, CSUM/TSO4/MRGRCVBUF/UFO + TSO6
 
 TRIALS=5
 
+LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lkl/src/
+NATIVE_NETPERF=/home/tazaki/work/netperf-2.7.0/src/
+PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:/home/tazaki/work/lkl-linux/tools/lkl/bin/
+
+TASKSET="taskset -c 0"
+OUTPUT=`date -I`
+
 export LKL_HIJACK_OFFLOAD=0xc803
 #export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 100000000"
 #export LKL_HIJACK_MEMSIZE=1G
+#LKL_SYSCTL="net.ipv4.tcp_wmem|4096 87380 2147483647"
+#LKL_MEMSIZE=1G
+

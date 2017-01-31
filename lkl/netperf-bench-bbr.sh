@@ -8,19 +8,11 @@ DEST_ADDR="2.1.1.2"
 SELF_ADDR="2.1.1.3"
 export FIXED_ADDRESS=${SELF_ADDR}
 export FIXED_MASK=24
-TRIALS=5
 QDISC_PARAMS="root|fq"
 
 
 # disable c-state
 sudo tuned-adm profile latency-performance
-
-LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lklorig/src/
-NATIVE_NETPERF=/home/tazaki/work/netperf-2.7.0/src/
-PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:/home/tazaki/work/lkl-linux/tools/lkl/bin/
-
-TASKSET="taskset -c 0"
-OUTPUT=`date -I`
 
 # VIRTIO offloads, CSUM/TSO4/MRGRCVBUF/UFO
 export LKL_HIJACK_OFFLOAD=0xc803
@@ -57,6 +49,14 @@ LKL_HIJACK_NET_IFTYPE=tap \
 ${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/${PREFIX}-$test-hijack-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
+
+# echo "== lkl-musl tap ($test-$num, $*)  =="
+# 
+# LKL_MEMSIZE=${mem} \
+#  LKL_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
+#  LKL_NET_QDISC=${qdisc_params} \
+#  rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
+#  |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
 
 echo "== native ($test-$num, $*)  =="
 if [ $qdisc_params != "none" ] ; then
