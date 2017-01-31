@@ -8,4 +8,7 @@ cat native-log.txt |grep timer:hrtim | grep qdisc |\
 cat lkl-log.txt  |grep fq: | \
        awk  '{ gsub(/]/,"")} $4 ~ /sched/ { base = $9 } $4 ~ /fired/ { printf "%s %.f\n", $2, ($8 - base); base = 0 }'  > lkl-delay.dat
 
-lkl-delay.dat| dbcoldefine time delay | dbcol delay | dbsort -n delay | dbrowenumerate | dbcolpercentile delay
+cat log-lkl.txt | \
+       sed "s/ts=//" | awk '$7 ~ /idx=0/ { base = $8 } $7 ~ /idx=1/ { printf "%s %.f\n", $4, ($8 - base); base = 0 }' > lkl-delay.dat
+
+#lkl-delay.dat| dbcoldefine time delay | dbcol delay | dbsort -n delay | dbrowenumerate | dbcolpercentile delay
