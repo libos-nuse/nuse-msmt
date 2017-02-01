@@ -24,7 +24,6 @@ cat ${OUTPUT}/hrtimer/lkl-delay.dat| dbcoldefine time delay | dbcol delay | \
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/hrtimer/hrtimer-delay.eps"
-#set xtics font "Helvetica,14"
 set pointsize 1
 set xzeroaxis
 set grid ytics
@@ -34,7 +33,7 @@ plot \
        '${OUTPUT}/hrtimer/lkl-delay.dat' usi 0:2 w p pt 2 title "lkl"
 
 set terminal png lw 3 14
-set xtics nomirror rotate by -45 font ",14"
+set xtics nomirror
 set output "${OUTPUT}/hrtimer/hrtimer-delay.png"
 replot
 
@@ -47,14 +46,17 @@ set logscale x
 unset logscale y
 #unset xlabel
 #unset xtics
+set size 1.0,0.6
+set ytics 0,0.5,1
+set format y "%0.1f"
 
 
 plot \
-       '${OUTPUT}/hrtimer/native-delay-cdf.dat' usi 1:3 w lp pt 1 title "native", \
-       '${OUTPUT}/hrtimer/lkl-delay-cdf.dat' usi 1:3 w lp pt 2 title "lkl"
+       '${OUTPUT}/hrtimer/lkl-delay-cdf.dat' usi 1:3 w lp pt 2 ps 2 title "LKL" ,\
+       '${OUTPUT}/hrtimer/native-delay-cdf.dat' usi 1:3 w lp pt 1 ps 2 title "Linux"
 
 set terminal png lw 3 14
-set xtics nomirror rotate by -45 font ",14"
+set xtics nomirror
 set output "${OUTPUT}/hrtimer/hrtimer-delay-cdf.png"
 replot
 

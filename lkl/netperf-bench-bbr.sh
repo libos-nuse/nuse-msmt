@@ -20,6 +20,32 @@ export LKL_HIJACK_OFFLOAD=0xc803
 mkdir -p ${OUTPUT}
 
 
+run_netperf_hijack_turn()
+{
+test=$1
+num=$2
+ex_arg=$3
+mem=$4
+tcp_wmem=$5
+qdisc_params=$6
+cc=$7
+
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l 30 -- -K $cc -o $ex_arg"
+
+echo "== lkl-hijack tap ($test-$num, $*)  =="
+
+LKL_HIJACK_NET_IFTYPE=tap \
+ LKL_HIJACK_NET_IFPARAMS=tap1 \
+ LKL_HIJACK_NET_IP=${SELF_ADDR} \
+ LKL_HIJACK_NET_NETMASK_LEN=24 \
+ LKL_HIJACK_MEMSIZE=${mem} \
+ LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
+ LKL_HIJACK_NET_QDISC=${qdisc_params} \
+${TASKSET} lkl-hijack.sh \
+ ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-hijack-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
+}
+
 run_netperf_turn()
 {
 
@@ -37,18 +63,8 @@ NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l 30 -- -K $cc -o $ex_arg"
 # enable offload
 sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
 sudo tc qdisc del dev ens3f0 root fq pacing
-echo "== lkl-hijack tap ($test-$num, $*)  =="
 
-LKL_HIJACK_NET_IFTYPE=tap \
- LKL_HIJACK_NET_IFPARAMS=tap1 \
- LKL_HIJACK_NET_IP=${SELF_ADDR} \
- LKL_HIJACK_NET_NETMASK_LEN=24 \
- LKL_HIJACK_MEMSIZE=${mem} \
- LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
- LKL_HIJACK_NET_QDISC=${qdisc_params} \
-${TASKSET} lkl-hijack.sh \
- ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
- |& tee -a ${OUTPUT}/${PREFIX}-$test-hijack-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
+run_netperf_hijack_turn $1 $2 "" $4 $5 $6 $7
 
 # echo "== lkl-musl tap ($test-$num, $*)  =="
 # 
@@ -85,6 +101,7 @@ for cc in ${CC_ALGO}
 do
 
 run_netperf_turn $test $num "" $mem $tcp_wmem $qdisc $cc
+echo ""
 
 done
 done
@@ -93,6 +110,17 @@ done
 done
 done
 
+for inum in `seq 1 ${TRIALS}`
+do
 
+PREFIX="netperf-bbr-nohrt"
+(cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-nohrt.so liblkl-hijack.so)
+#run_netperf_hijack_turn TCP_STREAM nohrt-nofq-$inum "" 1G 2000000000 none bbr
+run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" 1G 1000000000 "root|fq" bbr
+(cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-hrt.so liblkl-hijack.so)
+run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" 1G 1000000000 none bbr
+#run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" 1G 1000000000 "root|fq" bbr
+
+done
 
 sh `dirname ${BASH_SOURCE:-$0}`/netperf-plot-bbr.sh ${OUTPUT}
