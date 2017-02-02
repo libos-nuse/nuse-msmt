@@ -36,24 +36,28 @@ num=$2
 psize=$3
 ex_arg=$4
 
+
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 
 sudo ethtool -K ${OIF} tso on gro on gso on rx on tx on
 
-#echo "== lkl-hijack tap ($test-$num $*)  =="
-#LKL_HIJACK_NET_IFTYPE=tap \
-# LKL_HIJACK_NET_IFPARAMS=tap0 \
-# LKL_HIJACK_NET_IP=${SELF_ADDR} \
-# LKL_HIJACK_NET_NETMASK_LEN=24 \
-#${TASKSET} lkl-hijack.sh \
-# ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
-# |& tee -a ${OUTPUT}/${PREFIX}-$test-hijack-tap-ps$size-$num.dat
+# XXX: musl-libc w/ UDP_STREAM is not working over 2sec length so, use hijack
+if [ $test == "UDP_STREAM" ] ; then
+echo "== lkl-hijack tap ($test-$num $*)  =="
+LKL_HIJACK_NET_IFTYPE=tap \
+ LKL_HIJACK_NET_IFPARAMS=tap0 \
+ LKL_HIJACK_NET_IP=${SELF_ADDR} \
+ LKL_HIJACK_NET_NETMASK_LEN=24 \
+${TASKSET} lkl-hijack.sh \
+ ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-hijack-tap-ps$size-$num.dat
 
+else
 echo "== lkl-musl tap ($test-$num $*)  =="
 
 rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-ps$size-$num.dat
-
+fi
 
 echo "== native ($test-$num $*)  =="
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
@@ -83,7 +87,7 @@ run_netperf_turn $test $num $size "-m $size,$size"
 done
 
 run_netperf_turn TCP_RR $num $size " -r $size,$size"
-#run_netperf_turn UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size"
+run_netperf_turn UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size"
 done
 done
 

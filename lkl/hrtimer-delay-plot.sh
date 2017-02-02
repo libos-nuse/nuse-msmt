@@ -49,6 +49,7 @@ unset logscale y
 set size 1.0,0.6
 set ytics 0,0.5,1
 set format y "%0.1f"
+set key bottom right
 
 
 plot \

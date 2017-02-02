@@ -116,10 +116,10 @@ do
 PREFIX="netperf-bbr-nohrt"
 (cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-nohrt.so liblkl-hijack.so)
 #run_netperf_hijack_turn TCP_STREAM nohrt-nofq-$inum "" 1G 2000000000 none bbr
-run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" 1G 1000000000 "root|fq" bbr
+run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" 1G 2000000000 "root|fq" bbr
 (cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-hrt.so liblkl-hijack.so)
-run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" 1G 1000000000 none bbr
-#run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" 1G 1000000000 "root|fq" bbr
+run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" 1G 2000000000 none bbr
+#run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" 1G 2000000000 "root|fq" bbr
 
 done
 

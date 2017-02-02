@@ -301,10 +301,10 @@ set yrange [0:10]
 set key top left
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
    '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
-   #'${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   #'${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
 
 #   '${OUTPUT}/${DIR}/udp-stream-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap",\
@@ -326,10 +326,10 @@ set key top right
 set yrange [0:1]
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
    '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 title "Linux"
 
-   #'${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
+   #'${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
 
 #   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-macvtap.dat' usin (\$0-0.2):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(tap)",\

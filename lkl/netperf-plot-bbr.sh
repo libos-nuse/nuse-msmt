@@ -1,11 +1,11 @@
 
-OUTPUT=$1
 PREFIX=netperf-bbr
-mkdir -p ${OUTPUT}
 
 # read vals
 source ./netperf-common.sh
 
+OUTPUT=$1
+mkdir -p ${OUTPUT}
 # override variables
 QDISC_PARAMS="root|fq"
 
@@ -70,7 +70,7 @@ grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-nofq* \
 
 #grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-fq* \
 #reuse from previous experiments
-grep -h bits ${OUTPUT}/netperf-bbr-TCP_ST*-hijack-tap-*-1G-1000000000-root\|fq-bbr*\
+grep -h bits ${OUTPUT}/netperf-bbr-TCP_ST*-hijack-tap-*-1G-2000000000-root\|fq-bbr*\
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 | dbcolcreate -e "hrtimer,fq" mode \
