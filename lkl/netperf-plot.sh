@@ -274,13 +274,13 @@ set xrange [-1:7]
 set xtics ${PSIZE_XTICS}
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/${DIR}/tcp-rr.eps"
-set ylabel "Goodput (Trans/sec)"
-set yrange [0:20000]
+set ylabel "Goodput (KTrans/sec)"
+set yrange [0:20]
 set key top right
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.225):1:2 w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
    #'${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
 
