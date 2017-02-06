@@ -7,7 +7,6 @@ mkdir -p ${OUTPUT}
 
 
 # override
-SYS_MEM="1G"
 TCP_WMEM="100000000"
 QDISC_PARAMS="none"
 CC_ALGO="cubic"
@@ -52,7 +51,7 @@ done
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/tcp6-stream-1G-none.eps"
+set output "${OUTPUT}/${DIR}/tcp6-stream-${SYS_MEM}-none.eps"
 set yrange [0:]
 #set xtics font "Helvetica,14"
 set pointsize 2
@@ -73,11 +72,11 @@ set xtics ("disable" 0, "csum" 1, "csum+TSO6" 2)
 
 
 plot \
-   '${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-${CC_ALGO}-none-1G.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "LKL", \
-   '${OUTPUT}/${PREFIX}-tcp6-stream-native-${CC_ALGO}-none-1G.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux"
+   '${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-${CC_ALGO}-none-${SYS_MEM}.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "LKL", \
+   '${OUTPUT}/${PREFIX}-tcp6-stream-native-${CC_ALGO}-none-${SYS_MEM}.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux"
 
 set terminal png lw 3 14
-set output "${OUTPUT}/tcp6-stream-1G-none.png"
+set output "${OUTPUT}/tcp6-stream-${SYS_MEM}-none.png"
 replot
 
 
