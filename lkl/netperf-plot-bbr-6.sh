@@ -10,6 +10,7 @@ mkdir -p ${OUTPUT}
 TCP_WMEM="100000000"
 QDISC_PARAMS="none"
 CC_ALGO="cubic"
+SYS_MEM="1G"
 
 rm -f ${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-*.dat
 rm -f ${OUTPUT}/${PREFIX}-tcp6-stream-native-*.dat
