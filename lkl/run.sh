@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sh `dirname ${BASH_SOURCE:-$0}`/netperf-bench.sh
-sh `dirname ${BASH_SOURCE:-$0}`/netperf-bench-bbr.sh
+bash `dirname ${BASH_SOURCE:-$0}`/netperf-bench-bbr.sh
 sh `dirname ${BASH_SOURCE:-$0}`/netperf-bench-bbr-6.sh
 
 bash ./hrtimer-bench.sh
