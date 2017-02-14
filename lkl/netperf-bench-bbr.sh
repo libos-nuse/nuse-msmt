@@ -121,13 +121,14 @@ do
 PREFIX="netperf-bbr-nohrt"
 sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
 sudo tc qdisc del dev ens3f0 root fq pacing
-
+SYS_MEM="10000M"
+TCP_WMEM="400000000"
 (cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-nohrt.so liblkl-hijack.so)
-#run_netperf_hijack_turn TCP_STREAM nohrt-nofq-$inum "" ${SYS_MEM} 100000000 none bbr
-run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" ${SYS_MEM} 100000000 "root|fq" bbr
+run_netperf_hijack_turn TCP_STREAM nohrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
+run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
 (cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-hrt.so liblkl-hijack.so)
-run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" ${SYS_MEM} 100000000 none bbr
-#run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" ${SYS_MEM} 100000000 "root|fq" bbr
+run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
+run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
 
 done
 

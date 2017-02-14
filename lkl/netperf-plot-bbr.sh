@@ -70,7 +70,8 @@ grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-nofq* \
 
 #grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-fq* \
 #reuse from previous experiments
-grep -h bits ${OUTPUT}/netperf-bbr-TCP_ST*-hijack-tap-*-${SYS_MEM}-100000000-root\|fq-bbr*\
+#grep -h bits ${OUTPUT}/netperf-bbr-TCP_ST*-hijack-tap-*-${SYS_MEM}-100000000-root\|fq-bbr*\
+grep -h bits ${OUTPUT}/netperf-bbr-nohrt-TCP_ST*-hijack-tap*-hrt-fq-*-10000M-400000000-root\|fq-bbr*\
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 | dbcolcreate -e "hrtimer,fq" mode \
