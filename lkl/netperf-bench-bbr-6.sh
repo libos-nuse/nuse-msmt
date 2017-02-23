@@ -68,7 +68,7 @@ LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IPV6=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK6_LEN=64 \
  LKL_HIJACK_BOOT_CMDLINE="mem=${mem}" \
- LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
+ LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
  LKL_HIJACK_NET_QDISC=${qdisc_params} \
 ${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
