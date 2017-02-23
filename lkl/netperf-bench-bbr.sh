@@ -39,8 +39,8 @@ LKL_HIJACK_NET_IFTYPE=tap \
  LKL_HIJACK_NET_IFPARAMS=tap1 \
  LKL_HIJACK_NET_IP=${SELF_ADDR} \
  LKL_HIJACK_NET_NETMASK_LEN=24 \
- LKL_HIJACK_MEMSIZE=${mem} \
- LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
+ LKL_HIJACK_BOOT_CMDLINE="mem=${mem}" \
+ LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
  LKL_HIJACK_NET_QDISC=${qdisc_params} \
 ${TASKSET} lkl-hijack.sh \
  ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} \
@@ -66,15 +66,15 @@ NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l30 -- -K $cc -o $ex_arg"
 sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
 sudo tc qdisc del dev ens3f0 root fq pacing
 
-run_netperf_hijack_turn $1 $2 "" $4 $5 $6 $7
+#run_netperf_hijack_turn $1 $2 "" $4 $5 $6 $7
 
-# echo "== lkl-musl tap ($test-$num, $*)  =="
-# 
-# LKL_MEMSIZE=${mem} \
-#  LKL_SYSCTL="net.ipv4.tcp_wmem|4096 87380 ${tcp_wmem}" \
-#  LKL_NET_QDISC=${qdisc_params} \
-#  rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
-#  |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
+echo "== lkl-musl tap ($test-$num, $*)  =="
+
+LKL_BOOT_CMDLINE="mem=${mem}" \
+ LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
+ LKL_NET_QDISC=${qdisc_params} \
+ rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
 
 echo "== native ($test-$num, $*)  =="
 if [ $qdisc_params != "none" ] ; then

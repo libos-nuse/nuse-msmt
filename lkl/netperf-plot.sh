@@ -20,6 +20,8 @@ fi
 
 rm -rf ${OUTPUT}/${DIR}
 mkdir -p ${OUTPUT}/${DIR}
+mkdir -p ${OUTPUT}/out/${DIR}/
+
 
 # parse outputs
 
@@ -232,7 +234,7 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/tcp-stream.eps"
+set output "${OUTPUT}/out/${DIR}/tcp-stream.eps"
 #set xtics font "Helvetica,14"
 set pointsize 2
 set xzeroaxis
@@ -265,7 +267,7 @@ plot \
 #   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 
 set terminal png lw 3 14
-set output "${OUTPUT}/${DIR}/tcp-stream.png"
+set output "${OUTPUT}/out/${DIR}/tcp-stream.png"
 replot
 
 
@@ -273,7 +275,7 @@ set xlabel "Payload size (bytes)"
 set xrange [-1:7]
 set xtics ${PSIZE_XTICS}
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/tcp-rr.eps"
+set output "${OUTPUT}/out/${DIR}/tcp-rr.eps"
 set ylabel "Goodput (KTrans/sec)"
 set yrange [0:20]
 set key top right
@@ -291,11 +293,11 @@ plot \
 ##    #'${OUTPUT}/${DIR}/tcp-rr-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
 
 set terminal png lw 3 14
-set output "${OUTPUT}/${DIR}/tcp-rr.png"
+set output "${OUTPUT}/out/${DIR}/tcp-rr.png"
 replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/udp-stream.eps"
+set output "${OUTPUT}/out/${DIR}/udp-stream.eps"
 set ylabel "Goodput (Gbps)"
 set yrange [0:10]
 set key top left
@@ -316,11 +318,11 @@ plot \
 
 
 set terminal png lw 3 14
-set output "${OUTPUT}/${DIR}/udp-stream.png"
+set output "${OUTPUT}/out/${DIR}/udp-stream.png"
 replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/udp-stream-pps.eps"
+set output "${OUTPUT}/out/${DIR}/udp-stream-pps.eps"
 set ylabel "Goodput (Mpps)"
 set key top right
 set yrange [0:1]
@@ -341,7 +343,7 @@ plot \
 
 
 set terminal png lw 3 14
-set output "${OUTPUT}/${DIR}/udp-stream-pps.png"
+set output "${OUTPUT}/out/${DIR}/udp-stream-pps.png"
 replot
 
 set terminal dumb

@@ -4,6 +4,7 @@ source ./netperf-common.sh
 OUTPUT=$1
 PREFIX=netperf6
 mkdir -p ${OUTPUT}
+mkdir -p ${OUTPUT}/out
 
 
 # override
@@ -52,7 +53,7 @@ done
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/${DIR}/tcp6-stream-${SYS_MEM}-none.eps"
+set output "${OUTPUT}/out/tcp6-stream-${SYS_MEM}-none.eps"
 set yrange [0:]
 #set xtics font "Helvetica,14"
 set pointsize 2
@@ -77,7 +78,7 @@ plot \
    '${OUTPUT}/${PREFIX}-tcp6-stream-native-${CC_ALGO}-none-${SYS_MEM}.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux"
 
 set terminal png lw 3 14
-set output "${OUTPUT}/tcp6-stream-${SYS_MEM}-none.png"
+set output "${OUTPUT}/out/tcp6-stream-${SYS_MEM}-none.png"
 replot
 
 

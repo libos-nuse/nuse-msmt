@@ -11,11 +11,13 @@ export FIXED_MASK=24
 OIF=ens3f1
 OIF=br0
 
-export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem|4096 87380 100000000"
-export LKL_HIJACK_MEMSIZE=1G
+mkdir -p ${OUTPUT}
 
-export LKL_SYSCTL="net.ipv4.tcp_wmem|4096 87380 100000000"
-export LKL_MEMSIZE=1G
+export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem=4096 87380 100000000"
+export LKL_HIJACK_BOOT_CMDLINE="mem=1G"
+
+export LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 100000000"
+export LKL_BOOT_CMDLINE="mem=1G"
 
 # enable offload
 
@@ -25,8 +27,8 @@ sudo tuned-adm profile latency-performance
 # VIRTIO offloads, CSUM/TSO4/MRGRCVBUF/UFO
 export LKL_HIJACK_OFFLOAD=0xc803
 
-mkdir -p ${OUTPUT}
 
+exec > >(tee ${OUTPUT}/$0.log) 2>&1
 
 run_netperf_turn()
 {
@@ -40,6 +42,7 @@ ex_arg=$4
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 
 sudo ethtool -K ${OIF} tso on gro on gso on rx on tx on
+sudo sysctl -w net.ipv4.tcp_wmem="4096 87380 100000000"
 
 # XXX: musl-libc w/ UDP_STREAM is not working over 2sec length so, use hijack
 if [ $test == "UDP_STREAM" ] ; then
