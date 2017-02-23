@@ -48,6 +48,30 @@ ${TASKSET} lkl-hijack.sh \
 #set +x
 }
 
+run_netperf_musl_turn()
+{
+test=$1
+num=$2
+ex_arg=$3
+mem=$4
+tcp_wmem=$5
+qdisc_params=$6
+cc=$7
+
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l30 -- -K $cc -o $ex_arg"
+echo "== lkl-musl tap ($test-$num, $*)  =="
+
+#set -x
+
+LKL_BOOT_CMDLINE="mem=${mem}" \
+ LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
+ LKL_NET_QDISC=${qdisc_params} \
+ LKL_OFFLOAD=1 \
+ rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
+#set +x
+}
+
 run_netperf_turn()
 {
 
@@ -67,14 +91,8 @@ sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
 sudo tc qdisc del dev ens3f0 root fq pacing
 
 #run_netperf_hijack_turn $1 $2 "" $4 $5 $6 $7
+run_netperf_musl_turn $1 $2 "" $4 $5 $6 $7
 
-echo "== lkl-musl tap ($test-$num, $*)  =="
-
-LKL_BOOT_CMDLINE="mem=${mem}" \
- LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
- LKL_NET_QDISC=${qdisc_params} \
- rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
- |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
 
 echo "== native ($test-$num, $*)  =="
 if [ $qdisc_params != "none" ] ; then
@@ -104,7 +122,6 @@ do
 for cc in ${CC_ALGO}
 do
 
-(cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-hrt.so liblkl-hijack.so)
 run_netperf_turn $test $num "" $mem $tcp_wmem $qdisc $cc
 echo ""
 
@@ -123,12 +140,12 @@ sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
 sudo tc qdisc del dev ens3f0 root fq pacing
 SYS_MEM="10000M"
 TCP_WMEM="400000000"
-(cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-nohrt.so liblkl-hijack.so)
-run_netperf_hijack_turn TCP_STREAM nohrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
-run_netperf_hijack_turn TCP_STREAM nohrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
-(cd ${LKL_DIR}/tools/lkl;ln -f -s liblkl-hijack-hrt.so liblkl-hijack.so)
-run_netperf_hijack_turn TCP_STREAM hrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
-run_netperf_hijack_turn TCP_STREAM hrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
+LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lkl-nohrt/src/
+run_netperf_musl_turn TCP_STREAM nohrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
+run_netperf_musl_turn TCP_STREAM nohrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
+LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lkl/src/
+run_netperf_musl_turn TCP_STREAM hrt-nofq-$inum "" ${SYS_MEM} ${TCP_WMEM} none bbr
+run_netperf_musl_turn TCP_STREAM hrt-fq-$inum "" ${SYS_MEM} ${TCP_WMEM} "root|fq" bbr
 
 done
 

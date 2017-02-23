@@ -57,31 +57,31 @@ done
 # nofq/nohrt plots
 
 PREFIX=netperf-bbr-nohrt
-grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-nohrt-fq* \
+grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap-nohrt-fq* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 | dbcolcreate -e "no-hrtimer,fq" mode \
->> ${OUTPUT}/tcp-stream-hijack-tap-hrt-fq.dat
+>> ${OUTPUT}/tcp-stream-musl-tap-hrt-fq.dat
 
-grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-nofq* \
+grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap-hrt-nofq* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 | dbcolcreate -e "hrtimer,no-fq" mode \
->> ${OUTPUT}/tcp-stream-hijack-tap-hrt-fq.dat
+>> ${OUTPUT}/tcp-stream-musl-tap-hrt-fq.dat
 
 #grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-hijack-tap-hrt-fq* \
 #reuse from previous experiments
 #grep -h bits ${OUTPUT}/netperf-bbr-TCP_ST*-hijack-tap-*-${SYS_MEM}-100000000-root\|fq-bbr*\
-grep -h bits ${OUTPUT}/netperf-bbr-nohrt-TCP_ST*-hijack-tap*-hrt-fq-*-10000M-400000000-root\|fq-bbr*\
+grep -h bits ${OUTPUT}/netperf-bbr-nohrt-TCP_ST*-musl-tap*-hrt-fq-*-10000M-400000000-root\|fq-bbr*\
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcol mean stddev \
 | dbcolcreate -e "hrtimer,fq" mode \
->> ${OUTPUT}/tcp-stream-hijack-tap-hrt-fq.dat
+>> ${OUTPUT}/tcp-stream-musl-tap-hrt-fq.dat
 
 #generate latex table
-cat ${OUTPUT}/tcp-stream-hijack-tap-hrt-fq.dat | dbcol mode mean stddev | \
+cat ${OUTPUT}/tcp-stream-musl-tap-hrt-fq.dat | dbcol mode mean stddev | \
  grep -v "^#" | sed "s/\s/ \& /g" | sed "s/\$/ \\\\\\\\ \\\hline/" \
- > ${OUTPUT}/tcp-stream-hijack-hrt-fq.tbl
+ > ${OUTPUT}/tcp-stream-musl-hrt-fq.tbl
 
 
 gnuplot  << EndGNUPLOT
@@ -172,6 +172,9 @@ replot
 ## set output "${OUTPUT}/out/tcp-stream-512M-nofq.png"
 ## replot
 ## 
+
+
+
 # nohrt/nofq test
 set output "${OUTPUT}/out/tcp-stream-bbr-hrt-fq.eps"
 unset yrange
@@ -180,7 +183,7 @@ set xrange [-1:3]
 set xlabel ""
 
 plot \
-   '${OUTPUT}/tcp-stream-hijack-tap-hrt-fq.dat' usin 0:1:2:xtic(3) w boxerrorbar notitle
+   '${OUTPUT}/tcp-stream-musl-tap-hrt-fq.dat' usin 0:1:2:xtic(3) w boxerrorbar notitle
 
 set terminal png lw 3 14
 set output "${OUTPUT}/out/tcp-stream-bbr-hrt-fq.png"
