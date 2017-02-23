@@ -1,6 +1,7 @@
 #!/bin/sh
 
 OUTPUT=$1
+mkdir -p ${OUTPUT}/out
 
 cat ${OUTPUT}/hrtimer/native-log.txt |grep timer:hrtim | grep qdisc |\
        awk '{ gsub(/:/, "") } { gsub(/expires=/, "") } { gsub(/now=/, "") } $5 ~ /start/ { base = $8 }  $5 ~ /expire/  { if (base != 0) delay=$7 - base; else delay=0; { printf "%.f %.f \n", $4 * 1000000, delay; base = 0 } }' \
@@ -23,24 +24,26 @@ cat ${OUTPUT}/hrtimer/lkl-delay.dat| dbcoldefine time delay | dbcol delay | \
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/hrtimer/hrtimer-delay.eps"
+set output "${OUTPUT}/out/hrtimer-delay.eps"
+set xlabel "elasped time"
+set ylabel "Delay (nsec)"
 set pointsize 1
 set xzeroaxis
 set grid ytics
 
 plot \
-       '${OUTPUT}/hrtimer/native-delay.dat' usi 0:2 w p pt 1 title "native", \
-       '${OUTPUT}/hrtimer/lkl-delay.dat' usi 0:2 w p pt 2 title "lkl"
+       '${OUTPUT}/hrtimer/lkl-delay.dat' usi 0:2 w p pt 2 title "LKL", \
+       '${OUTPUT}/hrtimer/native-delay.dat' usi 0:2 w p pt 1 title "Linux"
 
 set terminal png lw 3 14
 set xtics nomirror
-set output "${OUTPUT}/hrtimer/hrtimer-delay.png"
+set output "${OUTPUT}/out/hrtimer-delay.png"
 replot
 
 
 set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/hrtimer/hrtimer-delay-cdf.eps"
-set xlabel "Delay (usec)"
+set output "${OUTPUT}/out/hrtimer-delay-cdf.eps"
+set xlabel "Delay (nsec)"
 set ylabel "CDF"
 set logscale x
 unset logscale y
@@ -58,7 +61,7 @@ plot \
 
 set terminal png lw 3 14
 set xtics nomirror
-set output "${OUTPUT}/hrtimer/hrtimer-delay-cdf.png"
+set output "${OUTPUT}/out/hrtimer-delay-cdf.png"
 replot
 
 set terminal dumb
