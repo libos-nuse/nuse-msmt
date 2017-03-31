@@ -77,7 +77,7 @@ plot \
    '${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-${CC_ALGO}-none-${SYS_MEM}.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 0 title "LKL", \
    '${OUTPUT}/${PREFIX}-tcp6-stream-native-${CC_ALGO}-none-${SYS_MEM}.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 0 title "Linux"
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/tcp6-stream-${SYS_MEM}-none.png"
 replot
 

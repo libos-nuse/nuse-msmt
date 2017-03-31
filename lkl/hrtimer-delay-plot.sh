@@ -35,7 +35,7 @@ plot \
        '${OUTPUT}/hrtimer/lkl-delay.dat' usi 0:2 w p pt 2 title "LKL", \
        '${OUTPUT}/hrtimer/native-delay.dat' usi 0:2 w p pt 1 title "Linux"
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set xtics nomirror
 set output "${OUTPUT}/out/hrtimer-delay.png"
 replot
@@ -59,7 +59,7 @@ plot \
        '${OUTPUT}/hrtimer/lkl-delay-cdf.dat' usi 1:3 w lp pt 2 ps 2 title "LKL" ,\
        '${OUTPUT}/hrtimer/native-delay-cdf.dat' usi 1:3 w lp pt 1 ps 2 title "Linux"
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set xtics nomirror
 set output "${OUTPUT}/out/hrtimer-delay-cdf.png"
 replot

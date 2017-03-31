@@ -37,7 +37,7 @@ plot \
    '${OUTPUT}/nginx-musl.dat' usin (\$0-0.225):1:2 w boxerrorbar  title "LKL", \
    '${OUTPUT}/nginx-native.dat' usin (\$0+0.225):1:2 w boxerrorbar  title "Linux"
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45 font ",14"
 set output "${OUTPUT}/out/nginx-wrk.png"
 replot

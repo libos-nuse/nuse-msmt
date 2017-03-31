@@ -31,7 +31,7 @@ tcp_wmem=$5
 qdisc_params=$6
 cc=$7
 
-NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l30 -- -K $cc -o $ex_arg"
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l10 -- -K $cc -o $ex_arg"
 echo "== lkl-hijack tap ($test-$num, $*)  =="
 
 #set -x
@@ -58,7 +58,7 @@ tcp_wmem=$5
 qdisc_params=$6
 cc=$7
 
-NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l30 -- -K $cc -o $ex_arg"
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l10 -- -K $cc -o $ex_arg"
 echo "== lkl-musl tap ($test-$num, $*)  =="
 
 #set -x
@@ -70,6 +70,29 @@ LKL_BOOT_CMDLINE="mem=${mem}" \
  rexec ${LKLMUSL_NETPERF}/netperf tap:tap1 -- ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat
 #set +x
+}
+
+run_netperf_qemu_turn()
+{
+test=$1
+num=$2
+ex_arg=$3
+mem=$4
+tcp_wmem=$5
+qdisc_params=$6
+cc=$7
+
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l10 -- -K $cc -o $ex_arg"
+echo "== lkl-musl-qemu tap ($test-$num $*)  =="
+rumprun kvm \
+ -M 10000 -I 'eth0,eth,-netdev type=tap,script=no,ifname=tap1,id=eth0' \
+ -W "eth0,inet,static,${SELF_ADDR}/${FIXED_MASK}" \
+ -g "-s -nographic -vga none" -i \
+ -e "LKL_SYSCTL=net.ipv4.tcp_wmem=4096 87380 ${tcp_wmem}" \
+ -e "LKL_NET_QDISC=${qdisc_params}" \
+ ${RUMPRUN_NETPERF}/netperf.bin ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-qemu-tap-$num-$mem-$tcp_wmem-$qdisc_params-$cc.dat &
+sleep 13 && killall qemu-system-x86_64
 }
 
 run_netperf_turn()
@@ -84,7 +107,7 @@ qdisc_params=$6
 cc=$7
 
 
-NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l30 -- -K $cc -o $ex_arg"
+NETPERF_ARGS="-H ${DEST_ADDR} -t $test -l10 -- -K $cc -o $ex_arg"
 
 # enable offload
 sudo ethtool -K ens3f0 tso on gro on gso on rx on tx on
@@ -93,6 +116,7 @@ sudo tc qdisc del dev ens3f0 root fq pacing
 #run_netperf_hijack_turn $1 $2 "" $4 $5 $6 $7
 run_netperf_musl_turn $1 $2 "" $4 $5 $6 $7
 
+run_netperf_qemu_turn $1 $2 "" $4 $5 $6 $7
 
 echo "== native ($test-$num, $*)  =="
 if [ $qdisc_params != "none" ] ; then

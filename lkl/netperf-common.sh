@@ -11,8 +11,9 @@ TRIALS=5
 
 LKL_DIR=/home/tazaki/work/lkl-linux/
 LKLMUSL_NETPERF=/home/tazaki/work/netperf2/lkl/src/
+RUMPRUN_NETPERF=/home/tazaki/work/netperf2/rumprun
 NATIVE_NETPERF=/home/tazaki/work/netperf-2.7.0/src/
-PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:${LKL_DIR}/tools/lkl/bin
+PATH=${PATH}:/home/tazaki/work/frankenlibc/rump/bin/:${LKL_DIR}/tools/lkl/bin:/home/tazaki/work/rumprun/rumprun-lkl-musl/bin/
 
 TASKSET="taskset -c 0"
 OUTPUT=`date -I`

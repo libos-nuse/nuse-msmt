@@ -62,6 +62,16 @@ rexec ${LKLMUSL_NETPERF}/netperf tap:tap0 -- ${NETPERF_ARGS} \
  |& tee -a ${OUTPUT}/${PREFIX}-$test-musl-tap-ps$size-$num.dat
 fi
 
+echo "== lkl-musl-qemu tap ($test-$num $*)  =="
+rumprun kvm \
+ -M 10000 -I 'eth0,eth,-netdev type=tap,script=no,ifname=tap0,id=eth0' \
+ -W "eth0,inet,static,${SELF_ADDR}/${FIXED_MASK}" \
+ -g "-s -nographic -vga none" -i \
+ ${RUMPRUN_NETPERF}/netperf.bin ${NETPERF_ARGS} \
+ |& tee -a ${OUTPUT}/${PREFIX}-$test-qemu-tap-ps$size-$num.dat &
+sleep 13 && killall qemu-system-x86_64
+
+
 echo "== native ($test-$num $*)  =="
 NETPERF_ARGS="-H ${DEST_ADDR} -t $test -- -o $ex_arg"
 ${TASKSET} ${NATIVE_NETPERF}/netperf ${NETPERF_ARGS} |& tee -a ${OUTPUT}/${PREFIX}-$test-native-ps$size-$num.dat

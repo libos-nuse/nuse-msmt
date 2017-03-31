@@ -66,6 +66,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-musl-tap-* \
 # | dbcolstats thpt | dbcol mean stddev \
 # > ${OUTPUT}/${DIR}/tcp-stream-musl-sendmmsg.dat
 
+grep -E -h 6bits ${OUTPUT}/${PREFIX}*-qemu-tap-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-stream-qemu-tap.dat
+
 grep -E -h bits ${OUTPUT}/${PREFIX}*-native-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
@@ -118,7 +123,13 @@ grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-musl-tap-* \
 # | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 # > ${OUTPUT}/${DIR}/tcp-rr-musl-sendmmsg.dat
 # 
- grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-native-* \
+
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-qemu-tap-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-rr-qemu-tap.dat
+
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-native-* \
  | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
  | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-native.dat
@@ -170,6 +181,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-musl-tap-* \
 # | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 # > ${OUTPUT}/${DIR}/udp-stream-musl-sendmmsg.dat
  
+grep -E -h 6bits ${OUTPUT}/${PREFIX_UDP}*-qemu-tap-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-qemu-tap.dat
+
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
@@ -222,6 +238,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-musl-tap-* \
 # | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 # > ${OUTPUT}/${DIR}/udp-stream-pps-musl-sendmmsg.dat
 # 
+grep -E -h 6bits ${OUTPUT}/${PREFIX_UDP}*-qemu-tap-* \
+| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
+| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-pps-qemu-tap.dat
+
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
@@ -240,7 +261,7 @@ set pointsize 2
 set xzeroaxis
 set grid ytics
 
-set boxwidth 0.45
+set boxwidth 0.3
 set style fill pattern
 
 set size 1.0,0.6
@@ -254,8 +275,9 @@ set ylabel "Goodput (Gbps)"
 
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/tcp-stream-qemu-tap.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL+qemu" , \
+   '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
    #'${OUTPUT}/${DIR}/tcp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
 
@@ -266,7 +288,7 @@ plot \
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(raw)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-hijack-raw.dat' usin (\$0-0.5):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/${DIR}/tcp-stream.png"
 replot
 
@@ -281,8 +303,9 @@ set yrange [0:20]
 set key top right
 
 plot \
-   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/tcp-rr-musl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/tcp-rr-qemu-tap.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL+qemu" , \
+   '${OUTPUT}/${DIR}/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
    #'${OUTPUT}/${DIR}/tcp-rr-hijack-tap.dat' usin (\$0-0.225):1:2 w boxerrorbar fill patter 0 title "LKL" , \
 
@@ -292,7 +315,7 @@ plot \
 ## #   '${OUTPUT}/${DIR}/tcp-rr-hijack-raw.dat' usin (\$0-0.4):1:2 w boxerrorbar fill patter 1 title "hijack(raw)",\
 ##    #'${OUTPUT}/${DIR}/tcp-rr-musl-raw.dat' usin (\$0-0.0):1:2 w boxerrorbar fill patter 5 lw 1 title "lkl-musl(raw)",\
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/${DIR}/tcp-rr.png"
 replot
 
@@ -303,8 +326,9 @@ set yrange [0:10]
 set key top left
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/udp-stream-hijack-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-qemu-tap.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL+qemu" , \
+   '${OUTPUT}/${DIR}/udp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
    #'${OUTPUT}/${DIR}/udp-stream-musl-tap.dat' usin (\$0-0.225):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
 
@@ -317,7 +341,7 @@ plot \
 
 
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/${DIR}/udp-stream.png"
 replot
 
@@ -328,8 +352,9 @@ set key top right
 set yrange [0:1]
 
 plot \
-   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 title "Linux"
+   '${OUTPUT}/${DIR}/udp-stream-pps-hijack-tap.dat' usin (\$0-0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-qemu-tap.dat' usin (\$0):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL-qemu" , \
+   '${OUTPUT}/${DIR}/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 title "Linux"
 
    #'${OUTPUT}/${DIR}/udp-stream-pps-musl-tap.dat' usin (\$0-0.225):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 title "LKL" , \
 
@@ -342,7 +367,7 @@ plot \
 
 
 
-set terminal png lw 3 14
+set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/${DIR}/udp-stream-pps.png"
 replot
 
