@@ -108,7 +108,7 @@ set key top left
 set size 1.0,0.6
 
 
-set xrange [-1:4]
+set xrange [-0.5:3.5]
 set yrange [:10]
 set ylabel "Goodput (Gbps)"
 set xlabel "size of sock tx buffer (bytes)"
