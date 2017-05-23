@@ -29,3 +29,9 @@ export LKL_OFFLOAD=1
 #export LKL_HIJACK_BOOT_CMDLINE="mem=1G"
 #LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 2147483647"
 #LKL_BOOT_CMDLINE="mem=1G"
+
+setup_lkl() {
+  PATH="$PROJECT_ROOT/frankenlibc/rump/bin:$LKL_DIR/tools/lkl/bin:$PATH"
+  PATH="$PROJECT_ROOT/rumprun/rumprun-lkl-musl/bin:$PATH"
+  export PATH
+}

@@ -63,7 +63,7 @@ netperf::run() {
   netperf::lkl "$@"
   netperf::seaperf "$@"
   netperf::netbsd "$@"
-  netperf::lkl-qemu "$@"
+  netperf::lkl_qemu "$@"
   netperf::native "$@"
 }
 
@@ -75,16 +75,18 @@ netperf::lkl() {
   local ex_arg="$4"
   local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
 
+  setup_lkl
+
   # XXX: musl-libc w/ UDP_STREAM is not working over 2sec length so, use hijack
   if [[ "$test" == "UDP_STREAM" ]] ; then
     echo "$(tput bold)== lkl-hijack tap ($test-$num $*)  ==$(tput sgr0)"
-    LKL_HIJACK_NET_IFTYPE=tap \
-    LKL_HIJACK_NET_IFPARAMS=tap0 \
-    LKL_HIJACK_NET_IP="$SELF_ADDR" \
-    LKL_HIJACK_NET_NETMASK_LEN=24 \
-      $TASKSET lkl-hijack.sh \
-      "$NATIVE_NETPERF/netperf" $netperf_args \
-        |& tee -a "$OUTPUT/$PREFIX-$test-hijack-tap-ps$size-$num.dat"
+
+    export LKL_HIJACK_NET_IFTYPE=tap
+    export LKL_HIJACK_NET_IFPARAMS=tap0
+    export LKL_HIJACK_NET_IP="$SELF_ADDR"
+    export LKL_HIJACK_NET_NETMASK_LEN=24
+    $TASKSET lkl-hijack.sh "$NATIVE_NETPERF/netperf" $netperf_args \
+      |& tee -a "$OUTPUT/$PREFIX-$test-hijack-tap-ps$size-$num.dat"
   else
     echo "$(tput bold)== lkl-musl tap ($test-$num $*)  ==$(tput sgr0)"
 
@@ -141,13 +143,15 @@ netperf::netbsd() {
 )
 }
 
-netperf::lkl-qemu() {
+netperf::lkl_qemu() {
 (
   local test="$1"
   local num="$2"
   local psize="$3"
   local ex_arg="$4"
   local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+
+  setup_lkl
 
   echo "$(tput bold)== lkl-musl-qemu tap ($test-$num $*)  ==$(tput sgr0)"
   rumprun kvm \
