@@ -10,6 +10,10 @@ SELF_ADDR="1.1.1.3"
 OIF=ens3f1
 OIF=br0
 
+SEAPERF_TCP_PORT="8065"
+SEAPERF_DEST="2.1.1.2"
+SEAPERF_SELF="2.1.1.3"
+
 main() {
   initialize
 
@@ -57,6 +61,7 @@ netperf::run() {
   sudo sysctl -w net.ipv4.tcp_wmem="4096 87380 100000000"
 
   netperf::lkl "$@"
+  netperf::seaperf "$@"
   netperf::netbsd "$@"
   netperf::lkl-qemu "$@"
   netperf::native "$@"
@@ -86,6 +91,35 @@ netperf::lkl() {
     rexec "$LKLMUSL_NETPERF/netperf" tap:tap0 -- $netperf_args \
      |& tee -a "$OUTPUT/$PREFIX-$test-musl-tap-ps$size-$num.dat"
   fi
+)
+}
+
+netperf::seaperf() {
+(
+  local test="$1"
+  local num="$2"
+  local psize="$3"
+  local ex_arg="$4"
+
+  if [[ "$test" != "TCP_STREAM" ]]; then
+    return
+  fi
+
+  echo "$(tput bold)== seastar tap ($test-$num $*) ==$(tput sgr0)"
+
+  for i in {0..5}; do
+    sudo timeout 120 "$SEAPERF/src/seaperf/seaclient" \
+      --host "$SEAPERF_DEST" --port "$SEAPERF_TCP_PORT" \
+      --network-stack native --dpdk-pmd \
+      --dhcp 0 \
+      --host-ipv4-addr "$SEAPERF_SELF" \
+      --netmask-ipv4-addr 255.255.255.0 \
+      |& tee -a "$OUTPUT/$PREFIX-$test-seastar-tap-ps$size-$num.dat"
+
+    if [[ "$?"  != 124 ]]; then
+      break
+    fi
+  done # while
 )
 }
 

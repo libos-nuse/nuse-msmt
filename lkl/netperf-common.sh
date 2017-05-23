@@ -18,6 +18,7 @@ NATIVE_NETPERF="$PROJECT_ROOT/netperf2/src/"
 LKLMUSL_NETPERF="$PROJECT_ROOT/netperf2-lklmusl/src/"
 NETBSD_NETPERF="$PROJECT_ROOT/netperf2-netbsd/src/"
 RUMPRUN_NETPERF="$PROJECT_ROOT/netperf2/rumprun/"
+SEAPERF="$PROJECT_ROOT/seaperf/release/"
 
 TASKSET="taskset -c 0"
 OUTPUT="$(date -I)"
