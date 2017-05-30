@@ -11,9 +11,17 @@ OFFLOADS="0 0003 d903" #disable, CSUM, CSUM/TSO4/MRGRCVBUF/UFO + TSO6
 
 TRIALS=5
 
+SELF_ADDR="1.1.1.3"
+DEST_ADDR="1.1.1.2"
+GATEWAY_ADDR="1.1.1.1"
+DPDK_DEST_ADDR="2.1.1.2"
+DPDK_SELF_ADDR="2.1.1.3"
+DPDK_NETMASK="255.255.255.0"
+SEAPERF_TCP_PORT="8065"
+
+
 [[ -z "$PROJECT_ROOT" ]] && PROJECT_ROOT=~/work
 LKL_DIR="$PROJECT_ROOT/lkl-linux/"
-PATH+=":$PROJECT_ROOT/frankenlibc/rump/bin/:$LKL_DIR/tools/lkl/bin:$PROJECT_ROOT/rumprun/rumprun-lkl-musl/bin/"
 NATIVE_NETPERF="$PROJECT_ROOT/netperf2/src/"
 LKLMUSL_NETPERF="$PROJECT_ROOT/netperf2-lklmusl/src/"
 NETBSD_NETPERF="$PROJECT_ROOT/netperf2-netbsd/src/"
@@ -34,4 +42,8 @@ setup_lkl() {
   PATH="$PROJECT_ROOT/frankenlibc/rump/bin:$LKL_DIR/tools/lkl/bin:$PATH"
   PATH="$PROJECT_ROOT/rumprun/rumprun-lkl-musl/bin:$PATH"
   export PATH
+}
+
+setup_netbsd_rump() {
+  export PATH="$PROJECT_ROOT/frankenlibc-netbsd/rump/bin:$PATH"
 }

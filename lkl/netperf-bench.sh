@@ -10,10 +10,6 @@ SELF_ADDR="1.1.1.3"
 OIF=ens3f1
 OIF=br0
 
-SEAPERF_TCP_PORT="8065"
-SEAPERF_DEST="2.1.1.2"
-SEAPERF_SELF="2.1.1.3"
-
 main() {
   initialize
 
@@ -111,11 +107,11 @@ netperf::seaperf() {
 
   for i in {0..5}; do
     sudo timeout 120 "$SEAPERF/src/seaperf/seaclient" \
-      --host "$SEAPERF_DEST" --port "$SEAPERF_TCP_PORT" \
+      --host "$DPDK_DEST_ADDR" --port "$SEAPERF_TCP_PORT" \
       --network-stack native --dpdk-pmd \
       --dhcp 0 \
-      --host-ipv4-addr "$SEAPERF_SELF" \
-      --netmask-ipv4-addr 255.255.255.0 \
+      --host-ipv4-addr "$DPDK_SELF_ADDR" \
+      --netmask-ipv4-addr "$DPDK_NETMASK" \
       |& tee -a "$OUTPUT/$PREFIX-$test-seastar-tap-ps$size-$num.dat"
 
     if [[ "$?"  != 124 ]]; then
@@ -135,8 +131,8 @@ netperf::netbsd() {
 
   echo "$(tput bold)== netbsd tap ($test-$num $*)  ==$(tput sgr0)"
 
-  export PATH="$PROJECT_ROOT/frankenlibc-netbsd/rump/bin:$PATH"
-  export FIXED_GATEWAY=1.1.1.1
+  setup_netbsd_rump
+  export FIXED_GATEWAY="$GATEWAY_ADDR"
 
   rexec "$NETBSD_NETPERF/netperf" tap:tap0 -- $netperf_args \
     |& tee -a "$OUTPUT/$PREFIX-$test-netbsd-tap-ps$size-$num.dat"
