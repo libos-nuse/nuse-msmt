@@ -1,11 +1,10 @@
+#!/bin/bash
 
-source ./netperf-common.sh
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/netperf-common.sh"
 
 OUTPUT=$1
 PREFIX=netperf6
-mkdir -p ${OUTPUT}
-mkdir -p ${OUTPUT}/out
-
 
 # override
 TCP_WMEM="100000000"
@@ -13,8 +12,9 @@ QDISC_PARAMS="none"
 CC_ALGO="cubic"
 SYS_MEM="1G"
 
-rm -f ${OUTPUT}/${PREFIX}-tcp6-stream-hijack-tap-*.dat
-rm -f ${OUTPUT}/${PREFIX}-tcp6-stream-native-*.dat
+mkdir -p "$OUTPUT/out"
+rm -f "$OUTPUT/$PREFIX"-tcp6-stream-hijack-tap-*.dat
+rm -f "$OUTPUT/$PREFIX"-tcp6-stream-native-*.dat
 
 for mem in ${SYS_MEM}
 do

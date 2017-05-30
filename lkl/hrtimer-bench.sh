@@ -1,9 +1,11 @@
 #!/bin/bash
 # sudo required
 
-source ./netperf-common.sh
-mkdir -p ${OUTPUT}/hrtimer
-exec > >(tee ${OUTPUT}/hrtimer/$0.log) 2>&1
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/netperf-common.sh"
+
+mkdir -p "$OUTPUT/hrtimer"
+exec > >(tee "$OUTPUT/hrtimer/$0.log") 2>&1
 
 DELAYED_DEST=2.1.1.2
 DELAYED_SELF=2.1.1.3
@@ -18,6 +20,7 @@ sudo perf record -e timer:hrtimer_start -e timer:hrtimer_expire_entry \
 sudo perf script -i ${OUTPUT}/hrtimer/perf.data > ${OUTPUT}/hrtimer/native-log.txt
 
 # lkl
+setup_lkl
 sudo tc qdisc del dev ens3f0 root fq pacing
 
 # printf based
@@ -38,7 +41,8 @@ LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 1000000000" \
 LKL_NET_QDISC="root|fq" \
 LKL_BOOT_CMDLINE="mem=9G" \
 RUMP_VERBOSE=1 \
-rexec ${LKLMUSL_NETPERF}/netperf.qdisc-debug tap:tap1 -- ${NETPERF_ARGS} | tee ${OUTPUT}/hrtimer/lkl-log.txt
+rexec "$LKLMUSL_NETPERF/netperf.qdisc-debug" tap:tap1 -- $NETPERF_ARGS \
+  | tee "$OUTPUT/hrtimer/lkl-log.txt"
 
 # kill -9 %1
 # rm -f /var/tmp/.ftrace-lock
@@ -47,5 +51,5 @@ rexec ${LKLMUSL_NETPERF}/netperf.qdisc-debug tap:tap1 -- ${NETPERF_ARGS} | tee $
 #/home/tazaki/work/perf-tools/bin/uprobe 'p:/home/tazaki/work/netperf2/lkl/src/netperf:rumpns_qdisc_watchdog_timestamp idx=%di:s32 ts=%si:s64' > /dev/null
 
 
-sh ./hrtimer-delay-plot.sh ${OUTPUT}
-sudo chown -R tazaki ${OUTPUT}/hrtimer
+bash ./hrtimer-delay-plot.sh "$OUTPUT"
+sudo chown -R tazaki "$OUTPUT/hrtimer"

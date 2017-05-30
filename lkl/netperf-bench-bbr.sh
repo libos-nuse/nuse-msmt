@@ -1,6 +1,7 @@
 #!/bin/bash
 
-source ./netperf-common.sh
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/netperf-common.sh"
 
 PREFIX=netperf-bbr
 TESTNAMES="TCP_STREAM"
@@ -12,6 +13,8 @@ QDISC_PARAMS="root|fq"
 
 mkdir -p ${OUTPUT}
 exec > >(tee ${OUTPUT}/$0.log) 2>&1
+
+setup_lkl
 
 # disable c-state
 sudo tuned-adm profile latency-performance

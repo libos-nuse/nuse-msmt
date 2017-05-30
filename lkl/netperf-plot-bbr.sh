@@ -2,7 +2,8 @@
 PREFIX=netperf-bbr
 
 # read vals
-source ./netperf-common.sh
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source "$SCRIPT_DIR/netperf-common.sh"
 
 OUTPUT=$1
 mkdir -p ${OUTPUT}/out
