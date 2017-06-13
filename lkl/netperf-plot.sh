@@ -53,8 +53,8 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-netbsd-tap-* \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-netbsd-tap.dat
 
-tail -n 1 "$OUTPUT/$PREFIX"*-seastar-tap-* \
-| dbcoldefine dum | csv_to_db | dbcoldefine d1 d2 psize thpt \
+grep -E -h bits "$OUTPUT/$PREFIX"*-seastar-tap-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine d1 d2 psize thpt d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-seastar-tap.dat
 

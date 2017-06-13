@@ -105,18 +105,23 @@ netperf::seaperf() {
 
   echo "$(tput bold)== seastar tap ($test-$num $*) ==$(tput sgr0)"
 
+  ssh "$DPDK_DEST_ADDR" "$SEAPERF/src/seaperf/seaserver -c1 --once --port $SEAPERF_TCP_PORT" \
+    |& tee -a "$OUTPUT/$PREFIX-$test-seastar-tap-ps$size-$num.dat" &
+
   for i in {0..5}; do
     sudo timeout 120 "$SEAPERF/src/seaperf/seaclient" \
-      --host "$DPDK_DEST_ADDR" --port "$SEAPERF_TCP_PORT" \
+      --host "$DEST_ADDR" --port "$SEAPERF_TCP_PORT" \
+      --bufsize "$psize" \
       --network-stack native --dpdk-pmd \
       --dhcp 0 \
       --host-ipv4-addr "$DPDK_SELF_ADDR" \
       --netmask-ipv4-addr "$DPDK_NETMASK" \
-      |& tee -a "$OUTPUT/$PREFIX-$test-seastar-tap-ps$size-$num.dat"
+      --lro off
 
-    if [[ "$?"  != 124 ]]; then
-      break
-    fi
+    case ${PIPESTATUS[0]} in
+      124|137) continue ;;
+      *) break ;;
+    esac
   done # while
 )
 }
