@@ -20,9 +20,8 @@ main() {
         network_config "$test"
         seaperf::tap::run $test $num $size "-m $size,$size"
       done
+      seaperf::dpdk::run "dpdk" $num $size "-m $size,$size"
     done
-
-    seaperf::dpdk::run "dpdk" $num $size "-m $size,$size"
   done
   network_config tso gro gso rx tx
 
