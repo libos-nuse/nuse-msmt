@@ -53,10 +53,10 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-netbsd-tap-* \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-netbsd-tap.dat
 
-tail -n 1 "$OUTPUT/$PREFIX"*-seastar-tap-* \
-| dbcoldefine dum | csv_to_db | dbcoldefine d1 d2 psize thpt \
+grep -E -h bits "$OUTPUT/$PREFIX"*-seastar-dpdk-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine d1 d2 psize thpt d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/tcp-stream-seastar-tap.dat
+> ${OUTPUT}/${DIR}/tcp-stream-seastar-dpdk.dat
 
 # grep -E -h bits ${OUTPUT}/${PREFIX}*-musl-macvtap-* \
 # | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
@@ -304,7 +304,7 @@ set ylabel "Goodput (Gbps)"
 plot \
    '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
    '${OUTPUT}/${DIR}/tcp-stream-netbsd-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL" , \
-   '${OUTPUT}/${DIR}/tcp-stream-seastar-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "seastar" , \
+   '${OUTPUT}/${DIR}/tcp-stream-seastar-dpdk.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "seastar(dpdk)" , \
    '${OUTPUT}/${DIR}/tcp-stream-qemu-tap.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "LKL+qemu" , \
    '${OUTPUT}/${DIR}/tcp-stream-native.dat' usin (\$0+0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "Linux"
 
@@ -313,7 +313,7 @@ plot \
 #   '${OUTPUT}/${DIR}/tcp-stream-hijack-macvtap.dat' usin (\$0-0.3):1:2 w boxerrorbar fill patter 1 title "hijack(macvtap)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-netbsd-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(tap)",\
-#   '${OUTPUT}/${DIR}/tcp-stream-seastar-tap.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "seastar(tap)",\
+#   '${OUTPUT}/${DIR}/tcp-stream-seastar-dpdk.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "seastar(dpdk)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-skbpre.dat' usin (\$0+0.1):1:2 w boxerrorbar fill patter 6 title "lkl-musl (skb-prealloc)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-sendmmsg.dat' usin (\$0+0.3):1:2 w boxerrorbar fill patter 7 title "lkl-musl (sendmmsg)",\
 #   '${OUTPUT}/${DIR}/tcp-stream-musl-raw.dat' usin (\$0-0.1):1:2 w boxerrorbar fill patter 4 title "lkl-musl(raw)",\
