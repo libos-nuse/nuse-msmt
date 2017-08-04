@@ -23,8 +23,8 @@ main() {
       seaperf::dpdk::run "dpdk" $num $size "-m $size,$size"
     done
   done
-  network_config tso gro gso rx tx
 
+  network_config all
   seaperf::plot
 }
 
@@ -63,6 +63,12 @@ network_config() {
         rx=on
         tx=on
         ;;
+      all)
+        tso=on
+        gro=on
+        gso=on
+        rx=on
+        tx=on
     esac
     shift
   done
@@ -105,18 +111,14 @@ seaperf::dpdk::run() {
   local psize="$3"
   local ex_arg="$4"
 
-  if [[ "$test" != "TCP_STREAM" ]]; then
-    return
-  fi
-
   echo "$(tput bold)== seastar dpdk ($test-$num $*) ==$(tput sgr0)"
 
-  ssh "$DPDK_DEST_ADDR" "$SEAPERF/src/seaperf/seaserver -c1 --once --port $SEAPERF_TCP_PORT" \
+  ssh "$DEST_ADDR" "$SEAPERF/src/seaperf/seaserver -c1 --once --port $SEAPERF_TCP_PORT" \
     |& tee -a "$OUTPUT/$PREFIX-$test-seastar-dpdk-ps$size-$num.dat" &
 
   for i in {0..5}; do
     sudo timeout 120 "$SEAPERF/src/seaperf/seaclient" \
-      --host "$DEST_ADDR" --port "$SEAPERF_TCP_PORT" \
+      --host "$DPDK_DEST_ADDR" --port "$SEAPERF_TCP_PORT" \
       --bufsize "$psize" \
       --network-stack native --dpdk-pmd \
       --dhcp 0 \
@@ -124,10 +126,9 @@ seaperf::dpdk::run() {
       --netmask-ipv4-addr "$DPDK_NETMASK" \
       --lro off
 
-    case ${PIPESTATUS[0]} in
-      124|137) continue ;;
-      *) break ;;
-    esac
+    if [[ "${PIPESTATUS[0]}" == 0 ]]; then
+      break
+    fi
   done # while
 )
 }
@@ -184,10 +185,10 @@ seaperf::plot() {
     
     
     plot \
-      '${OUTPUT}/seastar/tso-seastar-tap.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "tso" , \
-      '${OUTPUT}/seastar/gso-seastar-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "gso" , \
-      '${OUTPUT}/seastar/checksum-seastar-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "checksum" , \
-      '${OUTPUT}/seastar/base-seastar-tap.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "base" , \
+      '${OUTPUT}/seastar/tso-seastar-tap.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "tso (tap)" , \
+      '${OUTPUT}/seastar/gso-seastar-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "gso (tap)" , \
+      '${OUTPUT}/seastar/checksum-seastar-tap.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "checksum (tap)" , \
+      '${OUTPUT}/seastar/base-seastar-tap.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "base (tap)" , \
       '${OUTPUT}/seastar/dpdk-seastar.dat' usin (\$0+0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "dpdk"
     
     quit

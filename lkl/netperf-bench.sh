@@ -57,7 +57,7 @@ netperf::run() {
   sudo sysctl -w net.ipv4.tcp_wmem="4096 87380 100000000"
 
   netperf::lkl "$@"
-  netperf::seaperf "$@"
+  netperf::seaperf::dpdk "$@"
   netperf::netbsd "$@"
   netperf::lkl_qemu "$@"
   netperf::native "$@"
@@ -92,7 +92,7 @@ netperf::lkl() {
 )
 }
 
-netperf::seaperf() {
+netperf::seaperf::dpdk() {
 (
   local test="$1"
   local num="$2"
@@ -103,10 +103,10 @@ netperf::seaperf() {
     return
   fi
 
-  echo "$(tput bold)== seastar tap ($test-$num $*) ==$(tput sgr0)"
+  echo "$(tput bold)== seastar dpdk ($test-$num $*) ==$(tput sgr0)"
 
-  ssh "$DPDK_DEST_ADDR" "$SEAPERF/src/seaperf/seaserver -c1 --once --port $SEAPERF_TCP_PORT" \
-    |& tee -a "$OUTPUT/$PREFIX-$test-seastar-tap-ps$size-$num.dat" &
+  ssh "$DEST_ADDR" "$SEAPERF/src/seaperf/seaserver -c1 --once --port $SEAPERF_TCP_PORT" \
+    |& tee -a "$OUTPUT/$PREFIX-$test-seastar-dpdk-ps$size-$num.dat" &
 
   for i in {0..5}; do
     sudo timeout 120 "$SEAPERF/src/seaperf/seaclient" \

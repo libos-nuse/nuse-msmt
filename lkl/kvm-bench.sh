@@ -18,9 +18,6 @@ main() {
         network_config "$test"
         netperf::run $test $num $size "-m $size,$size"
       done
-
-      network_config $TESTNAMES
-      netperf::run all $num $size "-m $size,$size"
     done
   done
   network_config tso gro gso rx tx
@@ -133,8 +130,7 @@ netperf::plot() {
       '${OUTPUT}/kvm/tso-kvm.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "tso" , \
       '${OUTPUT}/kvm/gso-kvm.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "gso" , \
       '${OUTPUT}/kvm/checksum-kvm.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "checksum" , \
-      '${OUTPUT}/kvm/tx-kvm.dat' usin (\$0+0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 title "tx" , \
-      '${OUTPUT}/kvm/base-kvm.dat' usin (\$0+0.60):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "base"
+      '${OUTPUT}/kvm/base-kvm.dat' usin (\$0+0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 title "base"
     
     quit
 EndGNUPLOT
