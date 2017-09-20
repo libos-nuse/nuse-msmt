@@ -9,6 +9,7 @@ DEST_ADDR="1.1.1.2"
 SELF_ADDR="1.1.1.3"
 OIF=ens3f1
 OIF=br0
+TRIALS=2
 
 main() {
   initialize
@@ -76,7 +77,7 @@ netperf::lkl_android() {
 
   #adb shell su -c /data/local/tmp/cellar-test.sh /data/local/tmp/netperf $netperf_args \
 
-  adb shell su -c /data/local/tmp/mptcp.sh /data/local/tmp/netperf $netperf_args \
+  adb shell su -c LKL_HIJACK_LIBNAME=liblkl-hijack-mptcp.so sh /data/data/jp.ad.iij.nuse/cache/lkl-hijack-android.sh netperf $netperf_args \
      |& tee -a "$OUTPUT/$PREFIX-$test-lkl-android-raw-ps$size-$num.dat"
 )
 }
@@ -94,7 +95,7 @@ netperf::native_android() {
   export PATH=${PATH}:/home/tazaki/Android/Sdk/platform-tools/
   echo "$(tput bold)== native-android ($test-$num $*)  ==$(tput sgr0)"
 
-  adb shell /data/local/tmp/netperf $netperf_args \
+  adb shell su -c /data/data/jp.ad.iij.nuse/cache/netperf $netperf_args \
      |& tee -a "$OUTPUT/$PREFIX-$test-native-android-raw-ps$size-$num.dat"
 )
 }

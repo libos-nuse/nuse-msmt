@@ -71,7 +71,8 @@ set xlabel "Payload size (bytes)"
 set yrange [0:100]
 set ylabel "Goodput (Mbps)"
 set y2tics
-set y2range [0:50]
+set ytics nomirror
+set y2range [0:]
 set y2label "CPU utilization (%)"
 
 
