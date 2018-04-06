@@ -5,6 +5,7 @@ CMD="./Run $TESTS"
 SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE:-$0})" ; pwd )
 OUTPUT=$SCRIPT_DIR/output/$(date "+%Y%m%d-%H")
 UBENCH_ROOT=/Users/tazaki/gitworks/byte-unixbench/UnixBench
+FLIBC_ROOT=/Users/tazaki/gitworks/frankenlibc/rump/bin
 
 rm -rf $OUTPUT
 mkdir -p $OUTPUT
@@ -24,7 +25,10 @@ ln -fs testdir/disk.img
 #diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://51200`
 
 # LKL
-UB_OUTPUT_FILE_NAME=lkl UB_TMPDIR=/tmp/ UB_BINDIR=`pwd`/pgms-lkl PROGDIR=pgms-lkl CC=x86_64-rumprun-linux-cc $CMD
+PATH=$FLIBC_ROOT:${PATH} UB_OUTPUT_FILE_NAME=lkl UB_TMPDIR=/tmp/ UB_BINDIR=`pwd`/pgms-lkl PROGDIR=pgms-lkl CC=x86_64-rumprun-linux-cc $CMD
+
+# noah
+yes | noah $SCRIPT_DIR/ubench-noah.sh -- $CMD
 
 # native (macOS)
 UB_OUTPUT_FILE_NAME=macos $CMD
