@@ -10,7 +10,15 @@ fi
 mkdir -p $OUTPUT/plots
 
 # data convertion
-cat ${OUTPUT}/{lkl,noah,macos}.csv | grep -v Conc | datamash transpose -t, | tail -n +2 > ${OUTPUT}/ubench.dat
+TYPES="lkl,noah,macos,docker"
+for type in $(eval echo "{$TYPES}")
+do
+  if [ ! -s ${OUTPUT}/$type.csv ] ; then
+     echo "1,0,0,0,0,0,0,0,0,0,0" > ${OUTPUT}/$type.csv
+  fi
+done
+
+cat $(eval echo "${OUTPUT}/{$TYPES}.csv") | grep -v Conc | datamash transpose -t, | tail -n +2 > ${OUTPUT}/ubench.dat
 
 # table data for latex
 cat ${OUTPUT}/ubench.dat | sed "s/,/ \& /g" |sed "s/\$/ \\\\\\\\ \\\hline/" \
