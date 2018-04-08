@@ -1,0 +1,11 @@
+File Copy 1024 bufsize 2000 maxblocks (KBps) & 
+File Copy 256 bufsize 500 maxblocks (KBps) & 
+File Copy 4096 bufsize 8000 maxblocks (KBps) & 
+File Read 1024 bufsize 2000 maxblocks (KBps) & 
+File Read 256 bufsize 500 maxblocks (KBps) & 
+File Read 4096 bufsize 8000 maxblocks (KBps) & 
+File Write 1024 bufsize 2000 maxblocks (KBps) & 
+File Write 256 bufsize 500 maxblocks (KBps) & 
+File Write 4096 bufsize 8000 maxblocks (KBps) & 
+Pipe Throughput (lps) & 
+System Call Overhead (lps) & 

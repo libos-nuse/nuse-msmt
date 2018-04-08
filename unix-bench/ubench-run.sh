@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TESTS="-q -c 1 -i 1 fstime-r fstime-w fstime fsdisk-r fsdisk-w fsdisk fsbuffer-r fsbuffer-w fsbuffer pipe"
+TESTS="-q -c 1 -i 5 syscall fstime-r fstime-w fstime fsdisk-r fsdisk-w fsdisk fsbuffer-r fsbuffer-w fsbuffer pipe"
 CMD="./Run $TESTS"
 SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE:-$0})" ; pwd )
 OUTPUT=$SCRIPT_DIR/output/$(date "+%Y%m%d-%H")
