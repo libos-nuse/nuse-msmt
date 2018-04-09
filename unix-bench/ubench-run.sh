@@ -40,6 +40,7 @@ docker run --detach-keys="ctrl-q,ctrl-q" --rm -i -t \
   -e UB_RESULTDIR=$UB_RESULTDIR \
   -e UB_OUTPUT_FILE_NAME=docker \
   -e UB_OUTPUT_CSV=true \
+  -e UB_TMPDIR=$UB_RESULTDIR \
   -h `hostname` \
   thehajime/byte-unixbench:latest $CMD
 

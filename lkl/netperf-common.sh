@@ -30,7 +30,7 @@ RUMPRUN_NETPERF="$PROJECT_ROOT/netperf2/rumprun/"
 SEAPERF="$PROJECT_ROOT/seaperf/release/"
 
 TASKSET="taskset -c 0"
-OUTPUT="$(date -I)"
+#OUTPUT="$(date -I)"
 
 export LKL_HIJACK_OFFLOAD=0xc803
 export LKL_OFFLOAD=1

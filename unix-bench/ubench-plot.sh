@@ -53,10 +53,14 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/plots/unixbench.eps"
 
 plot \
-   '${OUTPUT}/ubench-2.csv' using (\$0-0.375):(\$1/1000) w boxes title "lkl", \
-   '' using (\$0-0.125):(\$2/1000) w boxes title "noah", \
-   '' us (\$0+0.125):(\$3/1000) w boxes title "docker", \
-   '' using (\$0+0.375):(\$4/1000) w boxes title "macos"
+   '${OUTPUT}/ubench-2.csv' using (\$0-0.375):(\$1/1000) w boxes \
+    fill patter 0 lc rgb "red" title "lkl", \
+   '' using (\$0-0.125):(\$2/1000) w boxes \
+    fill patter 1 lc rgb "green" title "noah", \
+   '' us (\$0+0.125):(\$3/1000) w boxes \
+    fill patter 2 lc rgb "gray" title "docker", \
+   '' us (\$0+0.375):(\$4/1000) w boxes \
+    fill patter 3 lc rgb "blue" title "macos"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/plots/unixbench.png"
