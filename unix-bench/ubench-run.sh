@@ -25,7 +25,7 @@ ln -fs testdir/disk.img
 #diskutil erasevolume HFS+ "ramdisk" `hdiutil attach -nomount ram://51200`
 
 # LKL
-PATH=$FLIBC_ROOT:${PATH} UB_OUTPUT_FILE_NAME=lkl UB_TMPDIR=/tmp/ UB_BINDIR=`pwd`/pgms-lkl PROGDIR=pgms-lkl CC=x86_64-rumprun-linux-cc $CMD
+PATH=$FLIBC_ROOT:${PATH} UB_OUTPUT_FILE_NAME=lkl UB_TMPDIR=/ UB_BINDIR=`pwd`/pgms-lkl PROGDIR=pgms-lkl CC=x86_64-rumprun-linux-cc $CMD
 
 # noah
 yes | noah $SCRIPT_DIR/ubench-noah.sh -- $CMD

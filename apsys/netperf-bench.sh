@@ -14,7 +14,6 @@ OIF=br0
 
 NETPERF_DIR=/Users/tazaki/gitworks/netperf2/
 #TMP variable
-TRIALS=1
 export PATH=~/bin:~/gitworks/frankenlibc/rump/bin:${PATH}
 
 main() {
