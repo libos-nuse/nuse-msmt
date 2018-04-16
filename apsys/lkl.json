@@ -1,0 +1,14 @@
+{
+    "interfaces": [
+        {
+            "ip": "3.3.3.3",
+            "masklen": "24",
+            "mac": "00:0d:0b:94:4e:97",
+            "param": "4",
+            "type": "rumpfd"
+        }
+    ],
+    "debug": "1",
+    "singlecpu": "1",
+    "delay_main": "500000",
+}
