@@ -34,8 +34,8 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/nginx-wrk.eps"
 
 plot \
-   '${OUTPUT}/nginx-musl.dat' usin (\$0-0.225):1:2 w boxerrorbar  title "LKL", \
-   '${OUTPUT}/nginx-native.dat' usin (\$0+0.225):1:2 w boxerrorbar  title "Linux"
+   '${OUTPUT}/nginx-musl.dat' usin (\$0-0.225):1:2 w boxerrorbar  title "lkl", \
+   '${OUTPUT}/nginx-native.dat' usin (\$0+0.225):1:2 w boxerrorbar  title "macos"
 
 set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45 font ",14"
