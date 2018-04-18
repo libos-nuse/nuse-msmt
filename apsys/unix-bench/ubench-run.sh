@@ -1,6 +1,7 @@
 #!/bin/bash
 
-TESTS="-q -c 1 -i 5 syscall fstime-r fstime-w fstime fsdisk-r fsdisk-w fsdisk fsbuffer-r fsbuffer-w fsbuffer pipe"
+TESTS_FULL="-q -c 1 -i 5 syscall fstime-r fstime-w fstime fsdisk-r fsdisk-w fsdisk fsbuffer-r fsbuffer-w fsbuffer pipe"
+TESTS="-q -c 1 -i 5 syscall fstime-r fstime-w fsdisk-r fsdisk-w pipe"
 CMD="./Run $TESTS"
 SCRIPT_DIR=$(cd "$(dirname ${BASH_SOURCE:-$0})" ; pwd )
 OUTPUT=$SCRIPT_DIR/output/$(date "+%Y%m%d-%H")
@@ -35,12 +36,11 @@ UB_OUTPUT_FILE_NAME=macos $CMD
 
 # Docker
 docker run --detach-keys="ctrl-q,ctrl-q" --rm -i -t \
-  -v /Volumes/Extended/:/Users/tazaki \
+  -v /Users/tazaki/:/Users/tazaki \
   --privileged=True \
   -e UB_RESULTDIR=$UB_RESULTDIR \
   -e UB_OUTPUT_FILE_NAME=docker \
   -e UB_OUTPUT_CSV=true \
-  -e UB_TMPDIR=$UB_RESULTDIR \
   -h `hostname` \
   thehajime/byte-unixbench:latest $CMD
 

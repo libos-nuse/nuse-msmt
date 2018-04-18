@@ -15,7 +15,9 @@ TYPES="lkl,noah,docker,macos"
 for type in $(eval echo "{$TYPES}")
 do
   if [ ! -s ${OUTPUT}/$type.csv ] ; then
-     echo "1,0,0,0,0,0,0,0,0,0,0,0" > ${OUTPUT}/$type.csv
+     # full test
+     #echo "1,0,0,0,0,0,0,0,0,0,0,0" > ${OUTPUT}/$type.csv
+     echo "1,0,0,0,0,0,0" > ${OUTPUT}/$type.csv
   fi
 done
 
@@ -41,11 +43,12 @@ set boxwidth 0.2
 set style fill pattern
 
 #set size 1.0,0.6
-set key top left
+set key top right
 
 #set xrange [-1:3]
 set yrange [0:5000]
-set xtics ('fstime' 0, 'fsbuffer' 1, 'fsdisk' 2, 'fstime-r' 3, 'fsbuffer-r' 4, 'fsdisk-r' 5, 'fstime-w' 6, 'fsbuffer-w' 7, 'fsdisk-w' 8, 'pipe' 9, 'syscall' 10)
+#set xtics ('fstime' 0, 'fsbuffer' 1, 'fsdisk' 2, 'fstime-r' 3, 'fsbuffer-r' 4, 'fsdisk-r' 5, 'fstime-w' 6, 'fsbuffer-w' 7, 'fsdisk-w' 8, 'pipe' 9, 'syscall' 10)
+set xtics ('fstime-r' 0, 'fsdisk-r' 1, 'fstime-w' 2, 'fsdisk-w' 3, 'pipe' 4, 'syscall' 5)
 set xtics rotate
 set ylabel "Throughput (MBps)"
 
