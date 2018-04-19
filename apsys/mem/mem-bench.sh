@@ -11,7 +11,7 @@ main() {
 
   mem::run
 
-  #bash "$SCRIPT_DIR/nginx-plot.sh" "$OUTPUT"
+  bash "$SCRIPT_DIR/mem-plot.sh" "$OUTPUT"
 }
 
 mem::run() {
