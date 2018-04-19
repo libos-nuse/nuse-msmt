@@ -5,7 +5,7 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 
 DEST_ADDR="3.3.3.2"
 SELF_ADDR="3.3.3.3"
-HOST_ADDR="3.3.3.4"
+HOST_ADDR="3.3.3.5"
 export FIXED_ADDRESS="$SELF_ADDR"
 export FIXED_MASK=24
 TRIALS=1
@@ -51,7 +51,7 @@ nginx::lkl() {
     "$LKLMUSL_NGINX/nginx/images/full.iso" tap:tap0 config:../lkl.json \
     | grep -v fallback &
   sleep 1
-  sudo ifconfig tap0 up; sudo ifconfig bridge1 addm tap0
+  sudo ifconfig tap0 up; sudo ifconfig bridge0 addm tap0
 
   ssh -t "$DEST_ADDR" sudo arp -d "$FIXED_ADDRESS"
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
@@ -86,8 +86,9 @@ nginx::docker() {
   local wrk_args="http://${HOST_ADDR}/${ex_arg}b.img"
 
   echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
-  docker run --rm -p 80:80 -v /Users/tazaki/tmp:/usr/share/nginx/html:ro \
-	-v /Users/tazaki/gitworks/nuse-msmt/apsys/nginx/nginx-docker.conf:/etc/nginx/nginx.conf:ro nginx &
+  docker run --rm -p 80:80 \
+   -v /Users/tazaki/gitworks/nuse-msmt/apsys/nginx/nginx-docker.conf:/etc/nginx/nginx.conf:ro \
+  nginx-test nginx &
 
   sleep 5
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
