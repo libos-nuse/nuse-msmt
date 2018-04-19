@@ -33,6 +33,7 @@ main() {
 nginx::run() {
   nginx::lkl "$@"
   nginx::native "$@"
+  nginx::docker "$@"
 }
 
 nginx::lkl() {
@@ -44,7 +45,7 @@ nginx::lkl() {
 
   #setup_lkl
 
-  echo "$(tput bold)== lkl-musl ($test-$num) ==$(tput sgr0)"
+  echo "$(tput bold)== lkl-musl ($test-$num-p${ex_arg}) ==$(tput sgr0)"
   killall nginx
   rexec "$LKLMUSL_NGINX/nginx/bin/nginx" \
     "$LKLMUSL_NGINX/nginx/images/full.iso" tap:tap0 config:../lkl.json \
@@ -68,12 +69,34 @@ nginx::native() {
   local ex_arg=$3
   local wrk_args="http://${HOST_ADDR}:8080/${ex_arg}b.img"
 
-  echo "$(tput bold)== native ($test-$num)  ==$(tput sgr0)"
+  echo "$(tput bold)== native ($test-$num-p${ex_arg})  ==$(tput sgr0)"
   nginx -s stop
   nginx
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
     2>&1 | tee -a "$OUTPUT/nginx-$test-native-$num.dat"
+  nginx -s stop
 )
 }
+
+nginx::docker() {
+(
+  local test=$1
+  local num=$2
+  local ex_arg=$3
+  local wrk_args="http://${HOST_ADDR}/${ex_arg}b.img"
+
+  echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
+  docker run --rm -p 80:80 -v /Users/tazaki/tmp:/usr/share/nginx/html:ro \
+	-v /Users/tazaki/gitworks/nuse-msmt/apsys/nginx/nginx-docker.conf:/etc/nginx/nginx.conf:ro nginx &
+
+  sleep 5
+  ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
+    2>&1 | tee -a "$OUTPUT/nginx-$test-docker-$num.dat"
+
+  kill $!
+  wait $! 2>/dev/null
+)
+}
+
 
 main
