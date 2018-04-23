@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-source "$SCRIPT_DIR/../lkl/netperf-common.sh"
+source "$SCRIPT_DIR/../../lkl/netperf-common.sh"
 
 OUTPUT="$1"
 DIRS="tx rx"

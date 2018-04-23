@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
-source "$SCRIPT_DIR/../lkl/netperf-common.sh"
+source "$SCRIPT_DIR/../../lkl/netperf-common.sh"
 
 # macos has different syntax
 OUTPUT=$SCRIPT_DIR/$(date "+%Y-%m-%d")
@@ -77,7 +77,7 @@ netperf::lkl() {
   rexec src/netperf disk.img tap:tap0 config:lkl.json \
    -- $netperf_args \
    2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-tap-ps$size-$num.dat" &
-  sudo ifconfig tap0 up; sudo ifconfig bridge1 addm tap0
+  sudo ifconfig tap0 up; sudo ifconfig bridge0 addm tap0
   wait
 
   cd $SCRIPT_DIR
