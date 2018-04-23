@@ -27,7 +27,7 @@ cat $(eval echo "${OUTPUT}/{$TYPES}.csv") | grep -v Conc | datamash transpose -t
 cat ${OUTPUT}/ubench-2.csv | sed "s/,/ \& /g" > ${OUTPUT}/ubench.tbl.in.2
 paste $SCRIPT_DIR/ubench.tbl.in ${OUTPUT}/ubench.tbl.in.2 > ${OUTPUT}/ubench.tbl.in.3
 cat ${OUTPUT}/ubench.tbl.in.3 | \
-  awk -F'&' '{print $0 " \\\\ \n"    " & "  "("($2/$5)*100 "\\%) & "  "("($3/$5)*100 "\\%) & "  "("($4/$5)*100 "\\%)& "  " \\\\"}' > ${OUTPUT}/ubench.dat
+  awk -F'&' '{printf("%s \\\\ \n & (%.1f \\%%) & (%.1f \\%%) & (%.1f \\%%) \\\\", $0, ($2/$5)*100, ($3/$5)*100, ($4/$5)*100)}' > ${OUTPUT}/ubench.dat
 
 gnuplot  << EndGNUPLOT
 
