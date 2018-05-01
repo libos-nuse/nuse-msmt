@@ -44,6 +44,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-native-* \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-native.dat
 
+grep -E -h bits ${OUTPUT}/${PREFIX}*-docker-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-stream-docker.dat
+
 # TCP_RR
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-lkl-tap-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
@@ -60,6 +65,11 @@ grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-native-* \
  | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-native.dat
 
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-docker-* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+ | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-docker.dat
+
 # UDP_STREAM
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-lkl-tap-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
@@ -75,6 +85,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-native.dat
+
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-docker-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-docker.dat
 
 # UDP_STREAM PPS
  
@@ -93,6 +108,11 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-native-* \
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-pps-native.dat
 
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-docker-* \
+| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
+| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-pps-docker.dat
+
 done # end of ${DIR}
 
 
@@ -104,7 +124,7 @@ set pointsize 2
 set xzeroaxis
 set grid ytics
 
-set boxwidth 0.3
+set boxwidth 0.2
 set style fill pattern
 
 set size 1.0,0.6
@@ -120,10 +140,12 @@ set ylabel "Goodput (Gbps)"
 
 plot \
    '${OUTPUT}/tx/tcp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
-   '${OUTPUT}/tx/tcp-stream-noah.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/tcp-stream-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos" ,\
    '${OUTPUT}/rx/tcp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle , \
-   '${OUTPUT}/rx/tcp-stream-noah.dat' usin (\$0):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" notitle , \
+   '${OUTPUT}/rx/tcp-stream-noah.dat' usin (\$0-0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" notitle , \
+   '${OUTPUT}/rx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" notitle,\
    '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle
 
 
@@ -144,7 +166,8 @@ set key top right
 
 plot \
    '${OUTPUT}/tx/tcp-rr-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
-   '${OUTPUT}/tx/tcp-rr-noah.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/tcp-rr-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos" 
 
 set terminal png lw 3 14 crop
@@ -159,7 +182,8 @@ set key top left
 
 plot \
    '${OUTPUT}/tx/udp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
-   '${OUTPUT}/tx/udp-stream-noah.dat' usin (\$0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/udp-stream-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker",\
    '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos"
 
 
@@ -175,7 +199,8 @@ set yrange [0:1]
 
 plot \
    '${OUTPUT}/tx/udp-stream-pps-lkl-tap.dat' usin (\$0-0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
-   '${OUTPUT}/tx/udp-stream-pps-noah.dat' usin (\$0):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/udp-stream-pps-noah.dat' usin (\$0-0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
+   '${OUTPUT}/tx/udp-stream-pps-docker.dat' usin (\$0+0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos"
 
 set terminal png lw 3 14 crop

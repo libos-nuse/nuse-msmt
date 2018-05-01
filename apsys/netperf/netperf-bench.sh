@@ -58,6 +58,7 @@ netperf::run() {
   netperf::lkl "$@"
   netperf::noah "$@"
   netperf::native "$@"
+  netperf::docker "$@"
 }
 
 netperf::lkl() {
@@ -104,6 +105,21 @@ netperf::noah() {
 )
 }
 
+netperf::docker() {
+( 
+  local test=$1
+  local num=$2
+  local psize="$3"
+  local ex_arg="$4"
+  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+  
+  echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
+  docker run --rm \
+   thehajime/byte-unixbench:latest \
+   netperf $netperf_args 2>&1 \
+  | tee "$OUTPUT/$PREFIX-$test-docker-ps$size-$num.dat"
+)
+}
 
 netperf::native() {
 (
