@@ -36,7 +36,7 @@ UB_OUTPUT_FILE_NAME=macos $CMD
 
 # Docker
 docker run --detach-keys="ctrl-q,ctrl-q" --rm -i -t \
-  -v /Users/tazaki/:/Users/tazaki \
+  -v $HOME:$HOME \
   --privileged=True \
   -e UB_RESULTDIR=$UB_RESULTDIR \
   -e UB_OUTPUT_FILE_NAME=docker \
