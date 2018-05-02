@@ -127,7 +127,7 @@ set grid ytics
 set boxwidth 0.2
 set style fill pattern
 
-set size 1.0,0.6
+set size 1.0,0.7
 set key top left
 
 set xrange [-1:7]
@@ -141,11 +141,11 @@ set ylabel "Goodput (Gbps)"
 plot \
    '${OUTPUT}/tx/tcp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
    '${OUTPUT}/tx/tcp-stream-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
-   '${OUTPUT}/tx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
+   '${OUTPUT}/tx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos" ,\
    '${OUTPUT}/rx/tcp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle , \
    '${OUTPUT}/rx/tcp-stream-noah.dat' usin (\$0-0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" notitle , \
-   '${OUTPUT}/rx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" notitle,\
+   '${OUTPUT}/rx/tcp-stream-docker.dat' usin (\$0+0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "gray" notitle,\
    '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle
 
 
@@ -167,7 +167,7 @@ set key top right
 plot \
    '${OUTPUT}/tx/tcp-rr-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
    '${OUTPUT}/tx/tcp-rr-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
-   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos" 
 
 set terminal png lw 3 14 crop
@@ -183,7 +183,7 @@ set key top left
 plot \
    '${OUTPUT}/tx/udp-stream-lkl-tap.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
    '${OUTPUT}/tx/udp-stream-noah.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
-   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker",\
+   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "gray" title "docker",\
    '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos"
 
 
@@ -200,7 +200,7 @@ set yrange [0:1]
 plot \
    '${OUTPUT}/tx/udp-stream-pps-lkl-tap.dat' usin (\$0-0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "lkl" , \
    '${OUTPUT}/tx/udp-stream-pps-noah.dat' usin (\$0-0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "green" title "noah" , \
-   '${OUTPUT}/tx/udp-stream-pps-docker.dat' usin (\$0+0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "gray" title "docker" ,\
+   '${OUTPUT}/tx/udp-stream-pps-docker.dat' usin (\$0+0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "gray" title "docker" ,\
    '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "macos"
 
 set terminal png lw 3 14 crop
