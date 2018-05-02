@@ -46,7 +46,7 @@ set style fill pattern
 set key top right
 
 #set xrange [-1:3]
-set yrange [0:5000]
+set yrange [0:9000]
 #set xtics ('fstime' 0, 'fsbuffer' 1, 'fsdisk' 2, 'fstime-r' 3, 'fsbuffer-r' 4, 'fsdisk-r' 5, 'fstime-w' 6, 'fsbuffer-w' 7, 'fsdisk-w' 8, 'pipe' 9, 'syscall' 10)
 set xtics ('fstime-r' 0, 'fsdisk-r' 1, 'fstime-w' 2, 'fsdisk-w' 3, 'pipe' 4, 'syscall' 5)
 set xtics rotate
