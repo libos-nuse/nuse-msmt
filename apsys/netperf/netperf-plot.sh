@@ -123,14 +123,15 @@ set output "${OUTPUT}/out/tcp-stream.eps"
 set pointsize 2
 set xzeroaxis
 set grid ytics
+set rmargin 0
 
 set boxwidth 0.2
 set style fill pattern
 
-set size 1.0,0.7
+set size 1.0,0.8
 set key top left
 
-set xrange [-1:7]
+set xrange [-0.5:6.5]
 set xtics ${PSIZE_XTICS}
 set xlabel "Payload size (bytes)"
 set yrange [-1:1]
@@ -155,7 +156,7 @@ replot
 
 
 set xlabel "Payload size (bytes)"
-set xrange [-1:7]
+set xrange [-0.5:6.5]
 set xtics ${PSIZE_XTICS}
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/tcp-rr.eps"
