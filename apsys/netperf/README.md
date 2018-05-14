@@ -11,7 +11,8 @@
 
 ## Setup
 
-We needed to patch to netperf2 so that 
+We needed to patch to netperf2 so that our experiment successfully run without any errors.
+
 ```
 diff --git a/config.sub b/config.sub
 index 1c366df..966cfd6 100755
