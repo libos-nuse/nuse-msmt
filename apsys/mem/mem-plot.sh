@@ -16,5 +16,5 @@ MACOS=$(grep peak ${OUTPUT}/mem-native.dat | awk '{print $4}')
 DOCKER=$(grep peak ${OUTPUT}/mem-docker.dat | awk '{print $4}' | head -1)
 DOCKER_VMM=$(grep peak ${OUTPUT}/mem-docker.dat | awk '{print $4}' | tail -1)
 
-echo "$LKL &  $NOAH  &  $DOCKER &  $MACOS \\\\" > $OUTPUT/mem-tbl.dat
-echo " &  ($NOAH_VMM) &  ($DOCKER_VMM) & \\\\" >> $OUTPUT/mem-tbl.dat
+echo " memory & $LKL &  $NOAH  &  $DOCKER &  $MACOS \\\\" > $OUTPUT/mem-tbl.dat
+echo " & &  ($NOAH_VMM) &  ($DOCKER_VMM) & \\\\" >> $OUTPUT/mem-tbl.dat

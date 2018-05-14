@@ -35,11 +35,11 @@ set grid ytics
 set boxwidth 0.3
 set style fill pattern
 set key top left
-set size 1.0,0.6
+set size 1.0,0.7
 
-set ylabel "Throughput (Req/sec)"
-set ytics 5000
-set yrange [0:20000]
+set ylabel "Throughput (KReq/sec)"
+set ytics 5
+set yrange [0:20]
 set y2label "Latency (msec)"
 set y2tics 5
 set y2range [0:]
@@ -50,9 +50,9 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/nginx-wrk.eps"
 
 plot \
-   '${OUTPUT}/nginx-musl-thpt.dat' usi (\$0-0.3):1:2 w boxerr lc rgb "red" title "lkl", \
-   '${OUTPUT}/nginx-docker-thpt.dat' usi (\$0+0):1:2 w boxerr lc rgb "gray" title "docker" ,\
-   '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):1:2 w boxerr lc rgb "blue" title "macos" ,\
+   '${OUTPUT}/nginx-musl-thpt.dat' usi (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" title "lkl", \
+   '${OUTPUT}/nginx-docker-thpt.dat' usi (\$0+0):(\$1/1000):(\$2/1000) w boxerr lc rgb "gray" title "docker" ,\
+   '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "blue" title "macos" ,\
    '${OUTPUT}/nginx-musl.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "red" ax x1y2 notitle, \
    '${OUTPUT}/nginx-docker.dat' usin (\$0+0):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "gray" ax x1y2 notitle ,\
    '${OUTPUT}/nginx-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "blue" ax x1y2 notitle
