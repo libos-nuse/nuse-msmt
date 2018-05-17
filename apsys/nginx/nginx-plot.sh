@@ -50,7 +50,7 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/nginx-wrk.eps"
 
 plot \
-   '${OUTPUT}/nginx-musl-thpt.dat' usi (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" title "lkl", \
+   '${OUTPUT}/nginx-musl-thpt.dat' usi (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" title "uni-lkl", \
    '${OUTPUT}/nginx-docker-thpt.dat' usi (\$0+0):(\$1/1000):(\$2/1000) w boxerr lc rgb "gray" title "docker" ,\
    '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "blue" title "macos" ,\
    '${OUTPUT}/nginx-musl.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "red" ax x1y2 notitle, \
