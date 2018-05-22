@@ -106,3 +106,6 @@ index 852eeb1..973075f 100644
 
 You should have results in `${DATE}/out` directory.
 
+The following is an example plot of the result obtained with the script.
+
+![](https://raw.githubusercontent.com/libos-nuse/nuse-msmt/master/apsys/netperf/tcp-stream-example.png)
