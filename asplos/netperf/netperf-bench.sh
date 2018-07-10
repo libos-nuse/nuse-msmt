@@ -8,13 +8,14 @@ OUTPUT=$SCRIPT_DIR/$(date "+%Y-%m-%d")
 
 PREFIX=netperf-bench
 TESTNAMES="TCP_STREAM TCP_MAERTS"
-DEST_ADDR="3.3.3.2"
-SELF_ADDR="3.3.3.3"
+DEST_ADDR="1.1.1.2"
+SELF_ADDR="1.1.1.1"
 OIF=br0
 
-NETPERF_DIR=/Users/tazaki/gitworks/netperf2/
+FRANKENLIBC_DIR=/home/moroo/src/frankenlibc
+NETPERF_DIR=${FRANKENLIBC_DIR}/netperf2
 #TMP variable
-export PATH=~/bin:~/gitworks/frankenlibc/rump/bin:${PATH}
+export PATH=${FRANKENLIBC_DIR}/rump/bin:${PATH}
 
 main() {
   initialize
@@ -45,22 +46,62 @@ initialize() {
 }
 
 netperf::run() {
-  netperf::kata-runtime "$@"
+  netperf::lkl    "$@"
+  netperf::native "$@"
+  netperf::docker "$@" "runc"
+  netperf::docker "$@" "kata-runtime"
+  netperf::docker "$@" "runsc"
 }
 
-netperf::kata-runtime() {
+netperf::lkl() {
+(
+  local test="$1"
+  local num="$2"
+  local psize="$3"
+  local ex_arg="$4"
+  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+
+  setup_lkl
+  cd $NETPERF_DIR
+
+  echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
+  sudo -u moroo ${FRANKENLIBC_DIR}/rump/bin/rexec \
+   src/netperf disk.img tap:tap0 config:lkl.json \
+   -- $netperf_args \
+   2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+  wait
+
+  cd $SCRIPT_DIR
+)
+}
+
+netperf::native() {
+(
+  local test="$1"
+  local num="$2"
+  local psize="$3"
+  local ex_arg="$4"
+  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+
+  echo "$(tput bold)== native ($test-$num $*)  ==$(tput sgr0)"
+  netperf $netperf_args 2>&1 | tee "$OUTPUT/$PREFIX-$test-native-ps$size-$num.dat"
+)
+}
+
+netperf::docker() {
 ( 
   local test=$1
   local num=$2
   local psize="$3"
   local ex_arg="$4"
+  local runtime="$5"
   local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
   
-  echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
-  docker run --runtime=kata-runtime --rm \
+  echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
+  docker run --runtime=$runtime --rm \
    thehajime/byte-unixbench:latest \
    netperf $netperf_args 2>&1 \
-  | tee "$OUTPUT/$PREFIX-$test-kata-runtime-ps$size-$num.dat"
+  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
 )
 }
 
