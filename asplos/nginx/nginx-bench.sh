@@ -1,7 +1,6 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-#source "$SCRIPT_DIR/netperf-common.sh"
+SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
 
 DEST_ADDR="3.3.3.2"
 SELF_ADDR="3.3.3.3"
