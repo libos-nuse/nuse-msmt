@@ -8,22 +8,32 @@ PKG_SIZES="64 128 256 512 1024 1500 2048"
 # parse outputs
 
 # thpt (req/sec)
-grep -E -h Req/Sec  ${OUTPUT}/nginx*-musl-[0-9].*  \
+grep -E -h Req/Sec  ${OUTPUT}/nginx*-lkl-[0-9].*  \
  | awk '{print $2 " " $3}' | sed "s/k/ 1000/g" | awk '{print $1*$2*2 " " $3}' \
- > ${OUTPUT}/nginx-musl-thpt.dat
+ > ${OUTPUT}/nginx-lkl-thpt.dat
 grep -E -h Req/Sec  ${OUTPUT}/nginx*-native-[0-9].*  \
  | awk '{print $2 " " $3}' | sed "s/k/ 1000/g" | awk '{print $1*$2*2 " " $3}' \
  > ${OUTPUT}/nginx-native-thpt.dat
-grep -E -h Req/Sec  ${OUTPUT}/nginx*-docker-[0-9].*  \
+grep -E -h Req/Sec  ${OUTPUT}/nginx*-runc-[0-9].*  \
  | awk '{print $2 " " $3}' | sed "s/k/ 1000/g" | awk '{print $1*$2*2 " " $3}' \
- > ${OUTPUT}/nginx-docker-thpt.dat
+ > ${OUTPUT}/nginx-runc-thpt.dat
+grep -E -h Req/Sec  ${OUTPUT}/nginx*-kata-runtime-[0-9].*  \
+ | awk '{print $2 " " $3}' | sed "s/k/ 1000/g" | awk '{print $1*$2*2 " " $3}' \
+ > ${OUTPUT}/nginx-kata-runtime-thpt.dat
+grep -E -h Req/Sec  ${OUTPUT}/nginx*-runsc-[0-9].*  \
+ | awk '{print $2 " " $3}' | sed "s/k/ 1000/g" | awk '{print $1*$2*2 " " $3}' \
+ > ${OUTPUT}/nginx-runsc-thpt.dat
 # latency
-grep -E -h Latency ${OUTPUT}/nginx*-musl-[0-9].*  \
- | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-musl.dat
+grep -E -h Latency ${OUTPUT}/nginx*-lkl-[0-9].*  \
+ | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-lkl.dat
 grep -E -h Latency ${OUTPUT}/nginx*-native-[0-9]* \
  | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-native.dat
-grep -E -h Latency ${OUTPUT}/nginx*-docker-[0-9]* \
- | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-docker.dat
+grep -E -h Latency ${OUTPUT}/nginx*-runc-[0-9]* \
+ | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-runc.dat
+grep -E -h Latency ${OUTPUT}/nginx*-kata-runtime-[0-9]* \
+ | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-kata-runtime.dat
+grep -E -h Latency ${OUTPUT}/nginx*-runsc-[0-9]* \
+ | awk '{print $2 " " $3}' | sed "s/ms/ 1000/g" | sed "s/us/ 1/g" | awk '{print $1*$2 " " $3*$4}'  > ${OUTPUT}/nginx-runsc.dat
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
@@ -50,12 +60,16 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/nginx-wrk.eps"
 
 plot \
-   '${OUTPUT}/nginx-musl-thpt.dat' usi (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" title "uni-lkl", \
-   '${OUTPUT}/nginx-docker-thpt.dat' usi (\$0+0):(\$1/1000):(\$2/1000) w boxerr lc rgb "gray" title "docker" ,\
-   '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "blue" title "macos" ,\
-   '${OUTPUT}/nginx-musl.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "red" ax x1y2 notitle, \
-   '${OUTPUT}/nginx-docker.dat' usin (\$0+0):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "gray" ax x1y2 notitle ,\
-   '${OUTPUT}/nginx-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "blue" ax x1y2 notitle
+   '${OUTPUT}/nginx-runc-thpt.dat' usi (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "green" title "runc", \
+   '${OUTPUT}/nginx-kata-runtime-thpt.dat' usi (\$0-0.1):(\$1/1000):(\$2/1000) w boxerr lc rgb "gray" title "kata-runtime", \
+   '${OUTPUT}/nginx-runsc-thpt.dat' usi (\$0+0.1):(\$1/1000):(\$2/1000) w boxerr lc rgb "blue" title "runsc", \
+   '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" title "native", \
+   '${OUTPUT}/nginx-lkl-thpt.dat' usi (\$0+0.5):(\$1/1000):(\$2/1000) w boxerr lc rgb "cyan" title "lkl", \
+   '${OUTPUT}/nginx-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "green" ax x1y2 notitle ,\
+   '${OUTPUT}/nginx-kata-runtime.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "gray" ax x1y2 notitle ,\
+   '${OUTPUT}/nginx-runsc.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "blue" ax x1y2 notitle ,\
+   '${OUTPUT}/nginx-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "red" ax x1y2 notitle ,\
+   '${OUTPUT}/nginx-lkl.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w yerror ps 1 lc rgb "cyan" ax x1y2 notitle
 
 set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45 font ",14"

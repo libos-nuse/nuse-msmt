@@ -30,9 +30,11 @@ main() {
 }
 
 nginx::run() {
-  nginx::lkl "$@"
+  nginx::lkl    "$@"
   nginx::native "$@"
-  nginx::docker "$@"
+  nginx::docker "$@" "runc"
+  nginx::docker "$@" "kata-runtime"
+  nginx::docker "$@" "runsc"
 }
 
 nginx::lkl() {
@@ -54,7 +56,7 @@ nginx::lkl() {
 
   ssh -t "$DEST_ADDR" sudo arp -d "$FIXED_ADDRESS"
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
-    2>&1 | tee -a "$OUTPUT/nginx-$test-musl-$num.dat"
+    2>&1 | tee -a "$OUTPUT/nginx-$test-lkl-$num.dat"
 
   kill $!
   wait $! 2>/dev/null
@@ -82,16 +84,17 @@ nginx::docker() {
   local test=$1
   local num=$2
   local ex_arg=$3
+  local runtime=$4
   local wrk_args="http://${HOST_ADDR}/${ex_arg}b.img"
 
   echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
-  docker run --rm -p 80:80 \
-   -v /Users/tazaki/gitworks/nuse-msmt/apsys/nginx/nginx-docker.conf:/etc/nginx/nginx.conf:ro \
+  docker run --runtime=$runtime --rm -p 80:80 \
+   -v ${SCRIPT_DIR}/nginx-docker.conf:/etc/nginx/nginx.conf:ro \
   nginx-test nginx &
 
   sleep 5
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
-    2>&1 | tee -a "$OUTPUT/nginx-$test-docker-$num.dat"
+    2>&1 | tee -a "$OUTPUT/nginx-$test-$runtime-$num.dat"
 
   kill $!
   wait $! 2>/dev/null
