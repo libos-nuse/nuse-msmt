@@ -16,6 +16,7 @@ FRANKENLIBC_DIR=/home/moroo/src/frankenlibc
 NETPERF_DIR=${FRANKENLIBC_DIR}/netperf2
 #TMP variable
 export PATH=${FRANKENLIBC_DIR}/rump/bin:${PATH}
+export PATH=${FRANKENLIBC_DIR}/liunx/tools/lkl/bin:${PATH}
 
 main() {
   initialize
