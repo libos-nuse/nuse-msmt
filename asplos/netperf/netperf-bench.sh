@@ -41,6 +41,14 @@ initialize() {
   export FIXED_ADDRESS=${SELF_ADDR}
   export FIXED_MASK=24
 
+  export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem=4096 87380 100000000"
+  export LKL_HIJACK_BOOT_CMDLINE="mem=1G"
+
+  export LKL_SYSCTL="net.ipv4.tcp_wmem=4096 87380 100000000"
+  export LKL_BOOT_CMDLINE="mem=1G"
+
+  export LKL_HIJACK_OFFLOAD=0xc803
+
   mkdir -p "$OUTPUT"
   rm -f "$OUTPUT/$PREFIX"-*.dat
   exec > >(tee "$OUTPUT/$0.log") 2>&1
@@ -65,12 +73,23 @@ netperf::lkl() {
   setup_lkl
   cd $NETPERF_DIR
 
-  echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
-  sudo -u moroo ${FRANKENLIBC_DIR}/rump/bin/rexec \
-   src/netperf disk.img tap:tap0 config:lkl.json \
-   -- $netperf_args \
-   2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
-  wait
+  # XXX: musl-libc w/ UDP_STREAM is not working over 2sec length so, use hijack
+  if [[ "$test" == "UDP_STREAM" ]] ; then
+    echo "$(tput bold)== lkl-hijack tap ($test-$num $*)  ==$(tput sgr0)"
+
+    export LKL_HIJACK_NET_IFTYPE=tap
+    export LKL_HIJACK_NET_IFPARAMS=tap0
+    export LKL_HIJACK_NET_IP="$SELF_ADDR"
+    sudo -u moroo $TASKSET lkl-hijack.sh netperf $netperf_args \
+     |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+  else
+    echo "$(tput bold)== lkl-musl tap ($test-$num $*)  ==$(tput sgr0)"
+    sudo -u moroo ${FRANKENLIBC_DIR}/rump/bin/rexec \
+     src/netperf disk.img tap:tap0 config:lkl.json \
+     -- $netperf_args \
+     2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+    wait
+  fi
 
   cd $SCRIPT_DIR
 )
