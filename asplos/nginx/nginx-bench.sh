@@ -2,9 +2,9 @@
 
 SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
 
-DEST_ADDR="3.3.3.2"
-SELF_ADDR="3.3.3.3"
-HOST_ADDR="3.3.3.5"
+DEST_ADDR="1.1.1.2"
+SELF_ADDR="1.1.1.3"
+HOST_ADDR="1.1.1.1"
 export FIXED_ADDRESS="$SELF_ADDR"
 export FIXED_MASK=24
 TRIALS=1
