@@ -45,10 +45,14 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-kata-runtime-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-kata-runtime.dat
-grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-* \
+grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/tcp-stream-runsc.dat
+> ${OUTPUT}/${DIR}/tcp-stream-runsc-ptrace-user.dat
+grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-kvm-user-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/tcp-stream-runsc-kvm-user.dat
 
 # TCP_RR
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-lkl-* \
@@ -67,10 +71,14 @@ grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-kata-runtime-* \
  | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
  | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-kata-runtime.dat
-grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-* \
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-ptrace-user-* \
  | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
  | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
- > ${OUTPUT}/${DIR}/tcp-rr-runsc.dat
+ > ${OUTPUT}/${DIR}/tcp-rr-runsc-ptrace-user.dat
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-kvm-user-* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+ | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-runsc-kvm-user.dat
 
 # UDP_STREAM
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-lkl-* \
@@ -89,10 +97,14 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-kata-runtime-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-kata-runtime.dat
-grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-* \
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/udp-stream-runsc.dat
+> ${OUTPUT}/${DIR}/udp-stream-runsc-ptrace-user.dat
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
+| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-runsc-kvm-user.dat
 
 # UDP_STREAM PPS
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-lkl-* \
@@ -111,10 +123,14 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-kata-runtime-* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-pps-kata-runtime.dat
-grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-* \
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/udp-stream-pps-runsc.dat
+> ${OUTPUT}/${DIR}/udp-stream-pps-runsc-ptrace-user.dat
+grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
+| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
+| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+> ${OUTPUT}/${DIR}/udp-stream-pps-runsc-kvm-user.dat
 
 done # end of ${DIR}
 
@@ -144,14 +160,16 @@ set ylabel "Goodput (Gbps)"
 plot \
    '${OUTPUT}/tx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
    '${OUTPUT}/tx/tcp-stream-kata-runtime.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "kata-runtime" ,\
-   '${OUTPUT}/tx/tcp-stream-runsc.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl" ,\
+   '${OUTPUT}/tx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(ptrace)" ,\
+   '${OUTPUT}/tx/tcp-stream-runsc-kvm-user.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(kvm)" ,\
+   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
+   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.7):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl" ,\
    '${OUTPUT}/rx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" notitle ,\
    '${OUTPUT}/rx/tcp-stream-kata-runtime.dat' usin (\$0-0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-runsc.dat' usin (\$0+0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.5):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" notitle
+   '${OUTPUT}/rx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.1):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-runsc-kvm-user.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.5):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.7):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" notitle
 
 
 set terminal png lw 3 14 crop
@@ -172,9 +190,10 @@ set key top right
 plot \
    '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
    '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "kata-runtime" ,\
-   '${OUTPUT}/tx/tcp-rr-runsc.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
+   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(ptrace)" ,\
+   '${OUTPUT}/tx/tcp-rr-runsc-kvm-user.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(kvm)" ,\
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
+   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.7):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/tcp-rr.png"
@@ -189,9 +208,10 @@ set key top left
 plot \
    '${OUTPUT}/tx/udp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
    '${OUTPUT}/tx/udp-stream-kata-runtime.dat' usin (\$0-0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "kata-runtime" ,\
-   '${OUTPUT}/tx/udp-stream-runsc.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/tx/udp-stream-lkl.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
+   '${OUTPUT}/tx/udp-stream-runsc-ptrace-user.dat' usin (\$0+0.1):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(ptrace)" ,\
+   '${OUTPUT}/tx/udp-stream-runsc-kvm-user.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(kvm)" ,\
+   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.5):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
+   '${OUTPUT}/tx/udp-stream-lkl.dat' usin (\$0+0.7):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
 
 
 set terminal png lw 3 14 crop
@@ -207,9 +227,10 @@ set yrange [0:1]
 plot \
    '${OUTPUT}/tx/udp-stream-pps-runc.dat' usin (\$0-0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
    '${OUTPUT}/tx/udp-stream-pps-kata-runtime.dat' usin (\$0-0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "gray" title "kata-runtime" ,\
-   '${OUTPUT}/tx/udp-stream-pps-runsc.dat' usin (\$0+0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/tx/udp-stream-pps-lkl.dat' usin (\$0+0.5):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
+   '${OUTPUT}/tx/udp-stream-pps-runsc-ptrace-user.dat' usin (\$0+0.1):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(ptrace)" ,\
+   '${OUTPUT}/tx/udp-stream-pps-runsc-kvm-user.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc(kvm)" ,\
+   '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.5):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
+   '${OUTPUT}/tx/udp-stream-pps-lkl.dat' usin (\$0+0.7):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "cyan" title "lkl"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/udp-stream-pps.png"

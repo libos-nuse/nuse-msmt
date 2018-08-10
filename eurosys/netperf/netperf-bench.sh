@@ -59,7 +59,8 @@ netperf::run() {
   netperf::native "$@"
   netperf::docker "$@" "runc"
   netperf::docker "$@" "kata-runtime"
-  netperf::docker "$@" "runsc"
+  netperf::docker "$@" "runsc-ptrace-user"
+  netperf::docker "$@" "runsc-kvm-user"
 }
 
 netperf::lkl() {
