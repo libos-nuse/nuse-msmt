@@ -18,11 +18,23 @@ main() {
 }
 
 py-coldstart::run() {
+  py-coldstart::native   "$@"
   py-coldstart::runu   "$@"
   py-coldstart::docker "$@" "runc"
   py-coldstart::docker "$@" "kata-runtime"
   py-coldstart::docker "$@" "runsc-ptrace-user"
   py-coldstart::docker "$@" "runsc-kvm-user"
+}
+
+py-coldstart::native() {
+(
+  local num=$1
+  local runtime=native
+
+  echo "$(tput bold)== native ($num)  ==$(tput sgr0)"
+  /usr/bin/time python3 /home/tazaki/work/rumprun-packages/python3/examples/main.py \
+	  |& tee ${OUTPUT}/py-coldstart-native-$num.dat
+)
 }
 
 py-coldstart::runu() {

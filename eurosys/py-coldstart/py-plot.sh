@@ -2,7 +2,7 @@
 OUTPUT=$1
 mkdir -p ${OUTPUT}/out
 
-RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc"
+RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc native"
 
 
 # parse outputs
@@ -33,14 +33,15 @@ set ytics 5
 set yrange [0:10]
 unset xtics
 unset xlabel
-set xrange [-1:5]
+set xrange [-1:6]
 
 plot \
    '${OUTPUT}/py-coldstart-runc-delay.dat' usi (0):(\$1):(\$2) w boxerr lc rgb "green" title "runc", \
    '${OUTPUT}/py-coldstart-kata-runtime-delay.dat' usi (1):(\$1):(\$2) w boxerr lc rgb "gray" title "runv", \
    '${OUTPUT}/py-coldstart-runsc-ptrace-user-delay.dat' usi (2):(\$1):(\$2) w boxerr lc rgb "blue" title "runsc(p)", \
    '${OUTPUT}/py-coldstart-runsc-kvm-user-delay.dat' usi (3):(\$1):(\$2) w boxerr lc rgb "red" title "runsc(k)", \
-   '${OUTPUT}/py-coldstart-runu-delay.dat' usi (4):(\$1):(\$2) w boxerr lc rgb "cyan" title "runu"
+   '${OUTPUT}/py-coldstart-runu-delay.dat' usi (4):(\$1):(\$2) w boxerr lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/py-coldstart-native-delay.dat' usi (5):(\$1):(\$2) w boxerr lc rgb "purple" title "native"
    
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/py-coldstart.png"
