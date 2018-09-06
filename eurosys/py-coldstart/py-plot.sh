@@ -29,19 +29,19 @@ set key top right
 set size 1.0,0.7
 
 set ylabel "Delay (sec)"
-set ytics 5
-set yrange [0:10]
+set ytics 0.5
+set yrange [0:1.5]
 unset xtics
 unset xlabel
 set xrange [-1:6]
 
 plot \
-   '${OUTPUT}/py-coldstart-runc-delay.dat' usi (0):(\$1):(\$2) w boxerr lc rgb "green" title "runc", \
-   '${OUTPUT}/py-coldstart-kata-runtime-delay.dat' usi (1):(\$1):(\$2) w boxerr lc rgb "gray" title "runv", \
-   '${OUTPUT}/py-coldstart-runsc-ptrace-user-delay.dat' usi (2):(\$1):(\$2) w boxerr lc rgb "blue" title "runsc(p)", \
-   '${OUTPUT}/py-coldstart-runsc-kvm-user-delay.dat' usi (3):(\$1):(\$2) w boxerr lc rgb "red" title "runsc(k)", \
-   '${OUTPUT}/py-coldstart-runu-delay.dat' usi (4):(\$1):(\$2) w boxerr lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/py-coldstart-native-delay.dat' usi (5):(\$1):(\$2) w boxerr lc rgb "purple" title "native"
+   '${OUTPUT}/py-coldstart-runc-delay.dat' usi (0):(\$1):(\$2) w boxerr lc rgb "green" fill pattern 2 title "runc", \
+   '${OUTPUT}/py-coldstart-kata-runtime-delay.dat' usi (1):(\$1):(\$2) w boxerr lc rgb "gray" fill pattern 1 title "runv", \
+   '${OUTPUT}/py-coldstart-runsc-ptrace-user-delay.dat' usi (2):(\$1):(\$2) w boxerr lc rgb "blue" title "runsc(ptrace)", \
+   '${OUTPUT}/py-coldstart-runsc-kvm-user-delay.dat' usi (3):(\$1):(\$2) w boxerr lc rgb "blue" title "runsc(kvm)", \
+   '${OUTPUT}/py-coldstart-runu-delay.dat' usi (4):(\$1):(\$2) w boxerr lc rgb "cyan" title "runu", \
+   '${OUTPUT}/py-coldstart-native-delay.dat' usi (5):(\$1):(\$2) w boxerr fill patter 0 lc rgb "red" title "native"
    
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/py-coldstart.png"
