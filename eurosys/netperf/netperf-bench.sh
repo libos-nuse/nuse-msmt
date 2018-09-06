@@ -8,12 +8,12 @@ OUTPUT=$SCRIPT_DIR/$(date "+%Y-%m-%d")
 
 PREFIX=netperf-bench
 TESTNAMES="TCP_STREAM TCP_MAERTS"
-DEST_ADDR="1.1.1.2"
-SELF_ADDR="1.1.1.1"
+DEST_ADDR="10.0.39.2"
+SELF_ADDR="10.0.39.1"
 OIF=br0
 
-FRANKENLIBC_DIR=/home/moroo/src/frankenlibc
-NETPERF_DIR=${FRANKENLIBC_DIR}/netperf2
+FRANKENLIBC_DIR=/home/tazaki/work/frankenlibc
+NETPERF_DIR=/home/tazaki/work/rumprun-packages/netperf/build
 #TMP variable
 export PATH=${FRANKENLIBC_DIR}/rump/bin:${PATH}
 export PATH=${FRANKENLIBC_DIR}/liunx/tools/lkl/bin:${PATH}
@@ -29,7 +29,7 @@ main() {
       done
 
       netperf::run TCP_RR $num $size " -r $size,$size"
-      netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size"
+      netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
     done
   done
 
@@ -38,9 +38,6 @@ main() {
 }
 
 initialize() {
-  export FIXED_ADDRESS=${SELF_ADDR}
-  export FIXED_MASK=24
-
   export LKL_HIJACK_SYSCTL="net.ipv4.tcp_wmem=4096 87380 100000000"
   export LKL_HIJACK_BOOT_CMDLINE="mem=1G"
 
@@ -51,7 +48,7 @@ initialize() {
 
   mkdir -p "$OUTPUT"
   rm -f "$OUTPUT/$PREFIX"-*.dat
-  exec > >(tee "$OUTPUT/$0.log") 2>&1
+  exec > >(tee "$OUTPUT/$(basename $0).log") 2>&1
 }
 
 netperf::run() {
@@ -60,7 +57,7 @@ netperf::run() {
   netperf::docker "$@" "runc"
   netperf::docker "$@" "kata-runtime"
   netperf::docker "$@" "runsc-ptrace-user"
-  netperf::docker "$@" "runsc-kvm-user"
+  #netperf::docker "$@" "runsc-kvm-user"
 }
 
 netperf::lkl() {
@@ -75,7 +72,7 @@ netperf::lkl() {
   cd $NETPERF_DIR
 
   # XXX: musl-libc w/ UDP_STREAM is not working over 2sec length so, use hijack
-  if [[ "$test" == "UDP_STREAM" ]] ; then
+  if [[ "$test" == "NIU_UDP_STREAM" ]] ; then
     echo "$(tput bold)== lkl-hijack tap ($test-$num $*)  ==$(tput sgr0)"
 
     export LKL_HIJACK_NET_IFTYPE=tap
@@ -84,9 +81,9 @@ netperf::lkl() {
     sudo -u moroo $TASKSET lkl-hijack.sh netperf $netperf_args \
      |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
   else
-    echo "$(tput bold)== lkl-musl tap ($test-$num $*)  ==$(tput sgr0)"
-    sudo -u moroo ${FRANKENLIBC_DIR}/rump/bin/rexec \
-     src/netperf disk.img tap:tap0 config:lkl.json \
+    echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
+    docker run -i --runtime=runu-dev thehajime/runu-base:latest \
+     netperf imgs/python.img tap:tap0 config:lkl-offload.json \
      -- $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
     wait

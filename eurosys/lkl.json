@@ -3,7 +3,7 @@
     "sysctl": "net.ipv4.tcp_wmem=4096 87380 16777216",
     "interfaces": [
         {
-            "ip": "1.1.1.3",
+            "ip": "10.0.39.3",
             "masklen": "24",
             "mac": "00:0d:0b:94:4e:97",
             "param": "4",
