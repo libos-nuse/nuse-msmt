@@ -1,10 +1,11 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
+SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+#source "$SCRIPT_DIR/netperf-common.sh"
 
-DEST_ADDR="1.1.1.2"
-SELF_ADDR="1.1.1.3"
-HOST_ADDR="1.1.1.1"
+DEST_ADDR="3.3.3.2"
+SELF_ADDR="3.3.3.3"
+HOST_ADDR="3.3.3.5"
 export FIXED_ADDRESS="$SELF_ADDR"
 export FIXED_MASK=24
 TRIALS=1
@@ -30,11 +31,9 @@ main() {
 }
 
 nginx::run() {
-  nginx::lkl    "$@"
+  nginx::lkl "$@"
   nginx::native "$@"
-  nginx::docker "$@" "runc"
-  nginx::docker "$@" "kata-runtime"
-  nginx::docker "$@" "runsc"
+  nginx::docker "$@"
 }
 
 nginx::lkl() {
@@ -46,20 +45,20 @@ nginx::lkl() {
 
   #setup_lkl
 
-  echo "$(tput bold)== lkl-musl ($test-$num-p${ex_arg}) ==$(tput sgr0)"
-  killall nginx
-  rexec "$LKLMUSL_NGINX/nginx/bin/nginx" \
-    "$LKLMUSL_NGINX/nginx/images/full.iso" tap:tap0 config:../lkl.json \
+  echo "$(tput bold)== lkl ($test-$num-p${ex_arg}) ==$(tput sgr0)"
+  sudo killall -9 nginx
+  sudo rexec "$LKLMUSL_NGINX/nginx/bin/nginx" \
+    "$LKLMUSL_NGINX/nginx/images/data.iso" tap:tap0 config:../lkl.json \
     | grep -v fallback &
   sleep 1
-  sudo ifconfig tap0 up; sudo ifconfig bridge0 addm tap0
+  sudo ifconfig tap0 up; sudo ifconfig bridge1 addm tap0
 
   ssh -t "$DEST_ADDR" sudo arp -d "$FIXED_ADDRESS"
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
     2>&1 | tee -a "$OUTPUT/nginx-$test-lkl-$num.dat"
 
-  kill $!
-  wait $! 2>/dev/null
+  sudo kill $!
+  sudo wait $! 2>/dev/null
 )
 }
 
@@ -84,17 +83,16 @@ nginx::docker() {
   local test=$1
   local num=$2
   local ex_arg=$3
-  local runtime=$4
   local wrk_args="http://${HOST_ADDR}/${ex_arg}b.img"
 
   echo "$(tput bold)== docker ($test-$num-p${ex_arg})  ==$(tput sgr0)"
-  docker run --runtime=$runtime --rm -p 80:80 \
-   -v ${SCRIPT_DIR}/nginx-docker.conf:/etc/nginx/nginx.conf:ro \
+  docker run --rm -p 80:80 \
+   -v /Users/tazaki/gitworks/nuse-msmt/apsys/nginx/nginx-docker.conf:/etc/nginx/nginx.conf:ro \
   nginx-test nginx &
 
   sleep 5
   ssh "$DEST_ADDR" "$NATIVE_WRK/wrk" "$wrk_args" \
-    2>&1 | tee -a "$OUTPUT/nginx-$test-$runtime-$num.dat"
+    2>&1 | tee -a "$OUTPUT/nginx-$test-docker-$num.dat"
 
   kill $!
   wait $! 2>/dev/null
