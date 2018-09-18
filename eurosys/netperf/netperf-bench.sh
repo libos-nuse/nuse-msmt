@@ -82,7 +82,7 @@ netperf::lkl() {
      |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
   else
     echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
-    docker run -i --runtime=runu-dev thehajime/runu-base:latest \
+    docker run -i --runtime=runu-dev thehajime/runu-base:linux \
      netperf imgs/python.img tap:tap0 config:lkl-offload.json \
      -- $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
