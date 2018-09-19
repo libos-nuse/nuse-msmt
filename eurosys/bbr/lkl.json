@@ -1,0 +1,16 @@
+{
+    "sysctl": "net.ipv4.tcp_wmem=40960 87380 1677721600;net.core.wmem_max=2147483647",
+    "interfaces": [
+        {
+            "ip": "2.1.1.39",
+            "masklen": "24",
+            "param": "3",
+            "offload": "0xc803",
+            "qdisc":"root|fq",
+            "type": "rumpfd"
+        }
+    ],
+    "debug": "1",
+    "singlecpu": "1",
+    "delay_main": "500000",
+}
