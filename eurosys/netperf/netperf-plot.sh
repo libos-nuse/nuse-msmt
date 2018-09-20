@@ -154,7 +154,7 @@ set xtics ${PSIZE_XTICS}
 set xlabel "Payload size (bytes)"
 set yrange [-10:10]
 set ytics ('(rx) 10' -10, '5' -5, '0' 0, '5' 5, '(tx) 10' 10)
-set ylabel "Goodput (Gbps)"
+set ylabel "Goodput (Gbps)" offset +3,0
 
 
 plot \
