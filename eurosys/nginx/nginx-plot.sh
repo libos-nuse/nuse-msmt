@@ -53,14 +53,13 @@ plot \
    '${OUTPUT}/nginx-native-thpt.dat' usi (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr lc rgb "red" fill pattern 0 title "native(mac)" 
 
 set terminal png lw 3 14 crop
-set xtics nomirror font ",14"
 set output "${OUTPUT}/out/nginx-wrk-thpt.png"
 replot
 
 # latency
 set ylabel "Latency (msec)"
 set ytics 1
-set yrange [0:5]
+set yrange [0:3.5]
 set xtics ("64" 0, "128" 1, "256" 2, "512" 3, "1024" 4, "1500" 5, "2048" 6)
 set xlabel "File size (bytes)"
 set xrange [-1:7]
@@ -68,12 +67,11 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/nginx-wrk-latency.eps"
 
 plot \
-   '${OUTPUT}/nginx-docker.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr ps 1 lc rgb "green"  title "docker(mac)" ,\
-   '${OUTPUT}/nginx-lkl.dat' usin (\$0-0):(\$1/1000):(\$2/1000) w boxerr ps 1 lc rgb "cyan" title "lkl", \
-   '${OUTPUT}/nginx-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr ps 1 lc rgb "red"  title "native(mac)" 
+   '${OUTPUT}/nginx-docker.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerr fill pattern 2 lc rgb "green"  title "docker(mac)" ,\
+   '${OUTPUT}/nginx-lkl.dat' usin (\$0-0):(\$1/1000):(\$2/1000) w boxerr fill pattern 4 lc rgb "cyan" title "lkl", \
+   '${OUTPUT}/nginx-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerr fill pattern 0 lc rgb "red"  title "native(mac)" 
 
 set terminal png lw 3 14 crop
-set xtics nomirror font ",14"
 set output "${OUTPUT}/out/nginx-wrk-latency.png"
 replot
 
