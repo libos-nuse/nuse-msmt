@@ -143,31 +143,31 @@ set pointsize 2
 set xzeroaxis
 set grid ytics
 
-set boxwidth 0.2
+set boxwidth 0.15
 set style fill pattern
 
 set size 1.0,0.8
 set key top left
 
-set xrange [-1.0:7.0]
+set xrange [-0.5:6.5]
 set xtics ${PSIZE_XTICS}
 set xlabel "Payload size (bytes)"
 set yrange [-10:10]
 set ytics ('(rx) 10' -10, '5' -5, '0' 0, '5' 5, '(tx) 10' 10)
-set ylabel "Goodput (Gbps)" offset +3,0
+set ylabel "Goodput (Gbps)" offset +4,0
 
 
 plot \
-   '${OUTPUT}/tx/tcp-stream-runc.dat' usin (\$0-0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-stream-kata-runtime.dat' usin (\$0-0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
    '${OUTPUT}/tx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/rx/tcp-stream-runc.dat' usin (\$0-0.4):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-kata-runtime.dat' usin (\$0-0.2):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" notitle ,\
+   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
+   '${OUTPUT}/rx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" notitle ,\
    '${OUTPUT}/rx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.2):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.4):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle
+   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle
 
 
 set terminal png lw 3 14 crop
@@ -186,11 +186,11 @@ set ytics auto
 set key top right
 
 plot \
-   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
    '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
+   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/tcp-rr.png"
@@ -203,11 +203,11 @@ set yrange [0:10]
 set key top left
 
 plot \
-   '${OUTPUT}/tx/udp-stream-runc.dat' usin (\$0-0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/udp-stream-kata-runtime.dat' usin (\$0-0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/udp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/udp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
    '${OUTPUT}/tx/udp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/udp-stream-lkl.dat' usin (\$0+0.2):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.4):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
+   '${OUTPUT}/tx/udp-stream-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/udp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
 
 
 set terminal png lw 3 14 crop
@@ -221,11 +221,11 @@ set key top right
 set yrange [0:1]
 
 plot \
-   '${OUTPUT}/tx/udp-stream-pps-runc.dat' usin (\$0-0.4):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/udp-stream-pps-kata-runtime.dat' usin (\$0-0.2):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/udp-stream-pps-runc.dat' usin (\$0-0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/udp-stream-pps-kata-runtime.dat' usin (\$0-0.15):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
    '${OUTPUT}/tx/udp-stream-pps-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/udp-stream-pps-lkl.dat' usin (\$0+0.2):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.4):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
+   '${OUTPUT}/tx/udp-stream-pps-lkl.dat' usin (\$0+0.15):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/udp-stream-pps.png"
