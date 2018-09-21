@@ -146,15 +146,18 @@ set grid ytics
 set boxwidth 0.15
 set style fill pattern
 
-set size 1.0,0.8
+set size 1.0,0.9
 set key top left
 
 set xrange [-0.5:6.5]
 set xtics ${PSIZE_XTICS}
 set xlabel "Payload size (bytes)"
 set yrange [-10:10]
-set ytics ('(rx) 10' -10, '5' -5, '0' 0, '5' 5, '(tx) 10' 10)
-set ylabel "Goodput (Gbps)" offset +4,0
+set ytics ('10' -10, '5' -5, '0' 0, '5' 5, '10' 10)
+set ylabel "Goodput (Gbps)" offset +0.8
+set label 1 right at first -1.0,10 "(tx)"
+set label 2 right at first -1.0,-10 "(rx)"
+
 
 
 plot \
