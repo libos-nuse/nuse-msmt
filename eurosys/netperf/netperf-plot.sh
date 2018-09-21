@@ -158,16 +158,16 @@ set ylabel "Goodput (Gbps)" offset +4,0
 
 
 plot \
-   '${OUTPUT}/tx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
-   '${OUTPUT}/tx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native" ,\
-   '${OUTPUT}/rx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 4 lc rgb "cyan" notitle ,\
-   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" notitle
+   '${OUTPUT}/tx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lt 1 lc rgb "blue" title "runsc" ,\
+   '${OUTPUT}/tx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lt 1 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/tcp-stream-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native" ,\
+   '${OUTPUT}/rx/tcp-stream-runc.dat' usin (\$0-0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "green" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-kata-runtime.dat' usin (\$0-0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 3 lt 1  lc rgb "blue" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-lkl.dat' usin (\$0+0.15):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 4 lt 1 lc rgb "cyan" notitle ,\
+   '${OUTPUT}/rx/tcp-stream-native.dat' usin (\$0+0.3):(\$1*-1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" notitle
 
 
 set terminal png lw 3 14 crop
