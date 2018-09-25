@@ -234,7 +234,7 @@
 # The settings for commands in this prm file refer to sample DUT configuration 
 # scripts located in the DocScript directory.
 
-IPv6 Suite Setup Command                  "sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap -HEC  -i name=tap-lwip-0,addr=10.1.0.10,netmask=255.255.255.0 -i name=tap-lwip-1,addr=10.2.0.10,netmask=255.255.255.0"
+IPv6 Suite Setup Command                  "sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap"
 IPv6 Unknown Routing Type                 10
 IPv6 Unknown Option Type                  20
 IPv6 Invalid Header                       254
