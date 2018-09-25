@@ -452,21 +452,20 @@
   # The settings for commands in this prm file refer to sample DUT configuration 
   # scripts located in the DocScript directory.
 
-ICMPv6 Suite Setup Command                            		"sudo -u tazaki ssh 172.16.0.176 anvl-dut/lkl-linux/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 ip monitor"
-ICMPv6 Suite Reset Command                            		"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
-ICMPv6 DUT Assign Unicast Address to an Interface Command 	"sudo -u tazaki ssh -f 172.16.0.176 anvl-dut/lkl-linux/anvl-wrapper.sh $ANVL_PARAMARG ip monitor"
-ICMPv6 DUT Remove Unicast Address from an Interface Command 	"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
-ICMPv6 DUT Assign Anycast Address to an Interface Command 	"sudo -u tazaki ssh -f 172.16.0.176 anvl-dut/lkl-linux/anvl-wrapper.sh $ANVL_PARAMARG ip monitor"
-ICMPv6 DUT Remove Anycast Address from an Interface Command 	"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
+ICMPv6 Suite Setup Command                            		"./DocScript/ICMPV6/icmpv6-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 Suite Reset Command                            		"./DocScript/ICMPV6/icmpv6-suite-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Assign Unicast Address to an Interface Command 	"./DocScript/ICMPV6/icmpv6-dut-assign-unicast-address-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Remove Unicast Address from an Interface Command 	"./DocScript/ICMPV6/icmpv6-dut-remove-unicast-address-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Assign Anycast Address to an Interface Command 	"./DocScript/ICMPV6/icmpv6-dut-assign-anycast-address-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Remove Anycast Address from an Interface Command 	"./DocScript/ICMPV6/icmpv6-dut-remove-anycast-address-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ICMPv6 DUT Assign Multicast Group Id to an Interface Command		"./DocScript/ICMPV6/icmpv6-dut-assign-multicast-group-id-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ICMPv6 DUT Remove Multicast Group Id from an Interface Command		"./DocScript/ICMPV6/icmpv6-dut-remove-multicast-group-id-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IPv6 DUT Add Static Route Command        			"./DocScript/ICMPV6/ipv6-dut-add-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IPv6 DUT Delete Static Route Command     			"./DocScript/ICMPV6/ipv6-dut-delete-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ICMPv6 DUT Configure IPv6 MTU Command           		"./DocScript/ICMPV6/icmpv6-dut-configure-ipv6-mtu-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IPv6 DUT Echo Request Send command 				"./DocScript/ICMPV6/ipv6-dut-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-#Reboot Command                                                  "echo 'reboot'"
-Reboot Command                            		"sudo -u tazaki ssh 172.16.0.176 anvl-dut/lkl-linux/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 ip monitor"
-#Reboot Command                            "./DocScript/IPV6/reboot-command.exp $ANVL_DUTHOSTNAME"
+Reboot Command                                                  "./DocScript/ICMPV6/reboot-command.exp $ANVL_DUTHOSTNAME"
+
 ICMPv6 Ingress Filter Command                                   "./DocScript/ICMPV6/icmpv6-ingress-filter-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ICMPv6 Ingress Disable Command                                  "./DocScript/ICMPV6/icmpv6-ingress-disable-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
 ICMPv6 Egress Filter Command                                    "./DocScript/ICMPV6/icmpv6-egress-filter-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
@@ -486,7 +485,7 @@ ICMPv6 Unknown Error Message Type                                127
 ICMPv6 Unknown Informational Message Type                        254
 IPv6 DUT Static Route Is Supported			         TRUE
 ICMPv6 DUT Supports Global Address			         TRUE
-Reboot Time                                                      6
+Reboot Time                                                      60
 IPv6 Packet Tolerance Time                                       1
 IPv6 Invalid Header                                              254
 IPv6 Unknown Option Type                                         20

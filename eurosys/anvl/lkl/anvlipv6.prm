@@ -234,7 +234,7 @@
 # The settings for commands in this prm file refer to sample DUT configuration 
 # scripts located in the DocScript directory.
 
-IPv6 Suite Setup Command                  "sudo -u tazaki ssh 172.16.0.176 anvl-dut/lkl-linux/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 ip monitor"
+IPv6 Suite Setup Command                  "./DocScript/IPV6/ipv6-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IPv6 Unknown Routing Type                 10
 IPv6 Unknown Option Type                  20
 IPv6 Invalid Header                       254
