@@ -1,0 +1,741 @@
+#
+#
+# anvlndp.prm 
+#
+#
+# This is a sample parameter file with entries that apply to ipv6-ndp test
+# suite. 
+#
+# Users must supply their own values; this file is only a template.
+#
+###############################################################################
+# 
+# A parameter file consists of one-line entries.  Each entry contains a
+# parameter name and a value.  The parameter must appear exactly as
+# it does here -- it is case-sensitive -- with spaces as word
+# separators.  The value must have the type specified and may be
+# separated from the parameter name either by spaces or by tabs.  All
+# parameter entries are optional. 
+#
+# Parameter syntax
+# ----------------
+# 
+# number: a decimal or hexadecimal number; hexadecimals must be
+#         prefixed with 0x.
+#         Examples: 9, 0xFF, 0x9a
+# 
+# boolean: True or False.
+# 
+# string: an unquoted piece of text which may not contain spaces.
+#         Examples: a string, command
+# 
+# Some parameters allow only a certain set of string values; they are
+# listed for each such parameter.
+# 
+# quoted string: a piece of text which may contain spaces and which is
+# enclosed by double quote (") marks.
+#                Examples: "date", "telnet host"
+# 
+# command: a quoted string whose contents will be passed to the host
+# O/S to be run as a command (often an expect script).  Certain
+# parameter commands will have to take as an argument the variable 
+# ANVL_PARAMARG; all other variables are optional arguments -- they can
+# be hard coded into the script instead. The following variables are
+# available:
+#
+#       ANVL_DUTHOSTNAME - the name of the Device Under Test (see anvl.cfg).
+#       ANVL_DUTPORT - the port of the Device Under Test (see anvl.cfg).
+#       ANVL_LOGLEVEL - the -l log level of the current test run.
+#       ANVL_CFGFILE - the configuration file for the current test run.
+#       ANVL_PRMFILE - the parameter file for the current test run.
+#	ANVL_PARAMARG - the utility variable which is set in a test 
+#                       for use by a parameter command run from that test.
+#       ANVL_TEST_SUITE - the name of the ANVL test suite that is
+#                         currently running.
+#       ANVL_TEST_NUMBER - the number of the ANVL test that is currently
+#                          running.
+#       ANVL_PID - the process id of the currently running ANVL process
+#                  (or '0' if this cannot be determined or doesn't exist
+#                  on the current operating system).
+#
+# If the entry is not included, the command is null, and ANVL may
+# prompt the user to manually perform any action required (e.g. reboot a
+# Device Under Test).
+# 
+###############################################################################
+###########: Parameter Entries for IPV6-NDP Suite :############
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Reinitialize Interface Time                       <number>
+# Default: 3
+#    
+# This entry indicates the time (in seconds) needed to reinitialize 
+# the DUT interface. 
+# i.e. The time that elapses from the event when the DUT interface
+#      is reset till the event it begins Duplicate Address Detection
+#      for its link-local address
+# ----------------------------------------------------------------------
+#
+# ICMPv6 ANVL Listen Time                                      <number>
+# Default: 3 
+#    
+# This entry indicates the maximum time (in seconds) ANVL should listen
+# for desired ICMPv6 packet/s to arrive from DUT.
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Process Time                                      <number>
+# Default: 1 
+#    
+# This entry indicates the maximum time (in seconds) ANVL should wait
+# to give time to the DUT to process the ICMPv6 packet sent to it.
+# 
+# ----------------------------------------------------------------------
+# ICMPv6 DUT Host Variable RetransTimer Value                  <number>
+# Default: 1000 
+# (From the RFC 2461 constant RETRANS_TIMER, which 1000 milliseconds)
+#  
+# This entry (in miliseconds) corresponds to host implementation 
+# variable: RetransTimer of the DUT. 
+# It specifies the time between retransmissions of Nbr Sol messages
+# by a node (host or router) during:
+#   a) Address Resolution (NDP)
+#   b) NUD Probes         (NDP)
+#   c) Duplicate Address Detection (ACONF)
+#
+# Ref. RFC 2461, S6.3.2, P51 Host Variables
+#
+# "     RetransTimer   The time between retransmissions of Neighbor
+#                      Solicitation messages to a neighbor when
+#                      resolving the address or when probing the
+#                      reachability of a neighbor.
+#
+#                      Default: RETRANS_TIMER milliseconds"
+# 
+# Ref. RFC 2462, S5.1, P11 Node Configuration Variables
+#
+# "                  Autoconfiguration also assumes the presence of the
+#                    variable RetransTimer as defined in [DISCOVERY].
+#                    For autoconfiguration purposes, RetransTimer
+#                    specifies the delay between consecutive Neighbor
+#                    Solicitation transmissions performed during
+#                    Duplicate Address Detection (if
+#                    DupAddrDetectTransmits is greater than 1), as well
+#                    as the time a node waits after sending the last
+#                    Neighbor Solicitation before ending the Duplicate
+#                    Address Detection process."
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 IPv6 Default MTU                                      <number>
+# Default: 1350 
+#    
+# This entry is used to denote the Default MTU value of any link
+# between ANVL and DUT while running an Test Suite belonging to
+# the ICMPv6 family (i.e. ICMPv6, PMTU discovery, NDP or AutoConfig)
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 IPv6 Low MTU                                          <number>
+# Default: 1280
+#    
+# This entry is used to denote the Minimum MTU value of any link
+# between ANVL and DUT while running an Test Suite belonging to
+# the ICMPv6 family (i.e. ICMPv6, PMTU discovery, NDP or AutoConfig)
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Supports Anycast Address                         <boolean>
+# Default: FALSE 
+#  
+# This entry is a boolean entry which says whether DUT supports Anycast
+# address to be configured to its interface. 
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Supports Global Address                          <boolean>
+# Default: TRUE 
+#  
+# This entry is a boolean entry which indicates whether DUT supports
+# configuration of a Global Address on its interfaces. 
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Reinitialize Interface Command                   <command>
+#  
+# $ANVL_PARAMARG contents:
+#   NONE 
+#
+# Command that reinitializes all the interfaces of the DUT
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Assign Unicast Address to an Interface Command   <command>
+# ICMPv6 DUT Remove Unicast Address from an Interface Command <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   ADDRESS     - The IPv6 address to be configured on the interface
+#   PREFIX_LEN  - The length of the prefix of the address in bits
+#
+# Command that adds (removes) an IPv6 unicast address to (from) a DUT
+# interface. 
+# These commands are used by tests which require some additional IPv6
+# address to be configured to DUT besides the one specified in ANVL
+# configuration file.
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Assign Anycast Address to an Interface Command   <command>
+# ICMPv6 DUT Remove Anycast Address from an Interface Command <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the anycast address is to
+#                 be configured. 
+#                 It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   ADDRESS     - The Anycast IPv6 address to be configured on the
+#                 interface
+#   PREFIX_LEN  - The length of the address prefix of the address in
+#                 bits
+#
+# Command that adds (removes) an IPv6 anycast address to (from) a DUT
+# interface. 
+# These commands are used by tests which require some additional IPv6
+# address to be configured to DUT besides the unicast address specified
+# in ANVL configuration file.
+#
+# NOTE: These two commands get ignored by ANVL if the boolean param
+# entry:
+#   "ICMPv6 DUT Supports Anycast Address"
+# is set to FALSE
+#
+# ----------------------------------------------------------------------
+#
+# IPv6 DUT Add Static Route Command                    <command>
+# IPv6 DUT Delete Static Route Command                 <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE     - The DUT interface to be used by the route
+#                   It must be one of these:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   DESTN         - The destination prefix of the route
+#   PREFIX_LEN    - The length of the prefix in bits
+#   GATEWAY       - The gateway address for the route
+#
+# Command that adds (or removes) static route to (or from) the 
+# IPv6 routing table of the DUT
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Unknown ICMPv6 Option Type                          <number>
+# Default: 254 
+#    
+# This entry is used to denote an ICMPv6 Option Type which DUT does not
+# understand. 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Neighbor Cache Entry Becomes STALE After Reachable Time 
+#                                                             <boolean>
+# Default: FALSE 
+#  
+# This entry is a boolean entry which states whether DUT Neighbor Cache
+# entry for a particular destination becomes STALE after Reachable Time.
+# 
+# Ref: RFC 2461, S7.3.3, P67 Node Behavior
+#
+# "
+#   When ReachableTime milliseconds have passed since receipt of the
+#   last reachability confirmation for a neighbor, the Neighbor Cache
+#   entry's state changes from REACHABLE to STALE.
+#
+#     Note: An implementation may actually defer changing the state
+#     from REACHABLE to STALE until a packet is sent to the neighbor,
+#     i.e.,
+#     there need not be an explicit timeout event associated with the
+#     expiration of ReachableTime.
+# "
+#
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Unicast NA Omits Target Link-layer Address Option
+#                                                             <boolean>
+# Default: FALSE 
+#  
+# This entry is a boolean entry which says whether the Unicast Neighbor
+# Advertisements originated by DUT includes target Link-layer Address
+# Option 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Supports Neighbor Cache Manual Check           <boolean>
+# Default: FALSE 
+#  
+# This entry is a boolean entry which says whether DUT supports Neighbor
+# cache checkup. 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Supports Router Log Manual Check               <boolean>
+# Default: FALSE 
+#  
+# This entry is a boolean entry which says whether DUT supports Router
+# Log manual check. 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Suite Setup Command                                      <command>
+#  
+# $ANVL_PARAMARG contents:
+#   DIFACE0_IPV6_ADRESS   - The IPv6 Address of DIface-0
+#   DIFACE1_IPV6_ADRESS   - The IPv6 Address of DIface-1
+#
+# Command that is to be run at the begining of the NDP Test suite
+# 
+# ----------------------------------------------------------------------
+# 
+# IPv6 NDP Suite Reset Command                                      <command>
+#  
+# $ANVL_PARAMARG contents:
+#   DIFACE0_IPV6_ADRESS   - The IPv6 Address of DIface-0
+#   DIFACE1_IPV6_ADRESS   - The IPv6 Address of DIface-1
+#
+# Command that is to be run at the end of the NDP Test suite
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Clear Neighbor Cache Command                   <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface of which the neighbor cache
+#                 is to be cleared. It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#
+# Command that clears the Neighbor Cache entry corresponding to a
+# particular interface in DUT 
+# 
+# ----------------------------------------------------------------------
+# 
+# IPv6 NDP DUT Enable IP Forwarding Command                   <command>
+#  
+# $ANVL_PARAMARG contents:
+#   NONE
+#
+# Command that turns on the forwarding capability of the DUT.
+# It changes the DUT from being a host to being a router.
+# 
+# ----------------------------------------------------------------------
+# 
+# IPv6 NDP DUT Disable IP Forwarding Command                  <command>
+#  
+# $ANVL_PARAMARG contents:
+#   NONE
+#
+# Command that turns off the forwarding capability of the DUT.
+# It changes the DUT from being a router to being a host.
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP DUT Neighbor Cache Entry State Verify Command      <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE       - The DUT interface on which the Neighbor Cache is
+#                     to be verified
+#   ADDRESS         - The IPv6 address whose presence in the Neighbor
+#                     Cache has to be verified.
+#   LLADDR          - The link layer address entry for this entry
+#     (Optional)
+#
+# EXIT STATUS:
+#      0, in the absence of the entry (with
+#                       matching Link Layer address, if specified)
+#      1, if the state of the entry is INCOMPLETE
+#      2, if the state of the entry is REACHABLE
+#      3, if the state of the entry is STALE
+#      4, if the state of the entry is DELAY
+#      5, if the state of the entry is PROBE
+#
+# Command that checks the existence and corresponding state of a
+# particular entry in the neighbor cache of a DUT interface
+# 
+# ----------------------------------------------------------------------
+# IPv6 NDP DUT Log Entry Verify Command
+#
+# $ANVL_PARAMARG contents:
+#   INTERFACE       - The DUT interface on which the Neighbor Cache is
+#                     to be verified
+#
+# EXIT STATUS:
+#      0, in the absence of the log entry 
+#      1, if the Log entry found
+#
+# Command that checks whether DUT has correctly logged the inconsistency 
+# to the system.
+# ----------------------------------------------------------------------
+# IPv6 NDP DUT Neighbor Cache Entry IsRouter Flag Verify Command
+#                                                             <command>
+# $ANVL_PARAMARG contents:
+#   INTERFACE       - The DUT interface on which the Neighbor Cache is
+#                     to be verified
+#   ADDRESS         - The IPv6 address whose presence in the Neighbor
+#                     Cache has to be verified.
+#   LLADDR          - The link layer address entry against the address
+#     (Optional)
+#
+# EXIT STATUS:
+#      0, in the absence of the entry (with
+#                       matching Link Layer address, if specified)
+#      1, if the IsRouterFlag of the entry is set to FALSE
+#      2, if the IsRouterFlag of the entry is set to TRUE
+#
+# Command that checks the existence and gets the value of IsRouter flag
+# of particular entry in the neighbor cache of a DUT interface
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Reset Router Command                               <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE       - The DUT interface on which the address is to be
+#                     configured. It must be one of the two values:
+#                       0 - <DIface-0>
+#                       1 - <DIface-1>
+#
+# Command that removes the values assigned to all Router Configuration
+# Variables for a particular interface of the DUT. As a result, once
+# this command runs, all the variables for that interface must proceed
+# with their default values.
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Set Router Configuration Variable Command          <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0 - <DIface-0>
+#                   1 - <DIface-1>
+#
+#   VARIABLE_ID - Identifier of the Router Configuration Variable
+#                 which needs to be configured. It must have one
+#                 of these values:
+#                   0 - AdvSendAdvertisements
+#                   1 - MaxRtrAdvInterval
+#                   2 - MinRtrAdvInterval
+#                   3 - AdvManagedFlag
+#                   4 - AdvOtherConfigFlag
+#                   5 - AdvLinkMTU
+#                   6 - AdvReachableTime
+#                   7 - AdvRetransTimer
+#                   8 - AdvDefaultLifetime
+#
+#   VALUE       - The Value to be assigned to the Router Configuration
+#                 variable
+#
+# Command that assigns a given value to the specified Router
+# Configuration Variable for a particular interface of the DUT.
+#
+# NOTE: This command excludes two variables from the List:
+#       a) AdvCurHopLimit : Because it entirely depends upon the
+#                           Link-layer for the interface.
+#       b) AdvPrefixList  : It is a composite variable, unlike the
+#                           ones being updated in this command. Hence,
+#                           there are a separate pair of commands for
+#                           setting/resetting this variable:
+#                           "IPv6 NDP Router AdvPrefixList Add Command"
+#                                             AND
+#                           "IPv6 NDP Router AdvPrefixList Del Command"
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Reset Router Configuration Variable Command        <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0 - <DIface-0>
+#                   1 - <DIface-1>
+#
+#   VARIABLE_ID - Identifier of the Router Configuration Variable
+#                 which needs to be configured. It must have one
+#                 of these values:
+#                   0 - AdvSendAdvertisements
+#                   1 - MaxRtrAdvInterval
+#                   2 - MinRtrAdvInterval
+#                   3 - AdvManagedFlag
+#                   4 - AdvOtherConfigFlag
+#                   5 - AdvLinkMTU
+#                   6 - AdvReachableTime
+#                   7 - AdvRetransTimer
+#                   8 - AdvDefaultLifetime
+#
+# Command that removes the value assigned to a specified Router
+# Configuration Variable for a particular interface of the DUT.
+# As a result, once this command runs, the corresponding variable
+# for that interface must proceed with its default values.
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Router AdvPrefixList Add Command                   <command>
+#  
+# $ANVL_PARAMARG contents:
+#   13 Arguments in all. The first three specify the prefix and the
+#   corrsponding interface.
+#   The remaining 11 get grouped into bunches of 4; representing the
+#   four variables: AdvValidLifetime, AdvPreferredLifetime, 
+#   AdvOnLinkFlag and AdvAutonomousFlag respectively.
+#
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0 - <DIface-0>
+#                   1 - <DIface-1>
+#
+#   PREFIX      - The IPv6 Prefix to be added
+#
+#   PREFIXLEN   - The mask length of the prefix to be added
+#
+#   ADVVALIDLIFETIME_USE_DEFAULT
+#               - Whether the AdvValidLifetime Variable is to be
+#                 set. If TRUE, ignore the two arguments that
+#                 follow. Else, use them
+#
+#   ADVVALIDLIFETIME
+#               - Value to be assigned to the AdvValidLifetime
+#                 variable.
+#
+#   ADVVALIDLIFETIMEIS_FIXED
+#               - To specify whether the value assigned to the
+#                 AdvValidLifetime is to be in fixed mode or
+#                 decremental mode. If TRUE, it is fixed. Else it is
+#                 decremental.
+#
+#   ADVPREFERREDLIFETIME_USE_DEFAULT
+#               - Whether the AdvPreferredLifetime Variable is to be
+#                 set. If TRUE, ignore the two arguments that
+#                 follow. Else, use them
+#
+#   ADVPREFERREDLIFETIME
+#               - Value to be assigned to the AdvPreferredLifetime
+#                 variable.
+#
+#   ADVPREFERREDDLIFETIME_ISFIXED
+#               - To specify whether the value assigned to the
+#                 AdvPreferredLifetime is to be in fixed mode or
+#                 decremental mode. If TRUE, it is fixed. Else it is
+#                 decremental.
+#
+#   ADVONLINKFLAG_USE_DEFAULT
+#               - Whether the AdvOnLinkFlag Variable is to be
+#                 set. If TRUE, ignore the argument that
+#                 follows. Else, use it.
+#
+#   ADVONLINKFLAG
+#               - Value to be assigned to the AdvOnLinkFlag
+#                 variable.
+#
+#   ADVAUTONOMOUSFLAG_USE_DEFAULT
+#               - Whether the AdvAutonomousFlag Variable is to be
+#                 set. If TRUE, ignore the argument that
+#                 follows. Else, use it.
+#
+#   ADVAUTONOMOUSFLAG
+#               - Value to be assigned to the AdvOnLinkFlag
+#                 variable.
+# 
+# Command that adds a Prefix Information Option to the Router
+# Configuration Variable AdvPrefixList for a particular interface
+# of the DUT. It is to be specified the values of the individual
+# Prefix Specific variables in case their default values are to
+# be overridden.
+# 
+# Examples:
+#   1. SETUP: Configure DUT to add the prefix PREFIX-1 to the
+#             AdvPrefixList of <DIface-0> with the following
+#             settings:
+#             - AdvValidLifetime set to 0xffffffff
+#             - AdvPreferredLifetime set to 0xffffffff
+#             - AdvOnLinkFlag set to TRUE
+#             - AdvAutonomousFlag set to FALSE
+#      
+#      The arguments passed to the command will be:
+#      (Assuming PREFIX-1 to be 3ffe:0:0:1::/64)
+#
+#      DUTRtrAdvConfigPrefixAdd 0 \     ;#INTERFACE = <DIface-0>
+#                               3ffe:0:0:1:: \ ;#PREFIX
+#                               64 \    ;#PREFIXLEN
+#                               0 \     ;#ADVVALIDLIFETIME_USE_DEFAULT
+#                               \       ;#  = FALSE
+#                               4294967295 \;#ADVVALIDLIFETIME=ffffffff
+#                               0 \     ;#ADVVALIDLIFETIME_IS_FIXED
+#                               \       ;# = FALSE (it is decremental)
+#                               0 \  ;#ADVPREFERREDLIFETIME_USE_DEFAULT
+#                               \       ;#  = FALSE
+#                               4294967295\;#..PREFERREDLIFE..=ffffffff
+#                               0 \     ;#ADVPREFERREDLIFETIME_IS_FIXED
+#                               \       ;# = FALSE (it is decremental)
+#                               0 \ ;#ADVONLINKFLAG_USE_DEFAULT = FALSE
+#                               1 \     ;#ADVONLINKFLAG = TRUE
+#                               0 \     ;#ADVAUTONOMOUSFLAG_USE_DEFAULT
+#                               \       ;#  = FALSE
+#                               0       ;#ADVAUTONOMOUSGLAG = FALSE
+#                          
+#   2. SETUP: Configure DUT to add the prefix PREFIX-1 to the
+#             AdvPrefixList of <DIface-0> with default settings
+#      
+#      The arguments passed to the command will be:
+#      (Assuming PREFIX-1 to be 3ffe:0:0:1::/64)
+#
+#      DUTRtrAdvConfigPrefixAdd 0 \      ;#INTERFACE = <DIface-0>
+#                               3ffe:0:0:1:: \ ;#PREFIX
+#                               64 \     ;#PREFIXLEN
+#                               1 \      ;#ADVVALIDLIFETIME_USE_DEFAULT
+#                               \        ;#  = TRUE
+#                               0 \      ;#ADVVALIDLIFETIME = N/A
+#                               0 \      ;#ADVVALIDLIFETIME_IS_FIXED
+#                               \        ;# = N/A
+#                               1 \  ;#ADVPREFERREDLIFETIME_USE_DEFAULT
+#                               \        ;#  = TRUE
+#                               0 \     ;#ADVPREFERREDLIFETIME = N/A
+#                               0 \     ;#ADVPREFERREDLIFETIME_IS_FIXED
+#                               \       ;# = N/A
+#                               1 \  ;#ADVONLINKFLAG_USE_DEFAULT = TRUE
+#                               0 \     ;#ADVONLINKFLAG = N/A
+#                               1 \     ;#ADVAUTONOMOUSFLAG_USE_DEFAULT
+#                               \       ;#  = TRUE
+#                               0       ;#ADVAUTONOMOUSGLAG = N/A
+#                          
+# ----------------------------------------------------------------------
+#
+# IPv6 NDP Router AdvPrefixList Del Command                   <command>
+#  
+# $ANVL_PARAMARG contents:
+#
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0 - <DIface-0>
+#                   1 - <DIface-1>
+#
+#   PREFIX      - The IPv6 Prefix to be deleted
+#
+#   PREFIXLEN   - The mask length of the prefix to be deleted
+#
+# Command that deletes a Prefix Information Option from the
+# Router Configuration Variable AdvPrefixList for a particular
+# interface of the DUT.
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 DUT is a Router                                  <boolean>
+# Default : TRUE
+#
+# Some tests in IPv6 suite run only if DUT acts as a Router.
+# The value of this flag determines whether DUT acts as a 
+# Router or not. If it is set to FALSE then a few tests get 
+# disabled.
+#			   
+#-----------------------------------------------------------------
+# Reboot Command                        <command>
+# Default: none
+# 
+# $ANVL_PARAMARG contents:
+# None
+#
+# A command that reboots the Device Under Test.  
+# ----------------------------------------------------------------------
+#
+# Reboot Time                           <number>
+# Default: 300 (seconds)
+# 
+# This indicates the maximum time (in seconds) the Device Under Test takes 
+# to reboot.  We recommend allowing ample time (e.g. 150% of
+# the average time) for a device to reboot since some tests will
+# erroneously fail if the reboot is not complete when they start.
+#
+# ----------------------------------------------------------------------
+#
+# IPv6 Packet Tolerance Time            <number>
+# Default: 1 (second)
+# 
+# This indicates the amount of time with which other parameter time related
+# entries will be adjusted through an addition operator
+# ----------------------------------------------------------------------
+#
+# DUT Verification Returns FALSE on Success <boolean>
+# Default: FALSE
+#
+# If this param value is TRUE, then FALSE would be returned,
+# if success occurs.
+#
+# ----------------------------------------------------------------------
+#
+# DUT Verification Return Value on Success <number>
+# Default: 1
+#
+# If DUT Verification Returns FALSE on Success is FALSE then this param
+# would be in consideration and whatever value is set to this param,
+# would be treated as the return value when success occurs.
+#
+# ----------------------------------------------------------------------
+#
+###############################################################################
+# 
+# Example IPV6-NDP parameters:
+#
+
+  # The settings for commands in this prm file refer to sample DUT configuration 
+  # scripts located in the DocScript directory.
+
+IPv6 NDP Suite Setup Command                          			"./DocScript/IPV6-NDP/ipv6-ndp-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Suite Reset Command                          			"./DocScript/IPV6-NDP/ipv6-ndp-suite-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP DUT Clear Neighbor Cache Command       			"./DocScript/IPV6-NDP/ipv6-ndp-dut-clear-neighbor-cache-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP DUT Enable IP Forwarding Command       			"./DocScript/IPV6-NDP/ipv6-ndp-dut-enable-ip-forwarding-command.exp $ANVL_DUTHOSTNAME"
+IPv6 NDP DUT Disable IP Forwarding Command      			"./DocScript/IPV6-NDP/ipv6-ndp-dut-disable-ip-forwarding-command.exp $ANVL_DUTHOSTNAME"
+IPv6 NDP DUT Neighbor Cache Entry State Verify Command 			"./DocScript/IPV6-NDP/ipv6-ndp-dut-neighbor-cache-entry-state-verify-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP DUT Neighbor Cache Entry IsRouter Flag Verify Command 		"./DocScript/IPV6-NDP/ipv6-ndp-dut-neighbor-cache-entry-isrouter-flag-verify-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP DUT Log Entry Verify Command     "./DocScript/IPV6-NDP/ipv6-ndp-dut-log-entry-verify-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Reset Router Command                   			"./DocScript/IPV6-NDP/ipv6-ndp-reset-router-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Set Router Configuration Variable Command 			"./DocScript/IPV6-NDP/ipv6-ndp-set-router-configuration-variable-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Reset Router Configuration Variable Command 			"./DocScript/IPV6-NDP/ipv6-ndp-reset-router-configuration-variable-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Router AdvPrefixList Add Command  				"./DocScript/IPV6-NDP/ipv6-ndp-router-advprefixlist-add-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 NDP Router AdvPrefixList Del Command       			"./DocScript/IPV6-NDP/ipv6-ndp-router-advprefixlist-del-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Reinitialize Interface Command       			"./DocScript/IPV6-NDP/icmpv6-dut-reinitialize-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Assign Unicast Address to an Interface Command 		"./DocScript/IPV6-NDP/icmpv6-dut-assign-unicast-address-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Remove Unicast Address from an Interface Command 		"./DocScript/IPV6-NDP/icmpv6-dut-remove-unicast-address-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Assign Anycast Address to an Interface Command 		"./DocScript/IPV6-NDP/icmpv6-dut-assign-anycast-address-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Remove Anycast Address from an Interface Command 		"./DocScript/IPV6-NDP/icmpv6-dut-remove-anycast-address-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Add Static Route Command        				"./DocScript/IPV6-NDP/ipv6-dut-add-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Delete Static Route Command     				"./DocScript/IPV6-NDP/ipv6-dut-delete-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Echo Request Send Command					"./DocScript/IPV6-NDP/ipv6-dut-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+Reboot Command                                                          "./DocScript/IPV6-NDP/reboot-command.exp $ANVL_DUTHOSTNAME"
+
+ICMPv6 DUT Reinitialize Interface Time                                   20
+ICMPv6 DUT Process Time                                                   5
+ICMPv6 DUT Host Variable RetransTimer Value                            1000
+ICMPv6 IPv6 Default MTU                                                1390
+ICMPv6 IPv6 Low MTU                                                    1280
+ICMPv6 DUT Supports Anycast Address                                   FALSE
+IPv6 NDP Unknown ICMPv6 Option Type                                       6
+IPv6 NDP DUT Neighbor Cache Entry Becomes STALE After Reachable Time   TRUE
+IPv6 NDP DUT Unicast NA Omits Target Link-layer Address Option        FALSE
+IPv6 NDP DUT Supports Neighbor Cache Manual Check                      TRUE
+IPv6 NDP DUT Supports Router Log Manual Check                         FALSE
+IPv6 DUT is a Router                                                   TRUE
+ICMPv6 DUT Supports Global Address				                             TRUE
+Reboot Time                                                              60
+IPv6 Packet Tolerance Time                                                1
+ICMPv6 Packet Listen Time 	                                             15
+ICMPv6 ANVL Listen Time 	                                               15
+#
+#  anvlndp.prm: IPv6 Neighbor Discovery Protocol ANVL Test Suite prm file
+#  
+#  Copyright (c) Ixia 2002-2010
+#  All rights reserved
+#
