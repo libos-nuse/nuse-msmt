@@ -1,0 +1,55 @@
+#
+#
+# anvlipgw.prm
+#
+#
+# This is a sample parameter file with entries for the IPGW Test Suite.
+# See the files anvl.prm and anvlip.prm for additional parameters.
+#
+# Users must supply their own values; this file is only a template.
+#
+###############################################################################
+# 
+# IPGW Suite Setup Command            <command>
+# 
+# A command that ensures that the Device Under Test is set up correctly
+# for IPGW tests according to the 'Test Suite Required Setup'
+# message. This message is printed when any tests from the suite are
+# run at log level medium or low.  The required setup is described in
+# the file anvlipgw.tal.  
+# 
+###############################################################################
+# Reboot Command                        <command>
+# Default: none
+# 
+# $ANVL_PARAMARG contents:
+# None
+#
+# A command that reboots the Device Under Test.  
+###############################################################################
+#
+# Reboot Time                           <number>
+# Default: 300 (seconds)
+# 
+# This indicates the maximum time (in seconds) the Device Under Test takes 
+# to reboot.  We recommend allowing ample time (e.g. 150% of
+# the average time) for a device to reboot since some tests will
+# erroneously fail if the reboot is not complete when they start.
+#
+###############################################################################
+
+
+
+# 
+# Example IPGW parameters:
+#
+
+  # your-script-here.exp is a script (e.g. an expect script) which configures
+  # the device whose name is stored in ANVL_DUTHOSTNAME appropriately
+  # for the IPGW test suite.
+  IPGW Suite Setup Command              "sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap"
+
+#
+#  Copyright (c) Ixia 2002-2006
+#  All rights reserved.
+#
