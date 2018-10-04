@@ -1,0 +1,218 @@
+#
+# Copyright (c) Ixia 2013
+# All rights reserved.
+#
+#----------------------------------------------------------------------
+# ARP Listen Time                                       <numeric>
+#
+# Default : 10 seconds
+#
+# DESCRIPTION :
+# This is the maximum time interval ANVL will wait for an expected Packet.
+# DUT should send the expected packet within this time interval.
+#
+#----------------------------------------------------------------------
+#
+# ARP Tolerance Time                                    <numeric>
+#
+# Default : 100 milliseconds
+#
+# DESCRIPTION :
+# This value depicts the time variance associated to any wait-event 
+# that varies a precise time-factor.
+#----------------------------------------------------------------------
+#
+# ARP Tolerance Factor                                   <numeric>
+#
+# Default : 1
+#
+# DESCRIPTION :
+# This value depicts the factor by which Listen Time needs to be
+# multiplied.
+#----------------------------------------------------------------------
+#
+# ARP Suite Setup Command                                <command>
+# Default: none
+#
+# $ANVL_PARAMARG contents:
+# IP_ADDR_0         - IP address of first interface
+# IP_ADDR_1         - IP address of second interface
+# IP_SUBNET_MASK_0  - IP subnet mask of first interface
+# IP_SUBNET_MASK_1  - IP subnet mask of second interface
+#
+# A command that ensures that the Device Under Test is set up correctly
+# for running ARP tests.
+#----------------------------------------------------------------------
+#
+# ARP Suite Reset Command                                <command>
+# Default: none
+#
+# $ANVL_PARAMARG contents:
+# IP_ADDR_0         - IP address of first interface
+# IP_ADDR_1         - IP address of second interface
+# IP_SUBNET_MASK_0  - IP subnet mask of first interface
+# IP_SUBNET_MASK_1  - IP subnet mask of second interface
+#
+# A command that clears/resets all setup configurations of Device Under Test.
+#----------------------------------------------------------------------
+#
+# ARP DUT Configure ARP Dynamic Cache Clear Command       <command>
+#
+# $ANVL_PARAMARG contents:
+# ANVL_DUTHOSTNAME - The Hostname of the DUT
+# IFACE_INDEX      - The DUT interface on which dynamic ARP cache entries will be cleared
+# 
+# A command that clears dynamic ARP Cache entries of the given DUT interface.
+#----------------------------------------------------------------------
+#
+# ARP DUT Configure Delete Static ARP Cache Entry Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# SRC_IP_ADDRESS      - IP address of anvl host which needs to be deleted from the entry   
+# SRC_MAC_ADDRESS     - MAC address of anvl which needs to be deleted from the entry
+# 
+# A command that deletes a static ARP Cache entry of DUT
+#----------------------------------------------------------------------
+#
+#ARP DUT Configure Send Echo Request Command               <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   DESTN_ADDRESS    - IP address of the anvl where Echo Request is to
+#                      be sent   
+#   INTERFACE        - Outgoing interface of the DUT through which Ping
+#                      is to be sent
+#   COUNT            - Number of Echo Request to be sent
+#   DATA_SIZE        - Size of the echo data
+#
+# A command that causes the DUT to send an Echo Request (Ping)
+# to ANVL.
+# ---------------------------------------------------------------------
+#
+# ARP DUT Configure Add ARP Cache Entry Command            <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# SRC_IP_ADDRESS      - IP address of anvl host which needs to be entered into DUT's arp cache   
+# SRC_MAC_ADDRESS     - MAC address of anvl host which needs to be entered into DUT's arp cache
+# 
+# A command that adds a static entry in the ARP Cache of DUT
+#----------------------------------------------------------------------
+#
+# ARP DUT Supports RFC 1027 for Proxy ARP                  <boolean>
+#
+# Default : FALSE
+#
+# DESCRIPTION :
+# Indicates whether or not DUT supports Proxy ARP as defined in RFC 1027
+#----------------------------------------------------------------------
+# ARP DUT is a Router                  <boolean>
+#
+# Default : FALSE
+#
+# DESCRIPTION :
+# Indicates whether DUT is a Router or a Host
+#----------------------------------------------------------------------
+# ARP DUT Enable Proxy ARP Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# IFACE_INDEX         - The DUT interface on which Proxy ARP will be enabled
+# 
+# A command that enables Proxy ARP on a given DUT interface 
+#----------------------------------------------------------------------
+# ARP DUT Disable Proxy ARP Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# IFACE_INDEX         - The DUT interface on which Proxy ARP will be disabled
+# 
+# A command that disables Proxy ARP on a given DUT interface 
+#----------------------------------------------------------------------
+# ARP DUT Static Route Add Command    <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME  - The Hostname of the DUT
+# DESTN_ADDRESS     - Destination address of the route
+# GATEWAY           - The gateway to reach dstAddr
+# INTERFACE         - The DUT IP interface
+# NETMASK           - Netmask
+# 
+# A command that causes the DUT to add a static route 
+#----------------------------------------------------------------------
+# ARP DUT Static Route Delete Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME  - The Hostname of the DUT
+# DESTN_ADDRESS     - Destination address of the route
+# GATEWAY           - The gateway to reach dstAddr
+# INTERFACE         - The DUT IP interface
+# NETMASK           - Netmask
+# 
+# A command that causes the DUT to delete a static route 
+#----------------------------------------------------------------------
+# ARP DUT Configure ARP Dynamic Cache Entry Timeout Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# IFACE_INDEX         - The DUT interface on which dynamic cache entry timeout will be configured
+# TIMEOUT             - The timeout in seconds
+
+# A command is used to cause the DUT to configure a timeout 
+# for its dynamic cache entries
+#----------------------------------------------------------------------
+# ARP DUT Configure Clear ARP Dynamic Cache Entry Timeout Command  <command>
+#
+# $ANVL_PARAMARG contents:
+#
+# ANVL_DUTHOSTNAME    - The Hostname of the DUT
+# IFACE_INDEX         - The DUT interface on which dynamic cache entry timeout will be cleared
+# TIMEOUT             - The timeout in seconds
+
+# A command is used to cause the DUT to clear a timeout 
+# for its dynamic cache entries
+#----------------------------------------------------------------------
+# ARP DUT Dynamic Cache Entry Timeout                    <numeric>
+#
+# Default : 30 seconds
+#
+# DESCRIPTION :
+# This is the time for which a dynamic entry will be present in the ARP Cache.
+# This timeout is only effective if it has been configured using the script
+# named ARP DUT Configure ARP Dynamic Cache Entry Timeout Command
+#----------------------------------------------------------------------
+
+
+ARP Listen Time            20
+ARP Tolerance Time         5
+ARP Tolerance Factor       1
+
+ARP Suite Setup Command "./DocScript/ARP/arp-dut-configure-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP Suite Reset Command "./DocScript/ARP/arp-dut-suite-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure ARP Dynamic Cache Clear Command "./DocScript/ARP/arp-dut-clear-dynamic-cache-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Delete Static ARP Cache Entry Command "./DocScript/ARP/arp-dut-delete-static-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Send Echo Request Command "./DocScript/ARP/arp-dut-background-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Add ARP Cache Entry Command "./DocScript/ARP/arp-dut-add-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Supports RFC 1027 for Proxy ARP        FALSE
+ARP DUT is a Router                            TRUE
+ARP DUT Enable Proxy ARP Command"./DocScript/ARP/arp-dut-enable-proxy-arp-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Disable Proxy ARP Command"./DocScript/ARP/arp-dut-disable-proxy-arp-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Static Route Add Command "./DocScript/ARP/arp-dut-static-route-add-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Static Route Delete Command "./DocScript/ARP/arp-dut-static-route-del-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure ARP Dynamic Cache Entry Timeout Command "./DocScript/ARP/arp-dut-configure-dynamic-cache-entry-timeout-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Clear ARP Dynamic Cache Entry Timeout Command "./DocScript/ARP/arp-dut-configure-clear-dynamic-cache-entry-timeout-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Dynamic Cache Entry Timeout            30
+#
+#  Copyright (c) Ixia 2013
+#  All rights reserved.
+#
+
+
