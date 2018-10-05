@@ -1,0 +1,259 @@
+# anvlicmp.prm 
+#
+#
+# This is a sample parameter file with entries ICMP test suite. 
+#
+# Users must supply their own values; this file is only a template.
+#
+##########################################################################
+# 
+# A parameter file consists of one-line entries.  Each entry contains a
+# parameter name and a value.  The parameter must appear exactly as
+# it does here -- it is case-sensitive -- with spaces as word
+# separators.  The value must have the type specified and may be
+# separated from the parameter name either by spaces or by tabs.  All
+# parameter entries are optional. 
+#
+# Parameter syntax
+# ----------------
+# 
+# number: a decimal or hexadecimal number; hexadecimals must be
+#         prefixed with 0x.
+#         Examples: 9, 0xFF, 0x9a
+# 
+# boolean: True or False.
+# 
+# string: an unquoted piece of text which may not contain spaces.
+#         Examples: a_string, command
+# 
+# quoted string: a piece of text which may contain spaces and which is
+# enclosed by double quote (") marks.
+#                Examples: "date", "telnet host"
+# 
+# command: a quoted string whose contents will be passed to the host
+# O/S to be run as a command (often an expect script). Certain
+# parameter commands will have to take as an argument the variable 
+# ANVL_PARAMARG; all other variables are optional arguments -- they can
+# be hardcoded into the script instead. The following variables are
+# available:
+#
+# If the entry is not included, the command is null, and ANVL may
+# prompt the user to manually perform any action required 
+#######################################################################
+# ---------------------------------------------------------------------
+# ICMP Suite Setup Command                                   <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+# IP_ADDR_0         - IP address of first interface
+# IP_ADDR_1         - IP address of second interface
+# IP_SUBNET_MASK_0  - IP subnet mask of first interface
+# IP_SUBNET_MASK_1  - IP subnet mask of second interface
+#
+# A command that ensures that the Device Under Test is set up correctly
+# for running ICMP tests. 
+# ---------------------------------------------------------------------
+# Reboot Command                        <command>
+# Default: none
+# 
+# $ANVL_PARAMARG contents:
+# None
+#
+# A command that reboots the Device Under Test.  
+# ---------------------------------------------------------------------
+#
+# Reboot Time                           <number>
+# Default: 300 (seconds)
+# 
+# This indicates the maximum time (in seconds) the Device Under Test takes 
+# to reboot.  We recommend allowing ample time (e.g. 150% of
+# the average time) for a device to reboot since some tests will
+# erroneously fail if the reboot is not complete when they start.
+#
+# ---------------------------------------------------------------------
+# IP DUT Background Echo Request Send Command                 <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   DESTN_ADDRESS    - IP address of the anvl where Echo Request is to
+#                      be sent   
+#   INTERFACE        - Outgoing interface of the DUT through which Ping
+#                      is to be sent
+#   COUNT            - Number of Echo Request to be sent
+#   DATA_SIZE        - Size of the echo data
+#
+# This command is used to cause the DUT to send an Echo Request (Ping)
+# to ANVL.
+# ---------------------------------------------------------------------
+# IP DUT Static Route Add Command                             <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   DESTN_ADDRESS    - The destination IP address
+#   GATEWAY          - The gateway IP address to reach the destination
+#   IFACE_NAME       - The outgoing interface name
+#   NETMASK          - Netmask
+#
+# This command is used to add a static route on DUT to reach 
+# destination (DEST_IP) via outgoing interface IFACE_NAME and Gateway 
+# GATEWAY.
+# ---------------------------------------------------------------------
+# IP DUT Static Route Delete Command                         <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   DESTN_ADDRESS    - The destination IP address
+#   GATEWAY          - The gateway IP address to reach the destination
+#   IFACE_NAME       - The outgoing interface name
+#   NETMASK          - Netmask
+#
+# This command is used to delete a static route on DUT which was added
+# on the DUT by "IP DUT Add Static Route Command".
+# ---------------------------------------------------------------------
+# IP DUT MTU Set Command                                      <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   IFACE_NAME       - The name of the interface on which MTU is to be 
+#                      set
+#   MTU_VALUE        - The value of the MTU which is to be set on the 
+#                      interface IFACE_NAME
+#
+# This command is used to set a MTU value (MTU_VALUE) on the specified 
+# interface (IFACE_NAME) of DUT.
+# ---------------------------------------------------------------------
+# IP DUT MTU Reset Command                                   <command>
+# Default: none
+#
+# $ANVL_PARAMARG:
+#   IFACE_NAME       - The name of the interface on which MTU is to be 
+#                      set
+#   MTU_VALUE        - The value of the MTU which is to be set on the 
+#                      interface IFACE_NAME
+#
+# This command is used to reset a MTU value (MTU_VALUE) on the 
+# specified interface (IFACE_NAME) of DUT.
+# ---------------------------------------------------------------------
+#
+# IP DUT is a Router                                  <boolean>
+# Default : TRUE
+#
+# Some tests in IP/ICMP suite run only if DUT acts as a Router.
+# The value of this flag determines whether DUT acts as a 
+# Router or not. If it is set to FALSE then a few tests get 
+# disabled.
+#			   
+# ---------------------------------------------------------------------
+# IP High MTU                                                  <number>
+# Default: 1500
+#
+# The higher value of Maximum Transmission Unit.
+# ---------------------------------------------------------------------
+# IP Low MTU                                                   <number>
+# Default: 1280
+#
+# The lower value of Maximum Transmission Unit.
+# ---------------------------------------------------------------------
+# IP Tolerance Factor                                         <number>
+#
+# Default : 1 
+#
+# This value depicts the time variance associated to any wait-event that
+# varies a precise time-factor.
+#-----------------------------------------------------------------------
+# IP Tolerance Time                                            <number>
+#
+# Default : 1 second
+#
+# Tolerance time associated with an event
+#-----------------------------------------------------------------------
+# IP Listen Time                                               <number>
+# Default : 10 seconds
+#
+# This is the maximum time interval for which anvl waits for a packet
+# ---------------------------------------------------------------------
+# IP Initial Reassembly Timeout value                          <number>
+# Default: 15 seconds
+#
+# This is the initial timeout in seconds for which DUT waits for 
+# fragments for reassembly.
+# ---------------------------------------------------------------------
+# ICMP Unused UDP Port                                        <number>
+# Default: 1000
+#
+# This is UDP port where the DUT does not listen for UDP packet.
+# ---------------------------------------------------------------------
+# ICMP DUT Supports ICMP Destination Unreachable Message
+# Default: True
+#
+# This flag indicates whether DUT supports ICMP Destination Unreachable 
+# Message.
+# ---------------------------------------------------------------------
+# ICMP DUT Supports ICMP Time Exceeded Message
+# Default: True
+#
+# This flag indicates whether DUT supports ICMP Time Exceeded Message.
+# ---------------------------------------------------------------------
+# ICMP DUT Supports ICMP Timestamp Message
+# Default: True
+#
+# This flag indicates whether DUT supports ICMP Timestamp Message.
+# ---------------------------------------------------------------------
+# ICMP Invalid ICMP Type
+# Default: 255
+#
+# This is the value to be used for invalid ICMP Message Type field
+# ---------------------------------------------------------------------
+# IP DUT Supports IP Timestamp Option
+# Default: True
+#
+# This flag indicates whether DUT supports IP Timestamp Option.
+# ---------------------------------------------------------------------
+# IP DUT Supports IP Loose Source And Record Route Option
+# Default: False
+#
+# This flag indicates whether DUT supports IP Loose Source And Record
+# Route Option.
+# ---------------------------------------------------------------------
+# IP DUT Supports MTU Configuration
+# Default: True
+#
+# This flag indicates whether DUT supports MTU configuration on its 
+# interface
+# ---------------------------------------------------------------------
+#######################################################################
+# 
+# Example icmp parameters:
+#
+
+  # The settings for commands in this prm file refer to sample DUT configuration 
+  # scripts located in the DocScript directory.
+
+ICMP Suite Setup Command                      "./DocScript/ICMP/icmp-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT Background Echo Request Send Command   "./DocScript/ICMP/ip-dut-background-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT Static Route Add Command               "./DocScript/ICMP/ip-dut-static-route-add-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT Static Route Delete Command            "./DocScript/ICMP/ip-dut-static-route-delete-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT MTU Set Command                        "./DocScript/ICMP/ip-dut-mtu-set-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT MTU Reset Command                      "./DocScript/ICMP/ip-dut-mtu-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+Reboot Command                                "./DocScript/ICMP/reboot-command.exp $ANVL_DUTHOSTNAME"
+
+IP DUT is a Router                            TRUE
+IP High MTU                                   1500
+IP Low MTU                                    100
+IP Tolerance Time                             1
+IP Tolerance Factor                           1
+IP Listen Time                                10
+IP Initial Reassembly Timeout value           70
+ICMP Unused UDP Port                          1000
+ICMP DUT Supports ICMP Destination Unreachable Message  True
+ICMP DUT Supports ICMP Time Exceeded Message             True
+ICMP DUT Supports ICMP Timestamp Message                 True
+IP DUT Supports IP Timestamp Option                      True
+IP DUT Supports IP Loose Source And Record Route Option  True
+IP DUT Supports MTU Configuration                        True
+Reboot Time                                    60	
+
+#
+#  Copyright (c) Ixia 2002-2010
+#  All rights reserved.
+#
