@@ -1,16 +1,16 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-OUTPUT="$(date "+%Y-%m-%d")"
-
-TESTS="ipgw"
+source ../test-common.sh
+TESTS="arp ip icmp ipgw"
+#TESTS="arp"
 
 mkdir -p $OUTPUT
 
-#exec > >(tee "$OUTPUT/$(basename $0).log") 2>&1
-
 for test in $TESTS
 do
+  run_DUT
   sudo /opt/Ixia/IxANVL900/ANVL-BIN/anvl -file $OUTPUT/$test-out.log \
-   -f anvl$test $test
+   -l medium -f anvl$test $test
 done
+
+bash  ${SCRIPT_DIR}/test4-parse.sh ${OUTPUT}

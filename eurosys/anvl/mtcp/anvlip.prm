@@ -241,15 +241,15 @@
   # The settings for commands in this prm file refer to sample DUT configuration 
   # scripts located in the DocScript directory.
 
-IP Suite Setup Command                        "echo setup" #"./DocScript/IP/ip-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-IP DUT Background Echo Request Send Command   "echo echo" "./DocScript/IP/ip-dut-background-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP Suite Setup Command                        "./DocScript/IP/ip-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IP DUT Background Echo Request Send Command   "./DocScript/IP/ip-dut-background-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IP DUT Static Route Add Command               "./DocScript/IP/ip-dut-static-route-add-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IP DUT Static Route Delete Command            "./DocScript/IP/ip-dut-static-route-delete-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IP DUT MTU Set Command                        "./DocScript/IP/ip-dut-mtu-set-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 IP DUT MTU Reset Command                      "./DocScript/IP/ip-dut-mtu-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 Reboot Command                                "./DocScript/IP/reboot-command.exp $ANVL_DUTHOSTNAME"
 
-IP DUT is a Router                            FALSE
+IP DUT is a Router                            TRUE
 IP High MTU                                   1500
 IP Low MTU                                    100
 IP Tolerance Time                             1

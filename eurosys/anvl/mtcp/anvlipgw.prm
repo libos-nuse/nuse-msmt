@@ -47,7 +47,7 @@
   # your-script-here.exp is a script (e.g. an expect script) which configures
   # the device whose name is stored in ANVL_DUTHOSTNAME appropriately
   # for the IPGW test suite.
-  IPGW Suite Setup Command              "echo gogo"
+  IPGW Suite Setup Command              "./DocScript/IPGW/ipgw-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 
 #
 #  Copyright (c) Ixia 2002-2006

@@ -195,7 +195,7 @@ ARP Listen Time            20
 ARP Tolerance Time         5
 ARP Tolerance Factor       1
 
-ARP Suite Setup Command "echo conf" #"./DocScript/ARP/arp-dut-configure-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP Suite Setup Command "./DocScript/ARP/arp-dut-configure-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP Suite Reset Command "./DocScript/ARP/arp-dut-suite-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP DUT Configure ARP Dynamic Cache Clear Command "echo clear" # "./DocScript/ARP/arp-dut-clear-dynamic-cache-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP DUT Configure Delete Static ARP Cache Entry Command "./DocScript/ARP/arp-dut-delete-static-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
