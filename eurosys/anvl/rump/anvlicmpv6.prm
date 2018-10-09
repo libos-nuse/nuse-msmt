@@ -1,0 +1,499 @@
+#
+#
+# anvlicmpv6.prm 
+#
+#
+# This is a sample parameter file with entries that apply to icmpv6 test
+# suite. 
+#
+# Users must supply their own values; this file is only a template.
+#
+###############################################################################
+# 
+# A parameter file consists of one-line entries.  Each entry contains a
+# parameter name and a value.  The parameter must appear exactly as
+# it does here -- it is case-sensitive -- with spaces as word
+# separators.  The value must have the type specified and may be
+# separated from the parameter name either by spaces or by tabs.  All
+# parameter entries are optional. 
+#
+# Parameter syntax
+# ----------------
+# 
+# number: a decimal or hexadecimal number; hexadecimals must be
+#         prefixed with 0x.
+#         Examples: 9, 0xFF, 0x9a
+# 
+# boolean: True or False.
+# 
+# string: an unquoted piece of text which may not contain spaces.
+#         Examples: a string, command
+# 
+# Some parameters allow only a certain set of string values; they are
+# listed for each such parameter.
+# 
+# quoted string: a piece of text which may contain spaces and which is
+# enclosed by double quote (") marks.
+#                Examples: "date", "telnet host"
+# 
+# command: a quoted string whose contents will be passed to the host
+# O/S to be run as a command (often an expect script).  Certain
+# parameter commands will have to take as an argument the variable 
+# ANVL_PARAMARG; all other variables are optional arguments -- they can
+# be hard coded into the script instead. The following variables are
+# available:
+#
+#       ANVL_DUTHOSTNAME - the name of the Device Under Test (see anvl.cfg).
+#       ANVL_DUTPORT - the port of the Device Under Test (see anvl.cfg).
+#       ANVL_LOGLEVEL - the -l log level of the current test run.
+#       ANVL_CFGFILE - the configuration file for the current test run.
+#       ANVL_PRMFILE - the parameter file for the current test run.
+#	ANVL_PARAMARG - the utility variable which is set in a test 
+#                       for use by a parameter command run from that test.
+#       ANVL_TEST_SUITE - the name of the ANVL test suite that is
+#                         currently running.
+#       ANVL_TEST_NUMBER - the number of the ANVL test that is currently
+#                          running.
+#       ANVL_PID - the process id of the currently running ANVL process
+#                  (or '0' if this cannot be determined or doesn't exist
+#                  on the current operating system).
+#
+# If the entry is not included, the command is null, and ANVL may
+# prompt the user to manually perform any action required (e.g. reboot a
+# Device Under Test).
+# 
+###############################################################################
+###########: Parameter Entries for ICMPv6 Suite :############
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 ANVL Listen Time                                      <number>
+# Default: 3 
+#    
+# This entry indicates the maximum time (in seconds) ANVL should listen
+# for desired ICMPv6 packet/s to arrive from DUT.
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Process Time                                      <number>
+# Default: 1 
+#    
+# This entry indicates the maximum time (in seconds) ANVL should wait
+# to give time to the DUT to process the ICMPv6 packet sent to it.
+# 
+# ----------------------------------------------------------------------
+# ICMPv6 DUT Host Variable RetransTimer Value                  <number>
+# Default: 1000 
+# (From the RFC 2461 constant RETRANS_TIMER, which 1000 milliseconds)
+#  
+# This entry (in miliseconds) corresponds to host implementation 
+# variable: RetransTimer of the DUT. 
+# It specifies the time between retransmissions of Nbr Sol messages
+# by a node (host or router) during:
+#   a) Address Resolution (NDP)
+#   b) NUD Probes         (NDP)
+#   c) Duplicate Address Detection (ACONF)
+#
+# Ref. RFC 2461, S6.3.2, P51 Host Variables
+#
+# "     RetransTimer   The time between retransmissions of Neighbor
+#                      Solicitation messages to a neighbor when
+#                      resolving the address or when probing the
+#                      reachability of a neighbor.
+#
+#                      Default: RETRANS_TIMER milliseconds"
+# 
+# Ref. RFC 2462, S5.1, P11 Node Configuration Variables
+#
+# "                  Autoconfiguration also assumes the presence of the
+#                    variable RetransTimer as defined in [DISCOVERY].
+#                    For autoconfiguration purposes, RetransTimer
+#                    specifies the delay between consecutive Neighbor
+#                    Solicitation transmissions performed during
+#                    Duplicate Address Detection (if
+#                    DupAddrDetectTransmits is greater than 1), as well
+#                    as the time a node waits after sending the last
+#                    Neighbor Solicitation before ending the Duplicate
+#                    Address Detection process."
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 IPV6 Default MTU                                      <number>
+# Default: 1350 
+#    
+# This entry is used to denote the Default MTU value of any link
+# between ANVL and DUT while running an Test Suite belonging to
+# the ICMPv6 family (i.e. ICMPv6, PMTU discovery, NDP or AutoConfig)
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 IPV6 High MTU                                         <number>
+# Default: 1500 
+#    
+# This entry is used to denote the highest possible MTU value of
+# any link between ANVL and DUT while running an Test Suite belonging
+# to the ICMPv6 family (i.e. ICMPv6, PMTU discovery, NDP or AutoConfig)
+# This value should be greater than the Default MTU. 
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 IPV6 Low MTU                                          <number>
+# Default: 1280 
+#    
+# This entry is used to denote the lowest possible MTU value of
+# any link between ANVL and DUT while running an Test Suite belonging
+# to the ICMPv6 family (i.e. ICMPv6, PMTU discovery, NDP or AutoConfig)
+# This value should be lesser than the Default MTU, AND
+# greater than or equal to the IPv6 Minimum Link MTU (i.e. 1280).
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Supports Global Address                          <boolean>
+# Default: TRUE 
+#  
+# This entry is a boolean entry which indicates whether DUT supports
+# configuration of a Global Address on its interfaces. 
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 Unknown Error Message Type                            <number>
+# Default: 127 
+#    
+# This entry denotes an ICMPv6 Error Message Type which is unknown to
+# DUT.
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 Unknown Informational Message Type                    <number>
+# Default: 255 
+#    
+# This entry denotes an ICMPv6 Informational Message Type which is
+# unknown to DUT. 
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 Unused UDP Port                                       <number>
+# Default: 50000
+#    
+# This entry is used to denote an Unused UDP Port in DUT. 
+# 
+# ----------------------------------------------------------------------
+# ICMPv6 Suite Reset Command                                        <command>
+#  
+# $ANVL_PARAMARG contents:
+#   DIFACE0_IPV6_ADRESS   - The IPv6 Address of DIface-0
+#   DIFACE1_IPV6_ADRESS   - The IPv6 Address of DIface-1
+#
+# Command that is to be run at the end  of the ICMPV6 Test
+# suite
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 Suite Setup Command                                        <command>
+#  
+# $ANVL_PARAMARG contents:
+#   DIFACE0_IPV6_ADRESS   - The IPv6 Address of DIface-0
+#   DIFACE1_IPV6_ADRESS   - The IPv6 Address of DIface-1
+#
+# Command that is to be run at the begining of the ICMPV6 Test
+# suite
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Assign Unicast Address to an Interface Command   <command>
+# ICMPv6 DUT Remove Unicast Address from an Interface Command <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the address is to be 
+#                 configured. It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   ADDRESS     - The IPv6 address to be configured on the interface
+#   PREFIX_LEN  - The length of the prefix of the address in bits
+#
+# Command that adds (removes) an IPv6 unicast address to (from) a DUT
+# interface. 
+# These commands are used by tests which require some additional IPv6
+# address to be configured to DUT besides the one specified in ANVL
+# configuration file.
+#
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Assign Anycast Address to an Interface Command   <command>
+# ICMPv6 DUT Remove Anycast Address from an Interface Command <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the anycast address is to
+#                 be configured. 
+#                 It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   ADDRESS     - The Anycast IPv6 address to be configured on the
+#                 interface
+#   PREFIX_LEN  - The length of the address prefix of the address in
+#                 bits
+#
+# Command that adds (removes) an IPv6 anycast address to (from) a DUT
+# interface. 
+# These commands are used by tests which require some additional IPv6
+# address to be configured to DUT besides the unicast address specified
+# in ANVL configuration file.
+#
+# ----------------------------------------------------------------------
+# ICMPv6 DUT Assign Multicast Group Id to an Interface Command   <command>
+# ICMPv6 DUT Remove Multicast group Id from an Interface Command <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE   - The DUT interface on which the Multicast Group Id is to
+#                 be configured. 
+#                 It must be one of the two values:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   GROUP       - The Multicast Group Id which would be configured for that     #                 interface
+#
+# Command that adds (removes) an IPv6 Multicast Group Id to (from) a DUT
+# interface. 
+# These commands are required by those tests which require to configure
+# a Multicast Group Id to a particular DUT Interface.
+#
+# ----------------------------------------------------------------------
+
+#
+# IPv6 DUT Add Static Route Command                    <command>
+# IPv6 DUT Delete Static Route Command                 <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE     - The DUT interface to be used by the route
+#                   It must be one of these:
+#                   0, for <DIface-0>
+#                   1, for <DIface-1>
+#   DESTN         - The destination prefix of the route
+#   PREFIX_LEN    - The length of the prefix in bits
+#   GATEWAY       - The gateway address for the route
+#
+# Command that adds (or removes) static route to (or from) the 
+# IPv6 routing table of the DUT
+# 
+# ----------------------------------------------------------------------
+#
+# ICMPv6 DUT Configure IPv6 MTU Command                       <command>
+#  
+# $ANVL_PARAMARG contents:
+#   INTERFACE     - The DUT interface on which to set the MTU
+#                   It must be one of these:
+#                     0, for <DIface-0>
+#                     1, for <DIface-1>
+#   MTU           - The user defined MTU size passed for setting
+#
+# Command that sets link MTU of a particular DUT interface. 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 DUT Echo Request Send command                         <command>
+#  
+# $ANVL_PARAMARG contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   $ANVL_PARAMARG contents:
+#      INTERFACE         - The DUT interface on which to send the ICMPv6
+#                          echo request, It must be one of these:
+#                          0, for <DIface-0>
+#                          1, for <DIface-1>
+#      DSTADDRESS        - The destination IPv6 address to send the ICMPv6
+#                          echo request
+#      SIZE              - Amount of data to send in the ICMPv6 Echo Request
+#
+# Command that sets link MTU of a particular DUT interface. 
+# 
+# ----------------------------------------------------------------------
+#
+# IPv6 DUT Static Route Is Supported                           <boolean>
+# Default : TRUE
+#
+# Some tests in IPv6 suite run only if DUT has support for the 
+# configuration of IPv6 Static Routes. If this flag is set to FALSE, 
+# then a few tests which require this feature get disabled.
+#			   
+# ----------------------------------------------------------------------
+# Reboot Command                        <command>
+# Default: none
+# 
+# $ANVL_PARAMARG contents:
+# None
+#
+# A command that reboots the Device Under Test.  
+# ----------------------------------------------------------------------
+# ICMPv6 Ingress Filter Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6ADDR          - IPv6 address that should be filtered out.
+#      DUTIFACE          - DUT Interface on which ingress filtering should
+#                          be done.
+#
+# Command that creates an ingress filtering on DUT interface on the 
+# specified IPv6 address
+#-----------------------------------------------------------------------
+# ICMPv6 Ingress Disable Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6ADDR          - IPv6 address that is ingress filtered already.
+#      DUTIFACE          - DUT Interface on which ingress filtering should
+#                          be undone on the IPV6ADDR.
+#
+# Command that disables an ingress filtering on DUT interface on the 
+# specified IPv6 address
+# ----------------------------------------------------------------------
+# ICMPv6 Engress Filter Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6ADDR          - IPv6 address that should be filtered out.
+#      DUTIFACE          - DUT Interface on which egress filtering should
+#                          be done.
+#
+# Command that creates an egress filtering on DUT interface on the 
+# specified IPv6 address
+# ----------------------------------------------------------------------
+# ICMPv6 Egress Disable Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6ADDR          - IPv6 address that is egress filtered already.
+#      DUTIFACE          - DUT Interface on which egress filtering should
+#                          be undone on the IPV6ADDR.
+#
+# Command that disables an egress filtering on DUT interface on the 
+# specified IPv6 address
+# ----------------------------------------------------------------------
+# ICMPv6 Reject Prefix Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6PREFIX        - IPv6 prefix that should be rejected by DUT.
+#      PREFIXLEN         - Length of IPv6 Prefix IPV6PREFIX.
+#      DUTIFACE          - DUT Interface on which prefix should be set to reject
+#
+# Command that set a DUT interface to reject add packets having source address
+# of the given prefix IPV6PREFIX
+# ----------------------------------------------------------------------
+# ICMPv6 Reject Disable Command                           <command>
+#
+#   Arguments contents:
+#   ANVL_DUT_HOSTNAME   - The value as specified for DUT Hostname in the 
+#                         corresponding config file (used to telnet to the
+#                         DUT for configuration)
+#   %ANVL_PARAMARG% contents:
+#      IPV6PREFIX        - IPv6 prefix that set to be rejected by DUT.
+#      PREFIXLEN         - Length of IPv6 Prefix IPV6PREFIX.
+#      DUTIFACE          - DUT Interface on which prefix rejection should be
+#                          reverted
+#
+# Command that reverts a DUT interface setup not to reject packets having
+# source address of the given prefix IPV6PREFIX
+# ----------------------------------------------------------------------
+# Reboot Time                           <number>
+# Default: 300 (seconds)
+# 
+# This indicates the maximum time (in seconds) the Device Under Test takes 
+# to reboot.  We recommend allowing ample time (e.g. 150% of
+# the average time) for a device to reboot since some tests will
+# erroneously fail if the reboot is not complete when they start.
+#
+# ----------------------------------------------------------------------
+#
+# IPv6 Packet Tolerance Time            <number>
+# Default: 1 (second)
+# 
+# This indicates the amount of time with which other parameter time related
+# entries will be adjusted through an addition operator
+# ----------------------------------------------------------------------
+# 
+# IPv6 Invalid Header                   <number>
+# Default: 254
+# 
+# Asking for a invalid IPv6 header type which is unknown to DUT.
+# User can specify invalid header type value which can not be more 
+# than 255.
+# 
+# ----------------------------------------------------------------------
+# 
+# IPv6 Unknown Option Type              <number>
+# Default: 31
+# 
+# Asking for unknown option type for DUT (to be used in Hop-by-Hop 
+# and Destination header).User can specify unknown routing
+# type value ranging from 2 to 31.
+# 
+# ----------------------------------------------------------------------
+#
+###############################################################################
+# 
+# Example ICMPV6 parameters:
+#
+
+  # The settings for commands in this prm file refer to sample DUT configuration 
+  # scripts located in the DocScript directory.
+
+ICMPv6 Suite Setup Command                            		"sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap"
+ICMPv6 Suite Reset Command                            		"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
+ICMPv6 DUT Assign Unicast Address to an Interface Command 	"sudo -u tazaki ssh -f 172.16.0.176 anvl-dut/anvl-wrapper.sh $ANVL_PARAMARG anvl-dut/lwip-tap/lwip-tap"
+ICMPv6 DUT Remove Unicast Address from an Interface Command 	"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
+ICMPv6 DUT Assign Anycast Address to an Interface Command 	"sudo -u tazaki ssh -f 172.16.0.176 anvl-dut/anvl-wrapper.sh $ANVL_PARAMARG anvl-dut/lwip-tap/lwip-tap"
+ICMPv6 DUT Remove Anycast Address from an Interface Command 	"sudo -u tazaki ssh 172.16.0.176 killall -q ip"
+ICMPv6 DUT Assign Multicast Group Id to an Interface Command		"./DocScript/ICMPV6/icmpv6-dut-assign-multicast-group-id-to-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Remove Multicast Group Id from an Interface Command		"./DocScript/ICMPV6/icmpv6-dut-remove-multicast-group-id-from-an-interface-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Add Static Route Command        			"./DocScript/ICMPV6/ipv6-dut-add-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Delete Static Route Command     			"./DocScript/ICMPV6/ipv6-dut-delete-static-route-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 DUT Configure IPv6 MTU Command           		"./DocScript/ICMPV6/icmpv6-dut-configure-ipv6-mtu-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Echo Request Send command 				"./DocScript/ICMPV6/ipv6-dut-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+#Reboot Command                                                  "echo 'reboot'"
+Reboot Command                            		"sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap"
+#Reboot Command                            "./DocScript/IPV6/reboot-command.exp $ANVL_DUTHOSTNAME"
+ICMPv6 Ingress Filter Command                                   "./DocScript/ICMPV6/icmpv6-ingress-filter-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ICMPv6 Ingress Disable Command                                  "./DocScript/ICMPV6/icmpv6-ingress-disable-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
+ICMPv6 Egress Filter Command                                    "./DocScript/ICMPV6/icmpv6-egress-filter-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
+ICMPv6 Egress Disable Command                                   "./DocScript/ICMPV6/icmpv6-egress-disable-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
+ICMPv6 Reject Prefix Command                                    "./DocScript/ICMPV6/icmpv6-reject-prefix-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
+ICMPv6 Reject Disable Command                                   "./DocScript/ICMPV6/icmpv6-reject-disable-command.exp $ANVL_DUTHOSTNAM $ANVL_PARAMARG"
+
+ICMPv6 Packet Listen Time 	                                 15
+ICMPv6 ANVL Listen Time 	                                 15
+ICMPv6 DUT Process Time                                          1
+ICMPv6 DUT Host Variable RetransTimer Value                      1
+ICMPv6 IPV6 Default MTU                                          1390
+ICMPv6 IPV6 High MTU                                             1500
+ICMPv6 IPV6 Low MTU                                              1280
+ICMPv6 Unused UDP Port                                           1000
+ICMPv6 Unknown Error Message Type                                127
+ICMPv6 Unknown Informational Message Type                        254
+IPv6 DUT Static Route Is Supported			         TRUE
+ICMPv6 DUT Supports Global Address			         TRUE
+Reboot Time                                                      6
+IPv6 Packet Tolerance Time                                       1
+IPv6 Invalid Header                                              254
+IPv6 Unknown Option Type                                         20
+IPv6 DUT is a Router                                             TRUE
+#
+#  anvlicmpv6.prm: ICMPv6 ANVL Test Suite prm file
+#  
+#  Copyright (c) Ixia 2002-2010
+#  All rights reserved
+#

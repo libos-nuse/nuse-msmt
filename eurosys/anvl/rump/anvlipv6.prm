@@ -1,0 +1,265 @@
+#
+#
+# anvlipv6.prm 
+#
+#
+# This is a sample parameter file with entries that apply to ipv6 test
+# suite. 
+#
+# Users must supply their own values; this file is only a template.
+#
+###############################################################################
+# 
+# A parameter file consists of one-line entries.  Each entry contains a
+# parameter name and a value.  The parameter must appear exactly as
+# it does here -- it is case-sensitive -- with spaces as word
+# separators.  The value must have the type specified and may be
+# separated from the parameter name either by spaces or by tabs.  All
+# parameter entries are optional. 
+#
+# Parameter syntax
+# ----------------
+# 
+# number: a decimal or hexadecimal number; hexadecimals must be
+#         prefixed with 0x.
+#         Examples: 9, 0xFF, 0x9a
+# 
+# boolean: True or False.
+# 
+# string: an unquoted piece of text which may not contain spaces.
+#         Examples: a string, command
+# 
+# Some parameters allow only a certain set of string values; they are
+# listed for each such parameter.
+# 
+# quoted string: a piece of text which may contain spaces and which is
+# enclosed by double quote (") marks.
+#                Examples: "date", "telnet host"
+# 
+# command: a quoted string whose contents will be passed to the host
+# O/S to be run as a command (often an expect script).  Certain
+# parameter commands will have to take as an argument the variable 
+# ANVL_PARAMARG; all other variables are optional arguments -- they can
+# be hard coded into the script instead. The following variables are
+# available:
+#
+#       ANVL_DUTHOSTNAME - the name of the Device Under Test (see anvl.cfg).
+#       ANVL_DUTPORT - the port of the Device Under Test (see anvl.cfg).
+#       ANVL_LOGLEVEL - the -l log level of the current test run.
+#       ANVL_CFGFILE - the configuration file for the current test run.
+#       ANVL_PRMFILE - the parameter file for the current test run.
+#	ANVL_PARAMARG - the utility variable which is set in a test 
+#                       for use by a parameter command run from that test.
+#       ANVL_TEST_SUITE - the name of the ANVL test suite that is
+#                         currently running.
+#       ANVL_TEST_NUMBER - the number of the ANVL test that is currently
+#                          running.
+#       ANVL_PID - the process id of the currently running ANVL process
+#                  (or '0' if this cannot be determined or doesn't exist
+#                  on the current operating system).
+#
+# If the entry is not included, the command is null, and ANVL may
+# prompt the user to manually perform any action required (e.g. reboot a
+# Device Under Test).
+# 
+###############################################################################
+#
+# IPv6 Suite Setup Command                                   <command>
+# $ANVL_PARAMARG contents:
+#   DIFACE0_IPV6_ADDRESS     IPv6 Address of first interface
+#   DIFACE0_IPV6_PREFIX_LEN  IPv6 Prefix length of first interface
+#   DIFACE1_IPV6_ADDRESS     IPv6 Address of second interface
+#   DIFACE1_IPV6_PREFIX_LEN  IPv6 Prefix length of second interface
+#   DUT_IPV6_MODE            IPv6 DUT is a Router
+#
+#
+# A command that ensures that the Device Under Test is set up correctly for
+# IPv6 tests according to the 'Test Suite Required Setup' message, which is
+# printed when any tests from the suite are run at log level medium or low.
+# The required setup is also described in the file anvlipv6.tal.
+#
+#-----------------------------------------------------------------
+# Reboot Command                        <command>
+# Default: none
+# 
+# $ANVL_PARAMARG contents:
+# None
+#
+# A command that reboots the Device Under Test.  
+#-----------------------------------------------------------------
+#
+# Reboot Time                           <number>
+# Default: 300 (seconds)
+# 
+# This indicates the maximum time (in seconds) the Device Under Test 
+# takes to reboot.  We recommend allowing ample time (e.g. 150% of
+# the average time) for a device to reboot since some tests will
+# erroneously fail if the reboot is not complete when they start.
+#
+#-----------------------------------------------------------------
+#
+# IPv6 Unknown Routing Type                             <number>
+# Default : 255 
+#
+# Asking for Routing type which is unknown to DUT. RFC 2460
+# defines only routing type 0. User can specify unknown routing
+# type value ranging from 1 to 255. 
+#
+#-----------------------------------------------------------------
+#
+# IPv6 Unknown Option Type                               <number>
+# Default : 31 
+#
+# Asking for unknown option type for DUT (to be used in Hop-by-Hop 
+# and Destination header).User can specify unknown routing
+# type value ranging from 2 to 31. 
+#
+#-----------------------------------------------------------------
+#
+# IPv6 Invalid Header                                    <number>
+# Default value is taken as 254
+#				    
+# Asking for a invalid IPv6 header type which is unknown to DUT.
+# User can specify invalid header type value which can not be more 
+# than 255. 
+#
+#-----------------------------------------------------------------
+#
+# IPv6 DUT Support Flow Level                           <boolean>
+# Default : FALSE
+#
+# Some tests in IPv6 suite run only if DUT does not support flow 
+# level field of IPv6 header. The value of this flag determines 
+# whether DUT supports flow level or not. If it is set to TRUE 
+# then a few tests get disabled.
+#			   
+#-----------------------------------------------------------------
+#
+# IPv6 DUT is a Router                                  <boolean>
+# Default : TRUE
+#
+# Some tests in IPv6 suite run only if DUT acts as a Router.
+# The value of this flag determines whether DUT acts as a 
+# Router or not. If it is set to FALSE then a few tests get 
+# disabled.
+#			   
+#-----------------------------------------------------------------
+#
+# IPv6 DUT Deprecation of RH0 Is Supported             <boolean>
+# Default : FALSE
+#
+# Per the RFC5095 An IPv6 node that receives a packet with a 
+# destination address assigned to it and that contains an RH0 
+# extension header MUST NOT execute the algorithm specified in 
+# the latter part of Section 4.4 of [RFC2460] for RH0
+# To run the ipv6 tests against these stacks set this entry to TRUE 
+# (If this entry is TRUE Section 4.4 of RFC2460 will not be 
+#  ie Section 7)
+#-----------------------------------------------------------------
+#
+# IPv6 DUT Periodic Router Advertise Is Supported      <boolean>
+# Default : TRUE
+#
+# Per the NDP spec, each router is supposed to implement router
+# discovery mecahnism if the interface involves in forwarding
+# process, it is supposed to send periodic router advertizement
+# and also reponse to router solicitation. Howerver some stack
+# implementaion choose not to implement this mecheasim.
+# To run the ipv6 forwarding tests against these stacks set this
+# entry to FALSE. 
+#-----------------------------------------------------------------
+# IPv6 MTU of First Interface of DUT                     <number>
+# Default : 1500
+#
+# LINK MTU of the 1st interface of DUT. Minimum MTU 1280 is required 
+# for IPv6.
+#
+#-----------------------------------------------------------------
+#
+# IPv6 MTU of Second Interface of DUT                     <number>
+# Default : 1500
+#
+# LINK MTU of the 2nd interface of DUT. Minimum MTU 1280 is  
+# required for IPv6.
+#		    
+#-----------------------------------------------------------------
+#
+# PPP Allow Dynamic Addressing                            <boolen>
+# Default : FALSE
+#
+# When any interface is of type PPP then this parameter will decide
+# wheather ANVL will accept DUT suggested ANVL's and DUT address.
+# If this is set to TRUE and the negotiated addresses of ANVL or
+# DUT or both differs from the addresses mentioned in the 
+# configuration file, then the address given in the configuration
+# file will be ignored. The negotiated addresses will be used by
+# the tests. This parameters is used only when interface type is PPP.
+#
+#-----------------------------------------------------------------
+# IPv6 DUT Echo Request Send Command                    <command>
+#
+# ANVL_PARAMARG contents:
+#   IPV6_ADDRESS     IPv6 Address where ICMPv6 Echo Request will be sent to
+#   PACKET_SIZE      The size of ICMPv6 Echo Request to be sent
+#
+# Command to send echo request packet from DUT to anvl.
+#-------------------------------------------------------------------
+# IPv6 DUT Configure Deprecation of RH0 Command         <command>
+#
+#   INTERFACE             Interface to be configured
+#   ENABLE/DISABLE        To enable/disable Deprecation of RH0
+#
+# This command ebales/disables Deprecation of RH0 in the DUT.
+#-------------------------------------------------------------------
+# IPv6 DUT PPP Interface Configure Command              <command>
+#
+#   INTERFACE                 Interface to be configured
+#   DUT_PPP_IPV6_ADDRESS      IPv6 Address to be configured
+#   DUT_PPP_IPV6_PREFIX_LEN   IPv6 Prefix Length to be configured
+#
+# This command assigns a global address to PPP interface of DUT 
+# and adds corresponding entry in routing table. This command is 
+# executed after IPv6CP and LCP negotiation is over and the PPP
+# link is up and ready.
+#-------------------------------------------------------------------
+#
+###############################################################################
+#
+# IPV6 specific parameters
+#
+###############################################################################
+# 
+# Example IPV6 parameters:
+#
+# The settings for commands in this prm file refer to sample DUT configuration 
+# scripts located in the DocScript directory.
+
+IPv6 Suite Setup Command                  "sudo -u tazaki ssh 172.16.0.176 anvl-dut/anvl-wrapper.sh 0 fe80::200:1ff:fe07:3939 64 anvl-dut/lwip-tap/lwip-tap"
+IPv6 Unknown Routing Type                 10
+IPv6 Unknown Option Type                  20
+IPv6 Invalid Header                       254
+IPv6 DUT Support Flow Level               TRUE
+IPv6 DUT is a Router                      TRUE
+IPv6 MTU of First Interface of DUT        1500
+IPv6 MTU of Second Interface of DUT       1500
+IPv6 DUT Periodic Router Advertise Is Supported TRUE
+IPv6 DUT Deprecation of RH0 Is Supported  FALSE
+PPP Allow Dynamic Addressing              FALSE
+Reboot Time                               60
+ICMPv6 Packet Listen Time 		  15
+IPv6 Packet Listen Time 		  15
+
+
+IPv6 DUT Echo Request Send Command        "./DocScript/IPV6/ipv6-dut-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT PPP Interface Configure Command  "./DocScript/IPV6/ipv6-dut-ppp-interface-configure.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+IPv6 DUT Configure Deprecation of RH0 Command  "./DocScript/IPV6/ipv6-dut-configure-deprecation-of-rh0-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+Reboot Command                            "./DocScript/IPV6/reboot-command.exp $ANVL_DUTHOSTNAME"
+
+
+
+#
+#  anvlipv6.prm: Ipv6 test suite parameter file
+#
+#  Copyright (c) Ixia 2002-2009
+#  All rights reserved.
+#
