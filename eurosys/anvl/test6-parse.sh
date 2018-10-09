@@ -14,7 +14,7 @@ do
  fi
 
  RESULT=$(grep Number ${OUTPUT}/$test-out.log | \
-  grep -E "passed|run" | \
+  grep -E "passed|run" | grep Number | \
   awk '{num[$4]=$5} END { print num["passed:"] "/" num["run:"] }')
  TEXT="${TEXT} ${RESULT}"
 done

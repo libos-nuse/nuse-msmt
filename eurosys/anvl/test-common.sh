@@ -8,7 +8,7 @@ DUT=$(basename `pwd`)
 run_DUT()
 {
   # kill all programs
-  ssh ${DUT_HOST} "sudo killall epserver; sudo killall -9 zebra; sudo killall -9 httpd; killall lwip-tap"
+  ssh ${DUT_HOST} "sudo killall epserver; sudo killall -9 zebra; sudo killall -9 httpd; killall lwip-tap; sudo killall rump_allserver"
 
   case $DUT in
     "mtcp") coproc ssh ${DUT_HOST} "cd anvl-dut/mtcp/; bash run.sh & read; sudo killall epserver"  ;;
@@ -18,6 +18,7 @@ run_DUT()
     "gvisor") ;; #ssh ${DUT_HOST} "cd anvl-dut/mtcp/; bash run.sh" & ;;
     "lwip") coproc ssh ${DUT_HOST} "cd anvl-dut/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
     "osv") coproc ssh ${DUT_HOST} "sudo /home/upa/OSv/start-osv-qemu-cmd-two-netdev.sh" & ;;
+    "rump") coproc ssh ${DUT_HOST} "cd anvl-dut/rump/; bash run.sh & read; killall rump_server"  ;
   esac
 
   trap 'echo >&"${COPROC[1]}"' EXIT
