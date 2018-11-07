@@ -12,7 +12,7 @@ mkdir -p "$OUTPUT/out/"
 
 # parse outputs
 
-# ${PYTHON} ${SCRIPT} ${OUTPUT}
+${PYTHON} ${SCRIPT} ${OUTPUT}
 
 gnuplot  << EndGNUPLOT
 set terminal postscript eps lw 3 "Helvetica" 24
