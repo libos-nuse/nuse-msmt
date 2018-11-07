@@ -31,8 +31,8 @@ set key top left
 set xrange [-1.0:7.0]
 set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
 set xlabel "Value size (bytes)"
-set yrange [0.0001:50]
-set ytics ('0' 0.0001, '0.1' 0.1, '50' 50)
+set yrange [0.0001:10000]
+set ytics ('0.0001' 0.0001, '1' 1, '10000' 10000)
 set ylabel "micros/op"
 set logscale y
 
@@ -52,8 +52,8 @@ set output "${OUTPUT}/out/fillrandom.eps"
 set xrange [-1.0:7.0]
 set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
 set xlabel "Value size (bytes)"
-set yrange [0.0001:50]
-set ytics ('0' 0.0001, '0.1' 0.1, '50' 50)
+set yrange [0.0001:10000]
+set ytics ('0.0001' 0.0001, '1' 1, '10000' 10000)
 set ylabel "micros/op"
 set logscale y
 
@@ -73,8 +73,8 @@ set output "${OUTPUT}/out/readseq.eps"
 set xrange [-1.0:7.0]
 set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
 set xlabel "Value size (bytes)"
-set yrange [0.0001:0.01]
-set ytics ('0' 0.0001, '0.001' 0.001, '0.01' 0.01)
+set yrange [0.0001:1]
+set ytics ('0.0001' 0.0001, '0.01' 0.01, '1' 1)
 set ylabel "micros/op"
 set logscale y
 
@@ -94,8 +94,8 @@ set output "${OUTPUT}/out/readrandom.eps"
 set xrange [-1.0:7.0]
 set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
 set xlabel "Value size (bytes)"
-set yrange [0.0001:0.01]
-set ytics ('0' 0.0001, '0.001' 0.001, '0.01' 0.01)
+set yrange [0.0001:1]
+set ytics ('0.0001' 0.0001, '0.01' 0.01, '1' 1)
 set ylabel "micros/op"
 set logscale y
 
