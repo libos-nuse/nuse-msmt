@@ -46,9 +46,11 @@ def stat_dat(benchmark, platform, all_dat):
     cands = {}
     for key, dat in all_dat.items():
         if benchmark in key and platform in key:
+            if not dat["info"]["size"] in cands.keys():
+                cands[dat["info"]["size"]] = []
             cands[dat["info"]["size"]] += dat["data"]
     stat = {}
-    for key, dat in cands:
+    for key, dat in cands.items():
         stat[key] = {"mean": mean(dat), "stddev": stdev(dat)}
 
     return stat
