@@ -49,10 +49,10 @@ grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/tcp-stream-runsc-ptrace-user.dat
-grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-kvm-user-* \
-| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
-| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/tcp-stream-runsc-kvm-user.dat
+#grep -E -h bits ${OUTPUT}/${PREFIX}*-runsc-kvm-user-* \
+#| dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 psize d3 thpt d4 \
+#| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+#> ${OUTPUT}/${DIR}/tcp-stream-runsc-kvm-user.dat
 
 # TCP_RR
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-lkl-* \
@@ -75,10 +75,36 @@ grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-ptrace-user-* \
  | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
  | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-runsc-ptrace-user.dat
-grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-kvm-user-* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
- | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
- > ${OUTPUT}/${DIR}/tcp-rr-runsc-kvm-user.dat
+#grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-kvm-user-* \
+# | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+# | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+# > ${OUTPUT}/${DIR}/tcp-rr-runsc-kvm-user.dat
+
+# TCP_RR (latency)
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-lkl-*-1* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbsort -n psize | dbcol lat-mean lat-stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-lkl-latency.dat
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-native-*-1* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbsort -n psize | dbcol lat-mean lat-stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-native-latency.dat
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runc-*-1* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbsort -n psize | dbcol lat-mean lat-stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-runc-latency.dat
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-kata-runtime-*-1* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbsort -n psize | dbcol lat-mean lat-stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-kata-runtime-latency.dat
+grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-ptrace-user-*-1* \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbsort -n psize | dbcol lat-mean lat-stddev \
+ > ${OUTPUT}/${DIR}/tcp-rr-runsc-ptrace-user-latency.dat
+#grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-kvm-user-* \
+# | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 thpt d8 \
+# | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+# > ${OUTPUT}/${DIR}/tcp-rr-runsc-kvm-user.dat
 
 # UDP_STREAM
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-lkl-* \
@@ -101,10 +127,10 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
 | dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-runsc-ptrace-user.dat
-grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
-| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
-| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/udp-stream-runsc-kvm-user.dat
+#grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
+#| dbcoldefine dum | csv_to_db | dbcoldefine  psize thpt d1 d2 d3 \
+#| dbmultistats -k psize thpt | dbsort -n psize | dbcol mean stddev \
+#> ${OUTPUT}/${DIR}/udp-stream-runsc-kvm-user.dat
 
 # UDP_STREAM PPS
 grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-lkl-* \
@@ -127,10 +153,10 @@ grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-ptrace-user-* \
 | dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
 | dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
 > ${OUTPUT}/${DIR}/udp-stream-pps-runsc-ptrace-user.dat
-grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
-| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
-| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
-> ${OUTPUT}/${DIR}/udp-stream-pps-runsc-kvm-user.dat
+#grep -E -h bits ${OUTPUT}/${PREFIX_UDP}*-runsc-kvm-user-* \
+#| dbcoldefine dum | csv_to_db|dbcoldefine  psize d1 d5 npkt d2 | dbroweval   '_npkt=_npkt/10'\
+#| dbmultistats -f "%d" -k psize npkt |  dbsort -n psize  | dbcol mean stddev \
+#> ${OUTPUT}/${DIR}/udp-stream-pps-runsc-kvm-user.dat
 
 done # end of ${DIR}
 
@@ -174,6 +200,7 @@ plot \
 
 
 set terminal png lw 3 14 crop
+set ylabel "Goodput (Gbps)" offset +0.5
 set output "${OUTPUT}/out/tcp-stream.png"
 replot
 
@@ -187,16 +214,39 @@ set ylabel "Goodput (KTrans/sec)"
 set yrange [0:20]
 set ytics auto
 set key top right
+unset label 1
+unset label 2
 
 plot \
-   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lc rgb "gray" title "runv" ,\
-   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lc rgb "blue" title "runsc" ,\
-   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lc rgb "cyan" title "runu" ,\
-   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
+   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lt 1 lc rgb "blue" title "runsc" ,\
+   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
 set output "${OUTPUT}/out/tcp-rr.png"
+replot
+
+set xlabel "Payload size (bytes)"
+set xrange [-0.5:6.5]
+set xtics ${PSIZE_XTICS}
+set terminal postscript eps lw 3 "Helvetica" 24
+set output "${OUTPUT}/out/tcp-rr-latency.eps"
+set ylabel "Latency (usec)"
+set yrange [0:1000]
+set ytics auto
+set key top left
+
+plot \
+   '${OUTPUT}/tx/tcp-rr-runc-latency.dat' usin (\$0-0.3):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-rr-kata-runtime-latency.dat' usin (\$0-0.15):(\$1):(\$2) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "runv" ,\
+   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user-latency.dat' usin (\$0+0.0):(\$1):(\$2) w boxerrorbar fill patter 3 lt 1 lc rgb "blue" title "runsc" ,\
+   '${OUTPUT}/tx/tcp-rr-lkl-latency.dat' usin (\$0+0.15):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "cyan" title "runu" ,\
+   '${OUTPUT}/tx/tcp-rr-native-latency.dat' usin (\$0+0.3):(\$1):(\$2) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
+
+set terminal png lw 3 14 crop
+set output "${OUTPUT}/out/tcp-rr-latency.png"
 replot
 
 set terminal postscript eps lw 3 "Helvetica" 24

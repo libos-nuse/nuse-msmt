@@ -1,12 +1,13 @@
 {
-    "boot_cmdline": "mem=8G",
-    "sysctl": "net.ipv4.tcp_wmem=4096 87380 16777216",
+    "sysctl": "net.ipv4.tcp_wmem=4096 87380 167772160",
+    "gateway": "172.17.0.1",
     "interfaces": [
         {
-            "ip": "10.0.39.3",
-            "masklen": "24",
+            "ip": "172.17.0.2",
+            "masklen": "16",
             "mac": "00:0d:0b:94:4e:97",
-            "param": "4",
+            "offload": "0xc803",
+            "param": "5",
             "type": "rumpfd"
         }
     ],

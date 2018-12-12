@@ -11,6 +11,7 @@ TESTNAMES="TCP_STREAM TCP_MAERTS"
 DEST_ADDR="10.0.39.2"
 SELF_ADDR="10.0.39.1"
 OIF=br0
+#TRIALS=1
 
 FRANKENLIBC_DIR=/home/tazaki/work/frankenlibc
 NETPERF_DIR=/home/tazaki/work/rumprun-packages/netperf/build
@@ -28,7 +29,7 @@ main() {
         netperf::run $test $num $size "-m $size,$size"
       done
 
-      netperf::run TCP_RR $num $size " -r $size,$size"
+      netperf::run TCP_RR $num $size " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY -r $size,$size"
       netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
     done
   done
@@ -82,9 +83,11 @@ netperf::lkl() {
      |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
   else
     echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
-    docker run -i --runtime=runu-dev thehajime/runu-base:linux \
-     netperf imgs/python.img tap:tap0 config:lkl-offload.json \
-     -- $netperf_args \
+    docker run --rm -i --runtime=runu-dev --net=none  \
+	    -e LKL_BOOT_CMDLINE="mem=1G" \
+	    -e LKL_NET=tap:tap0 -e LKL_ROOTFS=imgs/python.img  \
+	    -e LKL_CONFIG=$SCRIPT_DIR/../lkl.json -e LKL_OFFLOAD=1 \
+	    thehajime/runu-base:0.1 netperf $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
     wait
   fi
