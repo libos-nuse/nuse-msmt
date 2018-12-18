@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-PYTHON="python"
+PYTHON="python3"
 SCRIPT="sqlite-plot.py"
 
 OUTPUT="$1"
