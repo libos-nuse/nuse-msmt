@@ -64,11 +64,14 @@ def main():
 
     src_dir = os.listdir(src_path)
     all_dat = {}
+    print('parsing files', end='')
     for filename in src_dir:
         if not filename.endswith(".dat") or not "sqlite-bench" in filename:
             continue
         path = os.path.join(src_path, filename)
         info = parse_info(filename)
+        print('.', end='')
+        sys.stdout.flush()
         with open(path, "r") as fp:
             dat = read_dat(fp)
             all_dat[filename] = {"info": info, "data": dat}
@@ -76,8 +79,12 @@ def main():
     with open(dst_path, "wb") as fp:
         pickle.dump(all_dat, fp)
 
+    print('\nwriting files', end='')
     for benchmark in benchmarks:
         for platform in platforms:
+            print(benchmark+platform)
+            print('.', end='')
+            sys.stdout.flush()
             stat = stat_dat(benchmark, platform, all_dat)
             filename = benchmark + "-" + platform + ".dat"
             path = os.path.join(src_path, filename)
