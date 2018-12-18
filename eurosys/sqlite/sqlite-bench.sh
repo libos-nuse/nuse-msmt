@@ -60,7 +60,10 @@ sqlite::lkl() {
   local sqlite_args="--raw=1 --benchmarks=$test $ex_arg"
 
   echo "$(tput bold)== lkl-musl ($test-$num-$vsize)  ==$(tput sgr0)"
-  ${FRANKENLIBC_DIR}/sqlite-bench/sqlite-bench $sqlite_args \
+  docker run -i --net=none --runtime=runu-dev --rm  \
+	  -e LKL_BOOT_CMDLINE=$LKL_BOOT_CMDLINE \
+	  -e LKL_ROOTFS=imgs/python.img \
+	  thehajime/runu-base:0.1 sqlite-bench $sqlite_args \
    | tee "$OUTPUT/$PREFIX-$test-lkl-vs$size-$num.dat"
   wait
 )
