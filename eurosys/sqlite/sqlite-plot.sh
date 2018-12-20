@@ -29,11 +29,10 @@ set size 1.0,0.8
 set key top left
 
 set xrange [-0.5:6.5]
-set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
+set xtics ('1' 0, '16' 1, '256' 2, '1024' 3, '8192' 4)
 set xlabel "Value size (bytes)"
-set yrange [0.0001:10000]
-set ytics ('0.0001' 0.0001, '1' 1, '10000' 10000)
-set ylabel "micros/op"
+set yrange [1:1000]
+set ylabel "Latency (usec)"
 set logscale y
 
 plot \
@@ -50,13 +49,7 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/fillrandom.eps"
-set xrange [-0.5:6.5]
-set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
-set xlabel "Value size (bytes)"
-set yrange [0.0001:10000]
-set ytics ('0.0001' 0.0001, '1' 1, '10000' 10000)
-set ylabel "micros/op"
-set logscale y
+#set ytics ('0.0001' 0.0001, '1' 1, '10000' 10000)
 
 plot \
    '${OUTPUT}/fillrandom-runc.dat' usin (\$0-0.3):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
@@ -72,13 +65,7 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/readseq.eps"
-set xrange [-0.5:6.5]
-set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
-set xlabel "Value size (bytes)"
-set yrange [0.0001:1]
-set ytics ('0.0001' 0.0001, '0.01' 0.01, '1' 1)
-set ylabel "micros/op"
-set logscale y
+set yrange [0.1:10]
 
 plot \
    '${OUTPUT}/readseq-runc.dat' usin (\$0-0.3):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
@@ -94,13 +81,6 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/readrandom.eps"
-set xrange [-0.5:6.5]
-set xtics ('128' 0, '256' 1, '512' 2, '1024' 3, '1500' 4, '4096' 5, '8192' 6)
-set xlabel "Value size (bytes)"
-set yrange [0.0001:1]
-set ytics ('0.0001' 0.0001, '0.01' 0.01, '1' 1)
-set ylabel "micros/op"
-set logscale y
 
 plot \
    '${OUTPUT}/readrandom-runc.dat' usin (\$0-0.3):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\

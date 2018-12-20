@@ -8,7 +8,8 @@ import sys
 
 benchmarks = ["fillseq", "fillrandom", "readseq", "readrandom"]
 platforms = ["native", "lkl", "runc", "runsc-ptrace", "kata-runtime"]
-sizes = [128, 256, 512, 1024, 1500, 4096, 8192]
+#sizes = [128, 256, 512, 1024, 1500, 4096, 8192]
+sizes=[1, 16, 256, 1024, 8192]
 
 def parse_info(filename):
     assert "sqlite-bench" in filename
@@ -22,7 +23,7 @@ def parse_info(filename):
             info["platform"] = platform
             break
     for size in sizes:
-        if "vs" + str(size) in filename:
+        if "vs" + str(size) + "-" in filename:
             info["size"] = size
             break
     # TODO: Add trials info
@@ -82,7 +83,6 @@ def main():
     print('\nwriting files', end='')
     for benchmark in benchmarks:
         for platform in platforms:
-            print(benchmark+platform)
             print('.', end='')
             sys.stdout.flush()
             stat = stat_dat(benchmark, platform, all_dat)

@@ -8,11 +8,11 @@ OUTPUT=$SCRIPT_DIR/$(date "+%Y-%m-%d")
 PREFIX=sqlite-bench
 TRIALS="1"
 ENTRIES="1000000"
-VSIZES="128 256 512 1024 1500 4096 8192"
+VSIZES="1 8 256 1024 8192"
 TESTNAMES="fillseq fillrandom readseq readrandom"
 DB_PATH=/tmp/
 
-SRC_DIR=/home/moroo/src
+SRC_DIR=/home/tazaki/work/ukontainer/
 FRANKENLIBC_DIR=${SRC_DIR}/frankenlibc
 SQLITE_BENCH_DIR=${SRC_DIR}/sqlite-bench
 #TMP variable
