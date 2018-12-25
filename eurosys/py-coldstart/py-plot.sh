@@ -33,8 +33,8 @@ set ytics 10
 set yrange [10:1500]
 set logscale y
 set xtics font ", 18"
-set xtics ('runc' 0, 'runv' 1, 'runsc(p)' 2, 'runsc(k)' 3, 'runu' 4, 'native' 5)
-set xrange [-1:6]
+set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'ukontainer' 4, 'native' 5)
+set xrange [-0.5:5.5]
 
 plot \
    '${OUTPUT}/py-coldstart-runc-delay.dat' usi (0):(\$1)*1000:(\$2)*1000 w boxerr lt 1 lc rgb "green" fill pattern 2 title "runc", \
