@@ -34,4 +34,5 @@ grep -v '#' | sed "s/\t/ \& /g" \
  > ${OUTPUT}/tcp-stream-thpt.tbl
 
 
+cat ${OUTPUT}/tcp-stream-thpt.tbl
 
