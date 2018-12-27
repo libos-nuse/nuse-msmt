@@ -40,6 +40,7 @@ done
 #generate latex table
 cat ${OUTPUT}/tcp-stream-*.dat | dbcol mode mean stddev | \
 grep -v '#' | sed "s/\t/ \& /g" | sed "s/\(.*\)/\1 \\\\\\\\/" \
+| sed "s/lkl-/ukontainer-/" \
  > ${OUTPUT}/tcp-stream-thpt.tbl
 
 
