@@ -15,7 +15,7 @@ rm -f ${OUTPUT}/tcp-stream-*.dat
 for cc in ${CC_ALGO}
 do
 
-grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap*-root*-$cc* \
+grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap*-*-$cc* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
 | dbcolstats thpt | dbcolcreate -e lkl-$cc mode | dbcol mode mean stddev \
 >> ${OUTPUT}/tcp-stream-musl-tap-$cc.dat
