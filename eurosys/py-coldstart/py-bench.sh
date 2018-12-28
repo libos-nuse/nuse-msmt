@@ -76,13 +76,12 @@ py-coldstart::runu() {
 #	  imgs/python.img -- /main.py -m main \
 #	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
-  rm -rf /var/run/runu/foo
-
+  cname=foo
   /usr/bin/time runu run \
-	  --bundle $RUNU_BUNDLE_DIR foo \
+	  --bundle $RUNU_BUNDLE_DIR $cname \
 	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
-  rm -rf /var/run/runu/foo
+  runu delete $cname
 )
 }
 
@@ -103,7 +102,7 @@ py-coldstart::docker() {
 #	  python-hub-greenlet python /root/main.py -m main \
 #	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
 
-  cname=fooooo
+  cname=container-`date +%s`
   /usr/bin/time sudo $rbin --log=/dev/null \
 	  run --bundle /tmp/bundle-runc $cname \
 	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
