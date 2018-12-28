@@ -5,6 +5,8 @@ SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
 TRIALS=5
 OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 
+RUNU_BUNDLE_DIR=/home/upa/bundle-runu
+
 main() {
   mkdir -p "$OUTPUT"
   rm -f "$OUTPUT"/py-coldstart-*.dat
@@ -27,16 +29,24 @@ cp $SCRIPT_DIR/config-runv.json ./config.json
 chmod 666 config.json
 cp $SCRIPT_DIR/main.py ./rootfs
 
+
 # for runu
-mkdir -p /tmp/bundle-runu/rootfs
-cd /tmp/bundle-runu
-docker export d8699e9083db | tar -C rootfs -xf - 
+mkdir -p $RUNU_BUNDLE_DIR/rootfs
+cd $RUNU_BUNDLE_DIR
+docker export 07e3707a0c45 | tar -C rootfs -xf -
+
+# loopback mount python.img for lkl rootfs
+mkdir -p mnt
+mount rootfs/imgs/python.img mnt
+
 cp $SCRIPT_DIR/config-runu.json ./config.json
-cp $SCRIPT_DIR/main.py ./rootfs
+cp $SCRIPT_DIR/main.py ./mnt/
+
+umount mnt
 }
 
 py-coldstart::run() {
-  py-coldstart::native   "$@"
+  py-coldstart::native "$@"
   py-coldstart::runu   "$@"
   py-coldstart::docker "$@" "runc"
   py-coldstart::docker "$@" "kata-runtime"
@@ -66,10 +76,13 @@ py-coldstart::runu() {
 #	  imgs/python.img -- /main.py -m main \
 #	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
-  /usr/bin/time ~/work/runu/runu create \
-	  -b /tmp/bundle-runu foo \
+  rm -rf /var/run/runu/foo
+
+  /usr/bin/time runu run \
+	  --bundle $RUNU_BUNDLE_DIR foo \
 	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
+  rm -rf /var/run/runu/foo
 )
 }
 
@@ -94,6 +107,7 @@ py-coldstart::docker() {
 	  run --bundle /tmp/bundle-runc foo500 \
 	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
 
+  rm -rf runsc /var/run/runsc/foo500
 )
 }
 

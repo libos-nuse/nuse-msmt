@@ -10,6 +10,16 @@ import csv
 
 from greenlet import greenlet
 
+import http.server
+import socketserver
+
+def start_http():
+    print("this is http server test")
+    PORT = 8000
+    Handler = http.server.SimpleHTTPRequestHandler
+
+    httpd = socketserver.TCPServer(("", PORT), Handler)
+    print("listen on fd {}".format(httpd.fileno()))
 
 def hello_world():
     print("\n" * 4)
@@ -46,3 +56,4 @@ gr2 = greenlet(test2)
 if __name__ == '__main__':
     hello_world()
     gr1.switch()
+    start_http()
