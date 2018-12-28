@@ -15,7 +15,6 @@
 		"env": [
 			"PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin",
 			"TERM=xterm",
-		        "RUMP_VERBOSE=0",
                         "PYTHONHOME=/python",
                         "LKL_ROOTFS=imgs/python.img",
                         "HOME=/"

@@ -60,7 +60,7 @@ py-coldstart::native() {
   local runtime=native
 
   echo "$(tput bold)== native ($num)  ==$(tput sgr0)"
-  /usr/bin/time python3 /home/tazaki/work/rumprun-packages/python3/examples/main.py \
+  /usr/bin/time python3 $SCRIPT_DIR/main.py \
 	  |& tee ${OUTPUT}/py-coldstart-native-$num.dat
 )
 }
@@ -103,11 +103,12 @@ py-coldstart::docker() {
 #	  python-hub-greenlet python /root/main.py -m main \
 #	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
 
+  cname=fooooo
   /usr/bin/time sudo $rbin --log=/dev/null \
-	  run --bundle /tmp/bundle-runc foo500 \
+	  run --bundle /tmp/bundle-runc $cname \
 	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
 
-  rm -rf runsc /var/run/runsc/foo500
+  rm -rf /var/run/runsc/$cname
 )
 }
 
