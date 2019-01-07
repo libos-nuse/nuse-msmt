@@ -6,6 +6,7 @@ TRIALS=5
 OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 
 RUNU_BUNDLE_DIR=/home/upa/bundle-runu
+RUNC_BUNDLE_DIR=/tmp/bundle-runc
 
 main() {
   mkdir -p "$OUTPUT"
@@ -22,8 +23,9 @@ main() {
 
 prepare_image() {
 # for runc/runv/runsc
-mkdir -p /tmp/bundle-runc/rootfs
-cd /tmp/bundle-runc
+sudo rm -rf $RUNC_BUNDLE_DIR/
+mkdir -p $RUNC_BUNDLE_DIR/rootfs
+cd $RUNC_BUNDLE_DIR
 docker export $(docker create python-hub-greenlet) | tar -C rootfs -xf -
 cp $SCRIPT_DIR/config-runv.json ./config.json
 chmod 666 config.json
@@ -31,18 +33,19 @@ cp $SCRIPT_DIR/main.py ./rootfs
 
 
 # for runu
+sudo rm -rf $RUNU_BUNDLE_DIR/
 mkdir -p $RUNU_BUNDLE_DIR/rootfs
 cd $RUNU_BUNDLE_DIR
-docker export 07e3707a0c45 | tar -C rootfs -xf -
+docker export $(docker create thehajime/runu-base:0.1 foo) | tar -C rootfs -xf -
 
 # loopback mount python.img for lkl rootfs
 mkdir -p mnt
-mount rootfs/imgs/python.img mnt
+sudo mount rootfs/imgs/python.img mnt
 
 cp $SCRIPT_DIR/config-runu.json ./config.json
-cp $SCRIPT_DIR/main.py ./mnt/
+sudo cp $SCRIPT_DIR/main.py ./mnt/
 
-umount mnt
+sudo umount mnt
 }
 
 py-coldstart::run() {
@@ -77,11 +80,11 @@ py-coldstart::runu() {
 #	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
   cname=foo
-  /usr/bin/time runu run \
+  sudo /usr/bin/time /home/tazaki/work/runu/runu run \
 	  --bundle $RUNU_BUNDLE_DIR $cname \
 	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
-  runu delete $cname
+  sudo runu delete $cname
 )
 }
 
@@ -104,10 +107,11 @@ py-coldstart::docker() {
 
   cname=container-`date +%s`
   /usr/bin/time sudo $rbin --log=/dev/null \
-	  run --bundle /tmp/bundle-runc $cname \
+	  run --bundle $RUNC_BUNDLE_DIR $cname \
 	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
 
-  rm -rf /var/run/runsc/$cname
+  sudo rm -rf /var/run/runsc/$cname
+  sudo rm -rf /run/user/0/runsc/$cname
 )
 }
 
