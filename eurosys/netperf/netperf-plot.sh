@@ -82,23 +82,23 @@ grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-ptrace-user-* \
 
 # TCP_RR (latency)
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-lkl-*-1* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev lat-count d10 \
  | dbsort -n psize | dbcol lat-mean lat-stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-lkl-latency.dat
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-native-*-1* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev lat-count d10  \
  | dbsort -n psize | dbcol lat-mean lat-stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-native-latency.dat
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runc-*-1* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev lat-count d10  \
  | dbsort -n psize | dbcol lat-mean lat-stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-runc-latency.dat
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-kata-runtime-*-1* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev lat-count d10  \
  | dbsort -n psize | dbcol lat-mean lat-stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-kata-runtime-latency.dat
 grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-ptrace-user-*-1* \
- | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev \
+ | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 d5 psize d7 d9 d8 lat-mean lat-stddev lat-count d10  \
  | dbsort -n psize | dbcol lat-mean lat-stddev \
  > ${OUTPUT}/${DIR}/tcp-rr-runsc-ptrace-user-latency.dat
 #grep -E -h Trans ${OUTPUT}/${PREFIX_RR}*-runsc-kvm-user-* \

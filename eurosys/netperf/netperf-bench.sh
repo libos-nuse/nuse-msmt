@@ -23,15 +23,15 @@ main() {
   initialize
 
   # for netperf tests
-  for num in $(seq 1 "$TRIALS"); do
-    for size in $PSIZES; do
+  for size in $PSIZES; do
+    for num in $(seq 1 "$TRIALS"); do
       for test in $TESTNAMES; do
         netperf::run $test $num $size "-m $size,$size"
       done
 
-      netperf::run TCP_RR $num $size " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY -r $size,$size"
       netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
     done
+    netperf::run TCP_RR 1 $size " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY,LOCAL_SEND_CALLS,LOCAL_RECV_CALLS -r $size,$size"
   done
 
   bash "$SCRIPT_DIR/netperf-plot.sh" "$OUTPUT" tx
@@ -67,7 +67,11 @@ netperf::lkl() {
   local num="$2"
   local psize="$3"
   local ex_arg="$4"
-  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+  local duration=10
+  if [[ "$test" == "TCP_RR" ]] ; then
+	  duration=50
+  fi
+  local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
 
   setup_lkl
   cd $NETPERF_DIR
@@ -85,7 +89,7 @@ netperf::lkl() {
     echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
     docker run --rm -i --runtime=runu-dev --net=none  \
 	    -e LKL_BOOT_CMDLINE="mem=1G" \
-	    -e LKL_NET=tap:tap0 -e LKL_ROOTFS=imgs/python.img  \
+	    -e LKL_NET=tap0  \
 	    -e LKL_CONFIG=$SCRIPT_DIR/../lkl.json -e LKL_OFFLOAD=1 \
 	    thehajime/runu-base:0.1 netperf $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
@@ -102,7 +106,11 @@ netperf::native() {
   local num="$2"
   local psize="$3"
   local ex_arg="$4"
-  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+  local duration=10
+  if [[ "$test" == "TCP_RR" ]] ; then
+	  duration=50
+  fi
+  local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
 
   echo "$(tput bold)== native ($test-$num $*)  ==$(tput sgr0)"
   netperf $netperf_args 2>&1 | tee "$OUTPUT/$PREFIX-$test-native-ps$size-$num.dat"
@@ -116,7 +124,11 @@ netperf::docker() {
   local psize="$3"
   local ex_arg="$4"
   local runtime="$5"
-  local netperf_args="-H $DEST_ADDR -t $test -- -o $ex_arg"
+  local duration=10
+  if [[ "$test" == "TCP_RR" ]] ; then
+	  duration=50
+  fi
+  local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
   
   echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
   docker run --runtime=$runtime --rm \

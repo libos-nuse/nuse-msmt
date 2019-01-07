@@ -7,7 +7,7 @@
             "masklen": "16",
             "mac": "00:0d:0b:94:4e:97",
             "offload": "0xc803",
-            "param": "5",
+            "name": "tap0",
             "type": "rumpfd"
         }
     ],
