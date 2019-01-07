@@ -6,11 +6,13 @@ TRIALS=5
 OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 
 RUNU_BUNDLE_DIR=/home/upa/bundle-runu
+RUNU_BUNDLE_DIR=/home/tazaki/tmp/bundle-runu
 RUNC_BUNDLE_DIR=/tmp/bundle-runc
 
 main() {
   mkdir -p "$OUTPUT"
   rm -f "$OUTPUT"/py-coldstart-*.dat
+  exec > >(tee "$OUTPUT/$(basename $0).log") 2>&1
 
   prepare_image
   # python-coldstart tests
@@ -74,11 +76,14 @@ py-coldstart::runu() {
   local runtime=runu-dev
 
   echo "$(tput bold)== docker (runu-$num)  ==$(tput sgr0)"
-#  /usr/bin/time docker run -i --runtime=$runtime \
-#	  thehajime/runu-base:latest python \
-#	  imgs/python.img -- /main.py -m main \
-#	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
+  /usr/bin/time docker run -i --runtime=$runtime \
+	  -e LKL_ROOTFS=imgs/python.img \
+	  -e HOME=/ -e PYTHONHOME=/python \
+	  thehajime/runu-base:0.1 \
+	  python /main.py -m main \
+	  |& tee ${OUTPUT}/py-coldstart-runu-docker-$num.dat
 
+  echo "$(tput bold)== oci (runu-$num)  ==$(tput sgr0)"
   cname=foo
   sudo /usr/bin/time /home/tazaki/work/runu/runu run \
 	  --bundle $RUNU_BUNDLE_DIR $cname \
@@ -101,10 +106,11 @@ py-coldstart::docker() {
   esac
 
   echo "$(tput bold)== docker ($runtime-$num)  ==$(tput sgr0)"
-#  /usr/bin/time docker run -i --runtime=$runtime \
-#	  python-hub-greenlet python /root/main.py -m main \
-#	  |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
+  /usr/bin/time sudo docker run -i --runtime=$runtime \
+	  python-hub-greenlet python /root/main.py -m main \
+	  |& tee ${OUTPUT}/py-coldstart-$runtime-docker-$num.dat
 
+  echo "$(tput bold)== oci ($runtime-$num)  ==$(tput sgr0)"
   cname=container-`date +%s`
   /usr/bin/time sudo $rbin --log=/dev/null \
 	  run --bundle $RUNC_BUNDLE_DIR $cname \
