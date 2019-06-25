@@ -10,13 +10,14 @@ import csv
 
 from greenlet import greenlet
 
-import http.server
+#import http.server
 import socketserver
 
 def start_http():
     print("this is http server test")
     PORT = 8000
-    Handler = http.server.SimpleHTTPRequestHandler
+#    Handler = http.server.SimpleHTTPRequestHandler
+    Handler = None
 
     httpd = socketserver.TCPServer(("", PORT), Handler)
     print("listen on fd {}".format(httpd.fileno()))

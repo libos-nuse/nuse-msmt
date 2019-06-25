@@ -31,7 +31,7 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/py-coldstart-docker.eps"
 set pointsize 2
 set xzeroaxis
-set grid mytics
+set grid
 
 set boxwidth 0.3
 set style fill pattern
@@ -39,11 +39,12 @@ unset key
 set size 1.0,0.7
 
 set ylabel "Delay (msec)"
-set yrange [10:5000]
-set logscale y
+set yrange [0:2000]
+#set logscale y
 set xtics font ", 18"
 set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'ukontainer' 4, 'native' 5)
 set xrange [-0.5:5.5]
+set xtics nomirror
 
 plot \
    '${OUTPUT}/py-coldstart-runc-docker-delay.dat' usi (0):(\$1):(\$2) w boxerr lt 1 lc rgb "green" fill pattern 2 title "runc", \
@@ -66,8 +67,9 @@ replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/py-coldstart.eps"
-set ytics 10
-set yrange [10:5000]
+#set ytics 10
+set yrange [0:1000]
+set xtics nomirror rotate by 0
 
 plot \
    '${OUTPUT}/py-coldstart-runc-delay.dat' usi (0):(\$1):(\$2) w boxerr lt 1 lc rgb "green" fill pattern 2 title "runc", \

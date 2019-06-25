@@ -79,6 +79,7 @@ py-coldstart::runu() {
   /usr/bin/time docker run -i --runtime=$runtime \
 	  -e LKL_ROOTFS=imgs/python.img \
 	  -e HOME=/ -e PYTHONHOME=/python \
+	  -e PYTHONHASHSEED=1 \
 	  thehajime/runu-base:0.1 \
 	  python /main.py -m main \
 	  |& tee ${OUTPUT}/py-coldstart-runu-docker-$num.dat
@@ -89,6 +90,7 @@ py-coldstart::runu() {
 	  --bundle $RUNU_BUNDLE_DIR $cname \
 	  |& tee ${OUTPUT}/py-coldstart-runu-$num.dat
 
+  sudo runu kill $cname
   sudo runu delete $cname
 )
 }
@@ -107,6 +109,7 @@ py-coldstart::docker() {
 
   echo "$(tput bold)== docker ($runtime-$num)  ==$(tput sgr0)"
   /usr/bin/time sudo docker run -i --runtime=$runtime \
+	  -v $SCRIPT_DIR:/root \
 	  python-hub-greenlet python /root/main.py -m main \
 	  |& tee ${OUTPUT}/py-coldstart-$runtime-docker-$num.dat
 

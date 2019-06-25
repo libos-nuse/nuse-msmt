@@ -17,6 +17,7 @@
 			"TERM=xterm",
                         "PYTHONHOME=/python",
                         "LKL_ROOTFS=imgs/python.img",
+                        "PYTHONHASHSEED=1",
                         "HOME=/"
 		],
 		"cwd": "/home/tazaki/work/runu/rootfs",
