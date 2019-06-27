@@ -2,7 +2,7 @@
 OUTPUT=$1
 mkdir -p ${OUTPUT}/out
 
-RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc native"
+RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc native runnc"
 
 
 # parse outputs
@@ -42,8 +42,8 @@ set ylabel "Delay (msec)"
 set yrange [0:2000]
 #set logscale y
 set xtics font ", 18"
-set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'ukontainer' 4, 'native' 5)
-set xrange [-0.5:5.5]
+set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'nabla' 4, 'ukontainer' 5, 'native' 6)
+set xrange [-0.5:6.5]
 set xtics nomirror
 
 plot \
@@ -51,14 +51,16 @@ plot \
    '' usi (0):(\$1):(\$1) w labels offset 0,1, \
    '${OUTPUT}/py-coldstart-kata-runtime-docker-delay.dat' usi (1):(\$1):(\$2) w boxerr lt 1 lc rgb "gray" fill pattern 1 title "runv", \
    '' usi (1):(\$1):(\$1) w labels offset 0,1, \
-   '${OUTPUT}/py-coldstart-runsc-ptrace-user-docker-delay.dat' usi (2):(\$1):(\$2) w boxerr lt 1 lc rgb "blue" fill pattern 3 title "runsc(ptrace)", \
+   '${OUTPUT}/py-coldstart-runsc-ptrace-user-docker-delay.dat' usi (2):(\$1):(\$2) w boxerr lt 1 lc rgb "blue" fill pattern 4 title "runsc(ptrace)", \
    '' usi (2):(\$1):(\$1) w labels offset 0,1, \
    '${OUTPUT}/py-coldstart-runsc-kvm-user-docker-delay.dat' usi (3):(\$1):(\$2) w boxerr lt 1 lc rgb "blue" fill pattern 5 title "runsc(kvm)", \
    '' usi (3):(\$1):(\$1) w labels offset 0,1, \
-   '${OUTPUT}/py-coldstart-runu-docker-delay.dat' usi (4):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 4 title "runu", \
+   '${OUTPUT}/py-coldstart-runnc-docker-delay.dat' usi (4):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 6 title "runu", \
    '' usi (4):(\$1):(\$1) w labels offset 0,1, \
-   '${OUTPUT}/py-coldstart-native-delay.dat' usi (5):(\$1):(\$2) w boxerr fill patter 0 lt 1 lc rgb "red" title "native" ,\
-   '' usi (5):(\$1):(\$1) w labels offset 0,1
+   '${OUTPUT}/py-coldstart-runu-docker-delay.dat' usi (5):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 3 title "runu", \
+   '' usi (5):(\$1):(\$1) w labels offset 0,1, \
+   '${OUTPUT}/py-coldstart-native-delay.dat' usi (6):(\$1):(\$2) w boxerr fill patter 0 lt 1 lc rgb "red" title "native" ,\
+   '' usi (6):(\$1):(\$1) w labels offset 0,1
    
 set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45
@@ -68,6 +70,8 @@ replot
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/py-coldstart.eps"
 #set ytics 10
+set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'ukontainer' 4, 'native' 5)
+set xrange [-0.5:5.5]
 set yrange [0:1000]
 set xtics nomirror rotate by 0
 

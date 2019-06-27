@@ -8,6 +8,7 @@ OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 RUNU_BUNDLE_DIR=/home/upa/bundle-runu
 RUNU_BUNDLE_DIR=/home/tazaki/tmp/bundle-runu
 RUNC_BUNDLE_DIR=/tmp/bundle-runc
+RUNNC_BUNDLE_DIR=/tmp/bundle-runnc
 
 main() {
   mkdir -p "$OUTPUT"
@@ -33,6 +34,14 @@ cp $SCRIPT_DIR/config-runv.json ./config.json
 chmod 666 config.json
 cp $SCRIPT_DIR/main.py ./rootfs
 
+# for runnc
+sudo rm -rf $RUNNC_BUNDLE_DIR/
+mkdir -p $RUNNC_BUNDLE_DIR/rootfs
+cd $RUNNC_BUNDLE_DIR
+docker export $(docker create retrage/nabla-python:0.1 foo) | tar -C rootfs -xf -
+cp $SCRIPT_DIR/config-runnc.json ./config.json
+chmod 666 config.json
+cp $SCRIPT_DIR/main.py ./rootfs
 
 # for runu
 sudo rm -rf $RUNU_BUNDLE_DIR/
@@ -57,6 +66,7 @@ py-coldstart::run() {
   py-coldstart::docker "$@" "kata-runtime"
   py-coldstart::docker "$@" "runsc-ptrace-user"
   py-coldstart::docker "$@" "runsc-kvm-user"
+  py-coldstart::runnc  "$@"
 }
 
 py-coldstart::native() {
@@ -124,5 +134,26 @@ py-coldstart::docker() {
 )
 }
 
+py-coldstart::runnc() {
+  local num=$1
+  local runtime=runnc
+  local rbin="/home/tazaki/go/src/github.com/nabla-containers/runnc/build/runnc"
+
+  echo "$(tput bold)== docker ($runtime-$num)  ==$(tput sgr0)"
+  /usr/bin/time docker run -i --runtime=$runtime \
+    -e HOME=/ -e PYTHONHOME=/python \
+    retrage/nabla-python:0.1 \
+    /python.nabla /main.py -m main \
+    |& tee ${OUTPUT}/py-coldstart-$runtime-docker-$num.dat
+
+#  echo "$(tput bold)== oci ($runtime-$num)  ==$(tput sgr0)"
+#  cname=container-`date +%s`
+#  sudo /usr/bin/time $rbin --log=/dev/null \
+#    run --bundle $RUNNC_BUNDLE_DIR $cname \
+#    |& tee ${OUTPUT}/py-coldstart-$runtime-$num.dat
+#
+#  sudo $rbin kill $cname
+#  sudo $rbin delete $cname
+}
 
 main
