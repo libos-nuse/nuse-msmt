@@ -29,7 +29,7 @@ main() {
         netperf::run $test $num $size "-m $size,$size"
       done
 
-      netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
+#      netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
     done
     netperf::run TCP_RR 1 $size " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY,LOCAL_SEND_CALLS,LOCAL_RECV_CALLS -r $size,$size"
   done
@@ -59,6 +59,7 @@ netperf::run() {
   netperf::docker "$@" "kata-runtime"
   netperf::docker "$@" "runsc-ptrace-user"
   #netperf::docker "$@" "runsc-kvm-user"
+  netperf::docker-nc "$@" "runnc" "thehajime/nabla-netperf:0.1"
 }
 
 netperf::lkl() {
@@ -89,8 +90,9 @@ netperf::lkl() {
     echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
     docker run --rm -i --runtime=runu-dev --net=none  \
 	    -e LKL_BOOT_CMDLINE="mem=1G" \
-	    -e LKL_NET=tap0  \
+	    -e LKL_NET=tap0 \
 	    -e LKL_CONFIG=$SCRIPT_DIR/../lkl.json -e LKL_OFFLOAD=1 \
+	    -e LKL_ROOTFS="imgs/python.img" \
 	    thehajime/runu-base:0.1 netperf $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
     wait
@@ -134,6 +136,27 @@ netperf::docker() {
   docker run --runtime=$runtime --rm \
    thehajime/byte-unixbench:latest \
    netperf $netperf_args 2>&1 \
+  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
+)
+}
+
+netperf::docker-nc() {
+( 
+  local test=$1
+  local num=$2
+  local psize="$3"
+  local ex_arg="$4"
+  local runtime="$5"
+  local img="$6"
+  local duration=10
+  if [[ "$test" == "TCP_RR" ]] ; then
+	  duration=50
+  fi
+  local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
+  
+  echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
+  docker run --runtime=$runtime --rm $img \
+   netperf.nabla $netperf_args 2>&1 \
   | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
 )
 }
