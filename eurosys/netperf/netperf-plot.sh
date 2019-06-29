@@ -193,7 +193,7 @@ set boxwidth 0.15
 set style fill pattern
 
 set size 1.0,0.9
-set key font "Helvetica,18"
+set key font ",18"
 set key top left Left reverse
 
 set xrange [-0.5:6.5]
