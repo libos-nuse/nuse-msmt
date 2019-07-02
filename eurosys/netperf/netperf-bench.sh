@@ -92,9 +92,9 @@ netperf::lkl() {
 	    -e LKL_BOOT_CMDLINE="mem=1G" \
 	    -e LKL_NET=tap0 \
 	    -e LKL_CONFIG=$SCRIPT_DIR/../lkl.json -e LKL_OFFLOAD=1 \
-	    -e LKL_ROOTFS="imgs/python.img" \
 	    thehajime/runu-base:0.1 netperf $netperf_args \
      2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+#	    tgraf/netperf /usr/bin/netperf $netperf_args \
     wait
   fi
 
@@ -134,8 +134,7 @@ netperf::docker() {
   
   echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
   docker run --runtime=$runtime --rm \
-   thehajime/byte-unixbench:latest \
-   netperf $netperf_args 2>&1 \
+   tgraf/netperf /usr/bin/netperf $netperf_args 2>&1 \
   | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
 )
 }
