@@ -2,7 +2,7 @@
 
 SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
 
-TRIALS=5
+TRIALS=30
 OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 
 RUNU_BUNDLE_DIR=/home/upa/bundle-runu

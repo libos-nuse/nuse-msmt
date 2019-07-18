@@ -12,7 +12,7 @@ for rt in $RUNTIMES ; do
 grep -h elaps ${OUTPUT}/py-coldstart-$rt-[1-9].dat | sed "s/elapsed.*//" \
 	| awk '{print $3}' \
 	| awk -F: '{msecs=$2*1000; msecs+=$1*60*1000; printf "%.3f\n", msecs }' \
-	| dbcoldefine delay | dbcolstats delay | dbcol mean stddev \
+	| dbcoldefine delay | dbcolstats -f "%.1f" delay | dbcol mean stddev \
        	> ${OUTPUT}/py-coldstart-$rt-delay.dat
 
 if [ $rt == "native" ] ; then
@@ -22,7 +22,7 @@ fi
 grep -h elaps ${OUTPUT}/py-coldstart-$rt-docker-[1-9].dat | sed "s/elapsed.*//" \
 	| awk '{print $3}' \
 	| awk -F: '{msecs=$2*1000; msecs+=$1*60*1000; printf "%.3f\n", msecs }' \
-	| dbcoldefine delay | dbcolstats delay | dbcol mean stddev \
+	| dbcoldefine delay | dbcolstats -f "%.1f" delay | dbcol mean stddev \
        	> ${OUTPUT}/py-coldstart-$rt-docker-delay.dat
 done
 
