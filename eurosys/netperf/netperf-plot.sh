@@ -223,6 +223,7 @@ plot \
 
 
 set terminal png lw 3 14 crop
+set key font ",14"
 set ylabel "Goodput (Gbps)" offset +0.5
 set output "${OUTPUT}/out/tcp-stream.png"
 replot
@@ -236,6 +237,7 @@ set output "${OUTPUT}/out/tcp-rr.eps"
 set ylabel "Goodput (KTrans/sec)"
 set yrange [0:20]
 set ytics auto
+set key font ",18"
 set key top right
 unset label 1
 unset label 2
@@ -249,6 +251,7 @@ plot \
    '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
+set key font ",14"
 set output "${OUTPUT}/out/tcp-rr.png"
 replot
 
@@ -260,6 +263,7 @@ set output "${OUTPUT}/out/tcp-rr-latency.eps"
 set ylabel "Latency (usec)"
 set yrange [0:1000]
 set ytics auto
+set key font ",18"
 set key top left
 
 plot \
@@ -271,6 +275,7 @@ plot \
    '${OUTPUT}/tx/tcp-rr-native-latency.dat' usin (\$0+0.3):(\$1):(\$2) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
+set key font ",14"
 set output "${OUTPUT}/out/tcp-rr-latency.png"
 replot
 
@@ -278,6 +283,7 @@ set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/udp-stream.eps"
 set ylabel "Goodput (Gbps)"
 set yrange [0:10]
+set key font ",18"
 set key top left
 
 plot \
@@ -290,12 +296,14 @@ plot \
 
 
 set terminal png lw 3 14 crop
+set key font ",14"
 set output "${OUTPUT}/out/udp-stream.png"
 replot
 
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/udp-stream-pps.eps"
 set ylabel "Goodput (Mpps)"
+set key font ",18"
 set key top right
 set yrange [0:1]
 
@@ -308,6 +316,7 @@ plot \
    '${OUTPUT}/tx/udp-stream-pps-native.dat' usin (\$0+0.3):(\$1/1000000):(\$2/1000000) w boxerrorbar fill patter 0 lc rgb "red" title "native"
 
 set terminal png lw 3 14 crop
+set key font ",14"
 set output "${OUTPUT}/out/udp-stream-pps.png"
 replot
 
