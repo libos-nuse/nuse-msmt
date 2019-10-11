@@ -2,7 +2,8 @@
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 OUTPUT="$(date "+%Y-%m-%d")"
-DUT_HOST=172.16.0.176
+DUT_HOST=192.168.39.2
+DUT_ROOTDIR=$HOME/work/nuse-msmt/eurosys/anvl/anvl-dut
 
 DUT=$(basename `pwd`)
 run_DUT()
@@ -11,14 +12,14 @@ run_DUT()
   ssh ${DUT_HOST} "sudo killall epserver; sudo killall -9 zebra; sudo killall -9 httpd; killall lwip-tap; sudo killall rump_allserver"
 
   case $DUT in
-    "mtcp") coproc ssh ${DUT_HOST} "cd anvl-dut/mtcp/; bash run.sh & read; sudo killall epserver"  ;;
-    "lkl") coproc ssh ${DUT_HOST} "cd anvl-dut/lkl-linux/; bash run.sh & read; sudo killall -9 zebra"  ;;
-    "linux") coproc ssh ${DUT_HOST} "cd anvl-dut/quagga/; bash run.sh & read; sudo killall -9 zebra" ;;
-    "seastar") coproc ssh ${DUT_HOST} "cd anvl-dut/seastar/; bash run.sh & read; sudo killall -9 httpd"  ;;
-    "gvisor") ;; #ssh ${DUT_HOST} "cd anvl-dut/mtcp/; bash run.sh" & ;;
-    "lwip") coproc ssh ${DUT_HOST} "cd anvl-dut/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
+    "mtcp") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh & read; sudo killall epserver"  ;;
+    "lkl") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lkl-linux/; bash run.sh & read; sudo killall -9 zebra"  ;;
+    "linux") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/quagga/; bash run.sh & read; sudo killall -9 zebra" ;;
+    "seastar") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/seastar/; bash run.sh & read; sudo killall -9 httpd"  ;;
+    "gvisor") ;; #ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh" & ;;
+    "lwip") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
     "osv") coproc ssh ${DUT_HOST} "sudo /home/upa/OSv/start-osv-qemu-cmd-two-netdev.sh" & ;;
-    "rump") coproc ssh ${DUT_HOST} "cd anvl-dut/rump/; bash run.sh & read; killall rump_server"  ;
+    "rump") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/rump/; bash run.sh & read; killall rump_server"  ;
   esac
 
   trap 'echo >&"${COPROC[1]}"' EXIT

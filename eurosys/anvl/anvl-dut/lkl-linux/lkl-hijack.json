@@ -1,0 +1,28 @@
+{
+    "gateway": "10.1.0.1",
+    "interfaces": [
+        {
+            "ip": "10.1.0.20",
+            "masklen": "24",
+            "mac": "00:00:01:07:39:39",
+            "param": "tap-lkl-0",
+            "type": "tap"
+        },
+        {
+            "ip": "10.2.0.20",
+            "masklen": "24",
+            "mac": "00:00:02:07:39:39",
+            "param": "tap-lkl-1",
+            "type": "tap"
+        },
+        {
+            "ipv6": "fe80::3:20",
+            "masklen6": "64",
+            "param": "tap-lkl-2",
+            "type": "tap"
+        }
+    ],
+    "singlecpu": "1",
+    "delay_main": "50000",
+    "sysctl": "net.ipv4.conf.all.forwarding=1;net.ipv4.conf.all.rp_filter=1;net.ipv4.tcp_wmem=4096 87380 2147483647"
+}

@@ -1,0 +1,3 @@
+[submodule "eurosys/anvl/anvl-dut/quagga"]
+	path = eurosys/anvl/anvl-dut/quagga
+	url = git://github.com/ukontainer/quagga-anvl

@@ -197,13 +197,10 @@ ARP Tolerance Factor       1
 
 ARP Suite Setup Command "./DocScript/ARP/arp-dut-configure-suite-setup-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP Suite Reset Command "./DocScript/ARP/arp-dut-suite-reset-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-#ARP DUT Configure ARP Dynamic Cache Clear Command "./DocScript/ARP/arp-dut-clear-dynamic-cache-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-ARP DUT Configure ARP Dynamic Cache Clear Command "./DocScript/ARP/arp-dut-clear-dynamic-cache-command-linux.sh $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-#ARP DUT Configure Delete Static ARP Cache Entry Command "./DocScript/ARP/arp-dut-delete-static-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-ARP DUT Configure Delete Static ARP Cache Entry Command "./DocScript/ARP/arp-dut-delete-static-cache-entry-command-linux.sh $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure ARP Dynamic Cache Clear Command "./DocScript/ARP/arp-dut-clear-dynamic-cache-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Delete Static ARP Cache Entry Command "./DocScript/ARP/arp-dut-delete-static-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP DUT Configure Send Echo Request Command "./DocScript/ARP/arp-dut-background-echo-request-send-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-#ARP DUT Configure Add ARP Cache Entry Command "./DocScript/ARP/arp-dut-add-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
-ARP DUT Configure Add ARP Cache Entry Command "./DocScript/ARP/arp-dut-add-cache-entry-command-linux.sh $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
+ARP DUT Configure Add ARP Cache Entry Command "./DocScript/ARP/arp-dut-add-cache-entry-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
 ARP DUT Supports RFC 1027 for Proxy ARP        FALSE
 ARP DUT is a Router                            FALSE
 ARP DUT Enable Proxy ARP Command"./DocScript/ARP/arp-dut-enable-proxy-arp-command.exp $ANVL_DUTHOSTNAME $ANVL_PARAMARG"
