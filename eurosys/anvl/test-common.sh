@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#set -x
+
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 OUTPUT="$(date "+%Y-%m-%d")"
 DUT_HOST=192.168.39.2
@@ -13,8 +15,12 @@ run_DUT()
 
   case $DUT in
     "mtcp") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh & read; sudo killall epserver"  ;;
-    "lkl") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lkl-linux/; bash run.sh & read; sudo killall -9 zebra"  ;;
-    "linux") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/quagga/; bash run.sh & read; sudo killall -9 zebra" ;;
+    lkl|lkl-nozebra) 
+	coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lkl-linux/; export NO_ZEBRA=$NO_ZEBRA ; 
+	bash run.sh & read; sudo killall -9 zebra"  ;;
+    linux|linux-nozebra) 
+	coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/quagga/; export NO_ZEBRA=$NO_ZEBRA ; 
+	bash run.sh & read; sudo killall zebra" ;;
     "seastar") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/seastar/; bash run.sh & read; sudo killall -9 httpd"  ;;
     "gvisor") ;; #ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh" & ;;
     "lwip") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
@@ -22,6 +28,8 @@ run_DUT()
     "rump") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/rump/; bash run.sh & read; killall rump_server"  ;
   esac
 
+  ### XXX
+  coproc ssh ${DUT_HOST} "sudo systemctl start firewalld.service"
   trap 'echo >&"${COPROC[1]}"' EXIT
 
   sleep 10

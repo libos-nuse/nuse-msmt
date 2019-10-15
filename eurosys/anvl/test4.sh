@@ -1,5 +1,7 @@
 #!/bin/bash
 
+#set -x
+
 source ../test-common.sh
 TESTS="arp ip icmp ipgw"
 TESTS="arp ip icmp"
