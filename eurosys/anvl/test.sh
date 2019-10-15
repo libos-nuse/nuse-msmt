@@ -25,6 +25,9 @@ do
   cd $dir; bash ../test6.sh; cd ..
 done
 
+### XXX
+ssh ${DUT_HOST} "sudo systemctl start firewalld.service"
+
 PAYLOAD=`tail */${OUTPUT}/result4.tbl`
 bash -x ${SCRIPT_DIR}/slack-notify.sh "$PAYLOAD"
 

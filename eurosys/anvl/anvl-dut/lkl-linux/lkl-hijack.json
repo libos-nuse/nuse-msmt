@@ -25,5 +25,5 @@
     ],
     "singlecpu": "1",
     "delay_main": "50000",
-    "sysctl": "net.ipv4.conf.all.forwarding=1;net.ipv4.conf.all.rp_filter=1;net.ipv4.conf.all.accept_source_route=1;net.ipv4.conf.tap-lkl-0.arp_accept=1;net.ipv4.conf.tap-lkl-1.arp_accept=1;net.ipv4.neigh.tap-lkl-0.locktime=0;net.ipv4.neigh.tap-lkl-1.locktime=0;net.ipv4.tcp_wmem=4096 87380 2147483647"
+    "sysctl": "net.ipv4.conf.all.forwarding=1;net.ipv4.conf.all.rp_filter=1;net.ipv4.conf.all.accept_source_route=1;net.ipv4.conf.eth0.arp_accept=1;net.ipv4.conf.eth1.arp_accept=1;net.ipv4.neigh.eth0.locktime=-1;net.ipv4.neigh.eth1.locktime=-1;net.ipv4.tcp_wmem=4096 87380 2147483647"
 }

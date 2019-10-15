@@ -28,8 +28,6 @@ run_DUT()
     "rump") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/rump/; bash run.sh & read; killall rump_server"  ;
   esac
 
-  ### XXX
-  coproc ssh ${DUT_HOST} "sudo systemctl start firewalld.service"
   trap 'echo >&"${COPROC[1]}"' EXIT
 
   sleep 10
