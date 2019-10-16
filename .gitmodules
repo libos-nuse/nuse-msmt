@@ -1,3 +1,6 @@
 [submodule "eurosys/anvl/anvl-dut/quagga"]
 	path = eurosys/anvl/anvl-dut/quagga
 	url = git://github.com/ukontainer/quagga-anvl
+[submodule "eurosys/anvl/anvl-dut/lwip-tap"]
+	path = eurosys/anvl/anvl-dut/lwip-tap
+	url = git://github.com/ukontainer/lwip-tap
