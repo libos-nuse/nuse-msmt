@@ -21,7 +21,7 @@ run_DUT()
     linux|linux-nozebra) 
 	coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/quagga/; export NO_ZEBRA=$NO_ZEBRA ; 
 	bash run.sh & read; sudo killall zebra" ;;
-    "seastar") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/seastar/; bash run.sh & read; sudo killall -9 httpd"  ;;
+    "seastar") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/seastar/; bash ../../seastar/dut-run.sh & read; sudo killall -9 httpd"  ;;
     "gvisor") ;; #ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh" & ;;
     "lwip") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
     "osv") coproc ssh ${DUT_HOST} "sudo /home/upa/OSv/start-osv-qemu-cmd-two-netdev.sh" & ;;
