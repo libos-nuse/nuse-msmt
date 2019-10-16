@@ -22,7 +22,7 @@ run_DUT()
 	coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/quagga/; export NO_ZEBRA=$NO_ZEBRA ; 
 	bash run.sh & read; sudo killall zebra" ;;
     "seastar") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/seastar/; bash ../../seastar/dut-run.sh & read; sudo killall -9 httpd"  ;;
-    "gvisor") ;; #ssh ${DUT_HOST} "cd $DUT_ROOTDIR/mtcp/; bash run.sh" & ;;
+    "gvisor") ;; ssh ${DUT_HOST} "cd $DUT_ROOTDIR/../gvisor/; bash dut-run.sh" & ;;
     "lwip") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/lwip-tap/; bash run.sh & read; killall lwip-tap"  ;;
     "osv") coproc ssh ${DUT_HOST} "sudo /home/upa/OSv/start-osv-qemu-cmd-two-netdev.sh" & ;;
     "rump") coproc ssh ${DUT_HOST} "cd $DUT_ROOTDIR/rump/; bash run.sh & read; killall rump_server"  ;
