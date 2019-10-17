@@ -1,0 +1,14 @@
+sudo /usr/bin/qemu-system-x86_64 \
+        -nographic -m 1024 -smp 2 \
+        -device virtio-blk-pci,id=blk0,bootindex=0,drive=hd0 \
+        -drive file=./osv-disk.qcow2,if=none,id=hd0,aio=native,cache=none \
+        -device virtio-rng-pci \
+        -chardev stdio,mux=on,id=stdio,signal=off \
+        -device isa-serial,chardev=stdio \
+        -netdev bridge,id=hn0,br=br-anvl0,helper=/usr/libexec/qemu-bridge-helper \
+        -device virtio-net-pci,netdev=hn0,id=nic1,mac=b6:8d:97:f1:f1:f1 \
+        -netdev bridge,id=hn1,br=br-anvl1,helper=/usr/libexec/qemu-bridge-helper \
+        -device virtio-net-pci,netdev=hn1,id=nic2,mac=b6:8d:97:f2:f2:f2 \
+        -chardev socket,id=charmonitor,path=./osv.monitor,server,nowait \
+        -mon chardev=charmonitor,id=monitor,mode=control \
+        -enable-kvm -cpu host,+x2apic
