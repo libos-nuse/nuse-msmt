@@ -17,7 +17,7 @@ do
 
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="210" viewBox="0 0 1500 200">
 
-<g text-anchor="left" dominant-baseline="central">
+<g text-anchor="left" dominant-baseline="central" font-size="15">
   <text x="0" y="10">lwip</text>
   <text x="0" y="30">seastar</text>
   <text x="0" y="50">osv</text>
@@ -58,16 +58,36 @@ EOF
 	done
 	cat <<EOF >> ${OUTPUT}/$test.svg
 //${columns[@]}
-<rect y="0"   x="$x" width='20' height='20' fill="${result[1]}"/>
-<rect y="20"  x="$x" width='20' height='20' fill="${result[2]}"/>
-<rect y="40"  x="$x" width='20' height='20' fill="${result[3]}"/>
-<rect y="60"  x="$x" width='20' height='20' fill="${result[4]}"/>
-<rect y="80"  x="$x" width='20' height='20' fill="${result[5]}"/>
-<rect y="100" x="$x" width='20' height='20' fill="${result[6]}"/>
-<rect y="120" x="$x" width='20' height='20' fill="${result[7]}"/>
-<rect y="140" x="$x" width='20' height='20' fill="${result[8]}"/>
-<rect y="160" x="$x" width='20' height='20' fill="${result[9]}"/>
-<rect y="180" x="$x" width='20' height='20' fill="${result[10]}"/>
+<rect y="0"   x="$x" width='20' height='20' fill="${result[1]}">
+  <title>lwip: ${columns[0]}</title>
+</rect>
+<rect y="20"  x="$x" width='20' height='20' fill="${result[2]}">
+  <title>seastar: ${columns[0]}</title>
+</rect>
+<rect y="40"  x="$x" width='20' height='20' fill="${result[3]}">
+  <title>osv: ${columns[0]}</title>
+</rect>
+<rect y="60"  x="$x" width='20' height='20' fill="${result[4]}">
+  <title>gvisor: ${columns[0]}</title>
+</rect>
+<rect y="80"  x="$x" width='20' height='20' fill="${result[5]}">
+  <title>mtcp: ${columns[0]}</title>
+</rect>
+<rect y="100" x="$x" width='20' height='20' fill="${result[6]}">
+  <title>rump: ${columns[0]}</title>
+</rect>
+<rect y="120" x="$x" width='20' height='20' fill="${result[7]}">
+  <title>linux: ${columns[0]}</title>
+</rect>
+<rect y="140" x="$x" width='20' height='20' fill="${result[8]}">
+  <title>lkl: ${columns[0]}</title>
+</rect>
+<rect y="160" x="$x" width='20' height='20' fill="${result[9]}">
+  <title>linux-nozebra: ${columns[0]}</title>
+</rect>
+<rect y="180" x="$x" width='20' height='20' fill="${result[10]}">
+  <title>lkl-nozebra: ${columns[0]}</title>
+</rect>
 EOF
 
 	ln=$((++ln))
@@ -78,6 +98,6 @@ EOF
 </svg>
 EOF
 
-convert ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
+convert -transparent white ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
 done
 

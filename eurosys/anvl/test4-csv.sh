@@ -13,10 +13,15 @@ do
 
  cd $stack
  # echo "test-$stack,$stack" > ${OUTPUT}/$test.csv
- grep "<<" ${OUTPUT}/$test-out.log | \
-   sed -e 's/<< //' -e 's/://' -e 's/ /,/' -e 's/Passed/-/' \
-   -e 's/NO RESPONSE/NO-RESPONSE/' \
-   > ${OUTPUT}/$test.csv
+ if [ -f ${OUTPUT}/$test-out.log ] ; then
+     grep "<<" ${OUTPUT}/$test-out.log | \
+	 sed -e 's/<< //' -e 's/://' -e 's/ /,/' -e 's/Passed/-/' \
+	     -e 's/NO RESPONSE/NO-RESPONSE/' \
+	     > ${OUTPUT}/$test.csv
+ else
+     mkdir -p ${OUTPUT}
+     echo "," > ${OUTPUT}/$test.csv
+ fi
  cd ..
 
 done
