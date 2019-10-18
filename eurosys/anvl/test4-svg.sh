@@ -1,22 +1,21 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source ${SCRIPT_DIR}/test-common.sh
+
 OUTPUT=$1
 
 mkdir -p ${OUTPUT}
 
-STACKS="lwip seastar osv gvisor mtcp rump linux lkl"
-TESTS="arp ip icmp ipgw"
-
-rm -f ${OUTPUT}/{${TESTS// /,}}.svg
-for test in $TESTS
+rm -f ${OUTPUT}/{${TESTS4// /,}}.svg
+for test in $TESTS4
 do
 
     ln=0
     cat <<EOF > ${OUTPUT}/$test.svg
 <?xml version="1.0" encoding="utf-8"?>
 
-<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="200" viewBox="0 0 1500 200">
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="210" viewBox="0 0 1500 200">
 
 <g text-anchor="left" dominant-baseline="central">
   <text x="0" y="10">lwip</text>
@@ -27,6 +26,8 @@ do
   <text x="0" y="110">rump</text>
   <text x="0" y="130">linux</text>
   <text x="0" y="150">lkl</text>
+  <text x="0" y="170">linux-nz</text>
+  <text x="0" y="190">lkl-nz</text>
 </g>
 
 <g stroke='black' stroke-width="2">
@@ -40,7 +41,7 @@ EOF
 #	echo ${columns[@]}
 #	echo ${columns[8]}
 #	echo ${result[8]}
-	for idx in {1..8} ; do
+	for idx in {1..10} ; do
 	    if [ "${columns[$idx]}" == "!INCONCLUSIVE!" ] ; then
 		result[$idx]="yellow"
 	    elif [ "${columns[$idx]}" == "!FAILED!" ] ; then
@@ -65,6 +66,8 @@ EOF
 <rect y="100" x="$x" width='20' height='20' fill="${result[6]}"/>
 <rect y="120" x="$x" width='20' height='20' fill="${result[7]}"/>
 <rect y="140" x="$x" width='20' height='20' fill="${result[8]}"/>
+<rect y="160" x="$x" width='20' height='20' fill="${result[9]}"/>
+<rect y="180" x="$x" width='20' height='20' fill="${result[10]}"/>
 EOF
 
 	ln=$((++ln))
@@ -74,4 +77,7 @@ EOF
 </g>
 </svg>
 EOF
+
+convert ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
 done
+

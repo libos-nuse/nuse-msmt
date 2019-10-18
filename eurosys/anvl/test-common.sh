@@ -2,10 +2,20 @@
 
 #set -x
 
+# variables
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-OUTPUT="$(date "+%Y-%m-%d")"
+OUTPUT=${OUTPUT:-`date "+%Y-%m-%d-%H"`}
+export OUTPUT
 DUT_HOST=192.168.39.2
 DUT_ROOTDIR=$HOME/work/nuse-msmt/eurosys/anvl/anvl-dut
+SLACK_CH=log
+
+STACKS4=${STACKS4:-"linux lwip osv gvisor lkl mtcp seastar rump linux-nozebra lkl-nozebra"}
+STACKS6=${STACKS6:-"linux lwip lkl rump linux-nozebra lkl-nozebra"}
+
+TESTS4=${TESTS4:-"arp ip icmp ipgw"}
+# available TESTS="icmpv6 ipv6 ipv6-autoconfig ipv6-ndp ipv6-pmtu ipv6-rtralert ipv6cp ipv6ov4"
+TESTS6=${TESTS6:-"ipv6 icmpv6 ipv6-ndp"}
 
 DUT=$(basename `pwd`)
 run_DUT()

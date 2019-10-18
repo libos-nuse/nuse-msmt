@@ -1,16 +1,14 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-OUTPUT=$1
+source ${SCRIPT_DIR}/test-common.sh
 
+OUTPUT=$1
 mkdir -p ${OUTPUT}
 
-STACKS="lwip seastar osv gvisor mtcp rump linux lkl"
-TESTS="arp ip icmp ipgw"
-
-for stack in $STACKS
+for stack in $STACKS4
 do
-for test in $TESTS
+for test in $TESTS4
 do
 
  cd $stack
@@ -24,7 +22,7 @@ do
 done
 done
 
-for test in $TESTS
+for test in $TESTS4
 do
 
 # join lwip + seastar
@@ -61,6 +59,16 @@ q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,CASE when r.c1 is NULL then 'n/
 q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join lkl/${OUTPUT}/$test.csv r \
+  on l.c1==r.c1" | \
+# join all + linux-nozebra
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+  from - l \
+  left join linux-nozebra/${OUTPUT}/$test.csv r \
+  on l.c1==r.c1" | \
+# join all + lkl-nozebra
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+  from - l \
+  left join lkl-nozebra/${OUTPUT}/$test.csv r \
   on l.c1==r.c1" | \
 # cosmetic
   sed "s/\-/ /g" \

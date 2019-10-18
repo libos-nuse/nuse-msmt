@@ -1,13 +1,13 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-OUTPUT=$1
+source ${SCRIPT_DIR}/test-common.sh
 
-TESTS="ipv6 icmpv6 ipv6-ndp"
+OUTPUT=$1
 
 TEXT=""
 
-for test in $TESTS
+for test in $TESTS6
 do
  if [ -n "${TEXT}" ] ; then
   TEXT="${TEXT} &"
@@ -21,7 +21,7 @@ done
 
 
 echo -n "%" > ${OUTPUT}/result6.tbl
-echo ${TESTS} | sed "s/ / \& /g" >> ${OUTPUT}/result6.tbl 
+echo ${TESTS6} | sed "s/ / \& /g" >> ${OUTPUT}/result6.tbl
 echo ${TEXT} >> ${OUTPUT}/result6.tbl
 
 cat ${OUTPUT}/result6.tbl

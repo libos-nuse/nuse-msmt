@@ -1,15 +1,14 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
+source ${SCRIPT_DIR}/test-common.sh
+
 OUTPUT=$1
 
 mkdir -p ${OUTPUT}
 
-STACKS="lwip rump linux lkl"
-TESTS="ipv6 icmpv6 ipv6-ndp"
-
-rm -f ${OUTPUT}/{${TESTS// /,}}.svg
-for test in $TESTS
+rm -f ${OUTPUT}/{${TESTS6// /,}}.svg
+for test in $TESTS6
 do
 
     ln=0

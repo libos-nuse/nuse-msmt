@@ -1,16 +1,14 @@
 #!/bin/bash
 
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
-OUTPUT=$1
+source ${SCRIPT_DIR}/test-common.sh
 
+OUTPUT=$1
 mkdir -p ${OUTPUT}
 
-STACKS="lwip rump linux lkl"
-TESTS="ipv6 icmpv6 ipv6-ndp"
-
-for stack in $STACKS
+for stack in $STACKS6
 do
-for test in $TESTS
+for test in $TESTS6
 do
 
  cd $stack
@@ -23,7 +21,7 @@ do
 done
 done
 
-for test in $TESTS
+for test in $TESTS6
 do
 
 paste {lwip,rump,linux,lkl}/${OUTPUT}/$test.csv | \
