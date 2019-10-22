@@ -8,11 +8,34 @@ exec > >(tee "$OUTPUT/$(basename $0).log") 2>&1
 for dir in ${STACKS4}
 do
   if [[ $dir =~ .*-nozebra ]] ; then
-      real_dir=${dir/-nozebra/}
       export NO_ZEBRA=1
+  elif [[ $dir =~ "osv" ]] ; then
+      sudo ip ad add 10.1.0.100/24 dev eth0
+      sudo ip ad add 10.2.0.100/24 dev eth1
   fi
-  cd $dir; bash ../test4.sh; cd ..
+
+  cd $dir
+  for test in $TESTS4
+  do
+      echo "==$dir-$test=="
+      # exec a single test
+      run_DUT $dir
+      sudo /opt/Ixia/IxANVL900/ANVL-BIN/anvl -file ../$OUTPUT/$dir-$test-out.log \
+	   -l low -f anvl$test $test
+
+  done
+  bash ../${SCRIPT_DIR}/test-parse.sh ../${OUTPUT} $dir "$TESTS4" 4
+  cd ..
+
+  if [[ $dir =~ "osv" ]] ; then
+      sudo ip ad del 10.1.0.100/24 dev eth0
+      sudo ip ad del 10.2.0.100/24 dev eth1
+  fi
   unset NO_ZEBRA
+
+  ### XXX
+  ssh ${DUT_HOST} "sudo systemctl start firewalld.service"
+
 done
 bash  ${SCRIPT_DIR}/test4-csv.sh ${OUTPUT}
 bash  ${SCRIPT_DIR}/test4-svg.sh ${OUTPUT}
@@ -20,10 +43,23 @@ bash  ${SCRIPT_DIR}/test4-svg.sh ${OUTPUT}
 
 for dir in ${STACKS6}
 do
-  cd $dir; bash ../test6.sh; cd ..
+
+  cd $dir
+  for test in $TESTS6
+  do
+      echo "==$dir-$test=="
+      # exec a single test
+      run_DUT $dir
+      sudo /opt/Ixia/IxANVL900/ANVL-BIN/anvl -file ../$OUTPUT/$dir-$test-out.log \
+	   -l medium -f anvl$test $test
+
+  done
+  bash ../${SCRIPT_DIR}/test-parse.sh ../${OUTPUT} $dir "$TESTS6" 6
+  cd ..
+
 done
 
-PAYLOAD=`tail */${OUTPUT}/result4.tbl`
+PAYLOAD=`tail ${OUTPUT}/result4*.tbl`
 bash -x ${SCRIPT_DIR}/slack-notify.sh "$PAYLOAD"
 
 for test in ${TESTS4}
@@ -33,5 +69,4 @@ curl --silent -F file="@${OUTPUT}/$test.png" -F channels=${SLACK_CH} \
      https://slack.com/api/files.upload > /dev/null
 done
 
-tail */${OUTPUT}/result4.tbl
-tail */${OUTPUT}/result6.tbl
+tail ${OUTPUT}/result*.tbl

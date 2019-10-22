@@ -11,11 +11,10 @@ do
 for test in $TESTS6
 do
 
- cd $stack
- echo "test,$stack" > ${OUTPUT}/$test.csv
- grep "<<" ${OUTPUT}/$test-out.log | \
+ echo "test,$stack" > ${OUTPUT}/$stack-$test.csv
+ grep "<<" ${OUTPUT}/$stack-$test-out.log | \
    sed -e 's/<< //' -e 's/://' -e 's/ /,/' -e 's/Passed/-/' \
-   >> ${OUTPUT}/$test.csv
+   >> ${OUTPUT}/$stack-$test.csv
  cd ..
 
 done
@@ -24,7 +23,7 @@ done
 for test in $TESTS6
 do
 
-paste {lwip,rump,linux,lkl}/${OUTPUT}/$test.csv | \
+paste ${OUTPUT}/{lwip,rump,linux,lkl}-$test.csv | \
   csv_to_db| \
   dbcoldefine test lwip dum1 rump dum6 linux dum7 lkl | \
   dbcol test lwip rump linux lkl | \

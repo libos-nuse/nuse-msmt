@@ -17,9 +17,9 @@ TESTS4=${TESTS4:-"arp ip icmp ipgw"}
 # available TESTS="icmpv6 ipv6 ipv6-autoconfig ipv6-ndp ipv6-pmtu ipv6-rtralert ipv6cp ipv6ov4"
 TESTS6=${TESTS6:-"ipv6 icmpv6 ipv6-ndp"}
 
-DUT=$(basename `pwd`)
 run_DUT()
 {
+  DUT=$1
   # kill all programs
   ssh ${DUT_HOST} "sudo killall epserver rump_allserver qemu-system-x86_64; sudo killall -9 zebra httpd; killall lwip-tap"
 
