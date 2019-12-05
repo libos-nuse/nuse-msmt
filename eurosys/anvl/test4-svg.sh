@@ -99,5 +99,6 @@ EOF
 EOF
 
 convert -transparent white ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
+inkscape ${OUTPUT}/$test.svg -E ${OUTPUT}/$test.eps --export-ignore-filters --export-ps-level=3
 done
 
