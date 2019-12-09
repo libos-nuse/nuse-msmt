@@ -4,6 +4,7 @@ SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 source ${SCRIPT_DIR}/test-common.sh
 
 OUTPUT=$1
+#PRINT_NZ="print"
 
 mkdir -p ${OUTPUT}
 
@@ -26,8 +27,14 @@ do
   <text x="0" y="110">rump</text>
   <text x="0" y="130">linux</text>
   <text x="0" y="150">lkl</text>
-  <text x="0" y="170">linux-nz</text>
-  <text x="0" y="190">lkl-nz</text>
+EOF
+
+  if [ -n "$PRINT_NZ" ] ; then
+  echo '<text x="0" y="170">linux-nz</text>' >> ${OUTPUT}/$test.svg
+  echo '<text x="0" y="190">lkl-nz</text>' >> ${OUTPUT}/$test.svg
+  fi
+
+    cat <<EOF >> ${OUTPUT}/$test.svg
 </g>
 
 <g stroke='black' stroke-width="2">
@@ -35,7 +42,7 @@ EOF
     while read row; do
 	columns=(${row// /_})
 	columns=(${columns//,/ })
-	x=$((ln*20+50))
+	x=$((ln*20+60))
 	results=""
 
 #	echo ${columns[@]}
@@ -82,6 +89,10 @@ EOF
 <rect y="140" x="$x" width='20' height='20' fill="${result[8]}">
   <title>lkl: ${columns[0]}</title>
 </rect>
+EOF
+
+  if [ -n "$PRINT_NZ" ] ; then
+	cat <<EOF >> ${OUTPUT}/$test.svg
 <rect y="160" x="$x" width='20' height='20' fill="${result[9]}">
   <title>linux-nozebra: ${columns[0]}</title>
 </rect>
@@ -89,6 +100,7 @@ EOF
   <title>lkl-nozebra: ${columns[0]}</title>
 </rect>
 EOF
+  fi
 
 	ln=$((++ln))
     done < ${OUTPUT}/$test.csv
