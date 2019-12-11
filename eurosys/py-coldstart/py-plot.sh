@@ -2,7 +2,7 @@
 OUTPUT=$1
 mkdir -p ${OUTPUT}/out
 
-RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc native runnc"
+RUNTIMES="runu kata-runtime runsc-ptrace-user runsc-kvm-user runc native runnc kata-fc kata-qemu"
 
 
 # parse outputs
@@ -39,11 +39,11 @@ unset key
 set size 1.0,0.7
 
 set ylabel "Delay (msec)"
-set yrange [0:2000]
+set yrange [0:3000]
 #set logscale y
 set xtics font ", 18"
-set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'nabla' 4, 'ukontainer' 5, 'native' 6)
-set xrange [-0.5:6.5]
+set xtics ('runc' 0, 'kata' 1, 'gvisor(p)' 2, 'gvisor(k)' 3, 'nabla' 4, 'ukontainer' 5, 'native' 6, 'kata-fc' 7, 'kata-qemu' 8)
+set xrange [-0.5:8.5]
 set xtics nomirror
 
 plot \
@@ -60,7 +60,11 @@ plot \
    '${OUTPUT}/py-coldstart-runu-docker-delay.dat' usi (5):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 3 title "runu", \
    '' usi (5):(\$1):(\$1) w labels offset 0,1, \
    '${OUTPUT}/py-coldstart-native-delay.dat' usi (6):(\$1):(\$2) w boxerr fill patter 0 lt 1 lc rgb "red" title "native" ,\
-   '' usi (6):(\$1):(\$1) w labels offset 0,1
+   '' usi (6):(\$1):(\$1) w labels offset 0,1 ,\
+   '${OUTPUT}/py-coldstart-kata-fc-docker-delay.dat' usi (7):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 3 title "kata-fc", \
+   '' usi (7):(\$1):(\$1) w labels offset 0,1, \
+   '${OUTPUT}/py-coldstart-kata-qemu-docker-delay.dat' usi (8):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 3 title "kata-qemu", \
+   '' usi (8):(\$1):(\$1) w labels offset 0,1
    
 set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45
@@ -87,7 +91,11 @@ plot \
    '${OUTPUT}/py-coldstart-runu-delay.dat' usi (4):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 4 title "runu", \
    '' usi (4):(\$1):(\$1) w labels offset 0,1, \
    '${OUTPUT}/py-coldstart-native-delay.dat' usi (5):(\$1):(\$2) w boxerr fill patter 0 lt 1 lc rgb "red" title "native", \
-   '' usi (5):(\$1):(\$1) w labels offset 0,1
+   '' usi (5):(\$1):(\$1) w labels offset 0,1 ,\
+   '${OUTPUT}/py-coldstart-kata-fc-delay.dat' usi (6):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 4 title "kata-fc", \
+   '' usi (6):(\$1):(\$1) w labels offset 0,1, \
+   '${OUTPUT}/py-coldstart-kata-qemu-delay.dat' usi (7):(\$1):(\$2) w boxerr lt 1 lc rgb "cyan" fill pattern 4 title "kata-qemu", \
+   '' usi (7):(\$1):(\$1) w labels offset 0,1
    
 set terminal png lw 3 14 crop
 set xtics nomirror rotate by -45

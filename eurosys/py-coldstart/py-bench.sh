@@ -3,6 +3,7 @@
 SCRIPT_DIR="$(cd $(dirname "${BASH_SOURCE[0]}"); pwd)"
 
 TRIALS=30
+TRIALS=1
 OUTPUT="$SCRIPT_DIR/$(date "+%Y-%m-%d")"
 
 RUNU_BUNDLE_DIR=/home/upa/bundle-runu
@@ -47,7 +48,7 @@ cp $SCRIPT_DIR/main.py ./rootfs
 sudo rm -rf $RUNU_BUNDLE_DIR/
 mkdir -p $RUNU_BUNDLE_DIR/rootfs
 cd $RUNU_BUNDLE_DIR
-docker export $(docker create thehajime/runu-base:0.1 foo) | tar -C rootfs -xf -
+docker export $(docker create thehajime/runu-python:0.2 foo) | tar -C rootfs -xf -
 
 # loopback mount python.img for lkl rootfs
 mkdir -p mnt
@@ -64,6 +65,8 @@ py-coldstart::run() {
   py-coldstart::runu   "$@"
   py-coldstart::docker "$@" "runc"
   py-coldstart::docker "$@" "kata-runtime"
+  py-coldstart::docker "$@" "kata-fc"
+  py-coldstart::docker "$@" "kata-qemu"
   py-coldstart::docker "$@" "runsc-ptrace-user"
   py-coldstart::docker "$@" "runsc-kvm-user"
   py-coldstart::runnc  "$@"
@@ -90,7 +93,7 @@ py-coldstart::runu() {
 	  -e LKL_ROOTFS=imgs/python.img \
 	  -e HOME=/ -e PYTHONHOME=/python \
 	  -e PYTHONHASHSEED=1 \
-	  thehajime/runu-base:0.1 \
+	  thehajime/runu-python:0.2 \
 	  python /main.py -m main \
 	  |& tee ${OUTPUT}/py-coldstart-runu-docker-$num.dat
 
