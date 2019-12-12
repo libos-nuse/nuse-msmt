@@ -260,11 +260,19 @@ set xrange [-0.5:6.5]
 set xtics ${PSIZE_XTICS}
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/tcp-rr-latency.eps"
-set ylabel "Latency (usec)"
+set ylabel "Latency (usec)" offset +2.5
 set yrange [0:1000]
 set ytics auto
 set key font ",18"
 set key top left
+
+# XXX: need to update if the data is changed
+set label 1 at first 4.0,1060 "251613.08" font ",14"
+set arrow 1 from 4.5,1040 to 4.8,1000
+set label 2 at first 6.0,1060 "20787.93" font ",14"
+set arrow 2 from 6.3,1040 to 6.0,1000
+set label 3 at first 5.0,1060 "2702697.86" font ",14"
+set arrow 3 from 5.3,1040 to 5.8,1000
 
 plot \
    '${OUTPUT}/tx/tcp-rr-runc-latency.dat' usin (\$0-0.45):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\

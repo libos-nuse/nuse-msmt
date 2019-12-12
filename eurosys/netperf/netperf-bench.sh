@@ -11,6 +11,7 @@ TESTNAMES="TCP_STREAM TCP_MAERTS"
 DEST_ADDR="10.0.39.2"
 SELF_ADDR="10.0.39.1"
 OIF=br0
+RR_DURATION=20
 #TRIALS=1
 
 FRANKENLIBC_DIR=/home/tazaki/work/frankenlibc
@@ -53,6 +54,8 @@ initialize() {
 }
 
 netperf::run() {
+  ssh $DEST_ADDR killall netserver
+  ssh $DEST_ADDR /home/tazaki/work/netperf2/native/src/netserver -D -f &
   netperf::lkl    "$@"
   netperf::native "$@"
   netperf::docker "$@" "runc"
@@ -70,7 +73,7 @@ netperf::lkl() {
   local ex_arg="$4"
   local duration=10
   if [[ "$test" == "TCP_RR" ]] ; then
-	  duration=50
+	  duration=$RR_DURATION
   fi
   local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
 
@@ -110,7 +113,7 @@ netperf::native() {
   local ex_arg="$4"
   local duration=10
   if [[ "$test" == "TCP_RR" ]] ; then
-	  duration=50
+	  duration=$RR_DURATION
   fi
   local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
 
@@ -128,7 +131,7 @@ netperf::docker() {
   local runtime="$5"
   local duration=10
   if [[ "$test" == "TCP_RR" ]] ; then
-	  duration=50
+	  duration=$RR_DURATION
   fi
   local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
   
@@ -149,7 +152,7 @@ netperf::docker-nc() {
   local img="$6"
   local duration=10
   if [[ "$test" == "TCP_RR" ]] ; then
-	  duration=50
+	  duration=$RR_DURATION
   fi
   local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
   
