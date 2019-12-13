@@ -17,22 +17,22 @@ do
 
 grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-musl-tap*-*-$cc* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
-| dbcolstats thpt | dbcolcreate -e lkl-$cc mode | dbcol mode mean stddev \
+| dbcolstats -f '%.2f' thpt | dbcolcreate -e lkl-$cc mode | dbcol mode mean stddev \
 >> ${OUTPUT}/tcp-stream-musl-tap-$cc.dat
  
 grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-native*-$cc* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
-| dbcolstats thpt | dbcolcreate -e native-$cc mode | dbcol mode mean stddev \
+| dbcolstats -f '%.2f' thpt | dbcolcreate -e native-$cc mode | dbcol mode mean stddev \
 >> ${OUTPUT}/tcp-stream-native-$cc.dat
 
 grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-noah*-$cc* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
-| dbcolstats thpt | dbcolcreate -e noah-$cc mode | dbcol mode mean stddev \
+| dbcolstats -f '%.2f' thpt | dbcolcreate -e noah-$cc mode | dbcol mode mean stddev \
 >> ${OUTPUT}/tcp-stream-noah-$cc.dat
 
 grep -h bits ${OUTPUT}/${PREFIX}-TCP_ST*-docker*-$cc* \
 | dbcoldefine dum | csv_to_db | dbcoldefine  d1 d2 d3 d4 thpt d5 \
-| dbcolstats thpt | dbcolcreate -e docker-$cc mode | dbcol mode mean stddev \
+| dbcolstats -f '%.2f' thpt | dbcolcreate -e docker-$cc mode | dbcol mode mean stddev \
 >> ${OUTPUT}/tcp-stream-docker-$cc.dat
 
 done
