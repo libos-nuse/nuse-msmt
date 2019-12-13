@@ -19,6 +19,7 @@ do
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="210" viewBox="0 0 1500 200">
 
 <g text-anchor="left" dominant-baseline="central" font-size="15">
+  <text x="0" y="50" transform="translate(0, 100) rotate(270)">($test)</text>
   <text x="0" y="10">lwip</text>
   <text x="0" y="30">seastar</text>
   <text x="0" y="50">osv</text>

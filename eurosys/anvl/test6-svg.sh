@@ -18,6 +18,7 @@ do
 <svg xmlns="http://www.w3.org/2000/svg" width="4000" height="200" viewBox="0 0 4000 200">
 
 <g text-anchor="left" dominant-baseline="central">
+  <text x="0" y="50" transform="translate(0, 100) rotate(270)">($test)</text>
   <text x="0" y="10">lwip</text>
   <text x="0" y="30">rump</text>
   <text x="0" y="50">linux</text>
