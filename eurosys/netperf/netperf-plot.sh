@@ -229,64 +229,7 @@ set output "${OUTPUT}/out/tcp-stream.png"
 replot
 
 
-set xlabel "Payload size (bytes)"
-set xrange [-0.5:6.5]
-set xtics ${PSIZE_XTICS}
-set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/out/tcp-rr.eps"
-set ylabel "Goodput (KTrans/sec)"
-set yrange [0:20]
-set ytics auto
-set key font ",18"
-set key top right
-unset label 1
-unset label 2
-
-plot \
-   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.30):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "kata" ,\
-   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lt 1 lc rgb "blue" title "gvisor" ,\
-   '${OUTPUT}/tx/tcp-rr-runnc.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 7 lt 1 lc rgb "cyan" title "nabla" ,\
-   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lt 1 lc rgb "cyan" title "ukontainer" ,\
-   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
-
-set terminal png lw 3 14 crop
-set key font ",14"
-set output "${OUTPUT}/out/tcp-rr.png"
-replot
-
-set xlabel "Payload size (bytes)"
-set xrange [-0.5:6.5]
-set xtics ${PSIZE_XTICS}
-set terminal postscript eps lw 3 "Helvetica" 24
-set output "${OUTPUT}/out/tcp-rr-latency.eps"
-set ylabel "Latency (usec)" offset +2.5
-set yrange [0:1000]
-set ytics auto
-set key font ",18"
-set key top left
-
-# XXX: need to update if the data is changed
-set label 1 at first 4.0,1060 "251613.08" font ",14"
-set arrow 1 from 4.5,1040 to 4.8,1000
-set label 2 at first 6.0,1060 "20787.93" font ",14"
-set arrow 2 from 6.3,1040 to 6.0,1000
-set label 3 at first 5.0,1060 "2702697.86" font ",14"
-set arrow 3 from 5.3,1040 to 5.8,1000
-
-plot \
-   '${OUTPUT}/tx/tcp-rr-runc-latency.dat' usin (\$0-0.45):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
-   '${OUTPUT}/tx/tcp-rr-kata-runtime-latency.dat' usin (\$0-0.30):(\$1):(\$2) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "kata" ,\
-   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user-latency.dat' usin (\$0-0.15):(\$1):(\$2) w boxerrorbar fill patter 4 lt 1 lc rgb "blue" title "gvisor" ,\
-   '${OUTPUT}/tx/tcp-rr-runnc-latency.dat' usin (\$0+0.0):(\$1):(\$2) w boxerrorbar fill patter 6 lt 1 lc rgb "cyan" title "nabla" ,\
-   '${OUTPUT}/tx/tcp-rr-lkl-latency.dat' usin (\$0+0.15):(\$1):(\$2) w boxerrorbar fill patter 3 lt 1 lc rgb "cyan" title "ukontainer" ,\
-   '${OUTPUT}/tx/tcp-rr-native-latency.dat' usin (\$0+0.3):(\$1):(\$2) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
-
-set terminal png lw 3 14 crop
-set key font ",14"
-set output "${OUTPUT}/out/tcp-rr-latency.png"
-replot
-
+# UDP
 set terminal postscript eps lw 3 "Helvetica" 24
 set output "${OUTPUT}/out/udp-stream.eps"
 set ylabel "Goodput (Gbps)"
@@ -328,7 +271,65 @@ set key font ",14"
 set output "${OUTPUT}/out/udp-stream-pps.png"
 replot
 
+
+# TCP_RR
+unset xlabel
+set xrange [-0.5:5.5]
+set xtics ('runc' 0, 'kata' 1, 'gvisor' 2, 'nabla' 3, 'ukontainer' 4, 'native' 5)
+set terminal postscript eps lw 3 "Helvetica" 24
+set output "${OUTPUT}/out/tcp-rr.eps"
+set ylabel "Goodput (KTrans/sec)"
+set yrange [0:20]
+set ytics auto
+set key font ",18"
+set key top right
+unset label 1
+unset label 2
+
+plot \
+   '${OUTPUT}/tx/tcp-rr-runc.dat' usin (\$0-0.45):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
+   '${OUTPUT}/tx/tcp-rr-kata-runtime.dat' usin (\$0-0.30):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "kata" ,\
+   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user.dat' usin (\$0-0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 4 lt 1 lc rgb "blue" title "gvisor" ,\
+   '${OUTPUT}/tx/tcp-rr-runnc.dat' usin (\$0+0.0):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 7 lt 1 lc rgb "cyan" title "nabla" ,\
+   '${OUTPUT}/tx/tcp-rr-lkl.dat' usin (\$0+0.15):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 3 lt 1 lc rgb "cyan" title "ukontainer" ,\
+   '${OUTPUT}/tx/tcp-rr-native.dat' usin (\$0+0.3):(\$1/1000):(\$2/1000) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native"
+
+set terminal png lw 3 14 crop
+set key font ",14"
+set output "${OUTPUT}/out/tcp-rr.png"
+replot
+
+set terminal postscript eps lw 3 "Helvetica" 24
+set output "${OUTPUT}/out/tcp-rr-latency.eps"
+set ylabel "Latency (usec)" offset +2.5
+set yrange [0:1000]
+
+set boxwidth 0.3
+set style fill pattern
+unset key
+set size 1.0,0.7
+
+plot \
+   '${OUTPUT}/tx/tcp-rr-runc-latency.dat' usin (0):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
+   '' usi (0):(\$1):(\$1) w labels offset 0,2, \
+   '${OUTPUT}/tx/tcp-rr-kata-runtime-latency.dat' usin (1):(\$1):(\$2) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "kata" ,\
+   '' usi (1):(\$1):(\$1) w labels offset 0,2, \
+   '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user-latency.dat' usin (2):(\$1):(\$2) w boxerrorbar fill patter 4 lt 1 lc rgb "blue" title "gvisor" ,\
+   '' usi (2):(\$1):(\$1) w labels offset 0,2, \
+   '${OUTPUT}/tx/tcp-rr-runnc-latency.dat' usin (3):(\$1):(\$2) w boxerrorbar fill patter 6 lt 1 lc rgb "cyan" title "nabla" ,\
+   '' usi (3):(\$1):(\$1) w labels offset 0,2, \
+   '${OUTPUT}/tx/tcp-rr-lkl-latency.dat' usin (4):(\$1):(\$2) w boxerrorbar fill patter 3 lt 1 lc rgb "cyan" title "ukontainer" ,\
+   '' usi (4):(\$1):(\$1) w labels offset 0,2, \
+   '${OUTPUT}/tx/tcp-rr-native-latency.dat' usin (5):(\$1):(\$2) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native" ,\
+   '' usi (5):(\$1):(\$1) w labels offset 0,2
+
+set terminal png lw 3 14 crop
+set key font ",14"
+set output "${OUTPUT}/out/tcp-rr-latency.png"
+replot
+
 set terminal dumb
+unset key
 unset output
 replot
 

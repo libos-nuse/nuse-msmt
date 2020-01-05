@@ -32,8 +32,10 @@ main() {
 
 #      netperf::run UDP_STREAM $num $size "LOCAL_SEND_SIZE,THROUGHPUT,THROUGHPUT_UNITS,REMOTE_RECV_CALLS,ELAPSED_TIME -m $size -R 1"
     done
-    netperf::run TCP_RR 1 $size " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY,LOCAL_SEND_CALLS,LOCAL_RECV_CALLS -r $size,$size"
   done
+
+  # TCP_RR only runs with 1-byte
+  netperf::run TCP_RR 1 1 " LSS_SIZE_END,LSR_SIZE_END,RSR_SIZE_END,RSS_SIZE_END,REQUEST_SIZE,RESPONSE_SIZE,ELAPSED_TIME,THROUGHPUT,THROUGHPUT_UNITS,MEAN_LATENCY,STDDEV_LATENCY,LOCAL_SEND_CALLS,LOCAL_RECV_CALLS -r 1,1"
 
   bash "$SCRIPT_DIR/netperf-plot.sh" "$OUTPUT" tx
   bash "$SCRIPT_DIR/netperf-plot.sh" "$OUTPUT" rx
@@ -88,7 +90,7 @@ netperf::lkl() {
     export LKL_HIJACK_NET_IFPARAMS=tap0
     export LKL_HIJACK_NET_IP="$SELF_ADDR"
     sudo -u moroo $TASKSET lkl-hijack.sh netperf $netperf_args \
-     |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+     |& tee -a "$OUTPUT/$PREFIX-$test-lkl-ps$psize-$num.dat"
   else
     echo "$(tput bold)== lkl ($test-$num $*)  ==$(tput sgr0)"
     docker run --rm -i --runtime=runu-dev --net=none  \
@@ -96,7 +98,7 @@ netperf::lkl() {
 	    -e LKL_NET=tap0 \
 	    -e LKL_CONFIG=$SCRIPT_DIR/../lkl.json -e LKL_OFFLOAD=1 \
 	    thehajime/runu-base:0.1 netperf $netperf_args \
-     2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$size-$num.dat"
+     2>&1 | tee "$OUTPUT/$PREFIX-$test-lkl-ps$psize-$num.dat"
 #	    tgraf/netperf /usr/bin/netperf $netperf_args \
     wait
   fi
@@ -118,7 +120,7 @@ netperf::native() {
   local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
 
   echo "$(tput bold)== native ($test-$num $*)  ==$(tput sgr0)"
-  netperf $netperf_args 2>&1 | tee "$OUTPUT/$PREFIX-$test-native-ps$size-$num.dat"
+  netperf $netperf_args 2>&1 | tee "$OUTPUT/$PREFIX-$test-native-ps$psize-$num.dat"
 )
 }
 
@@ -138,7 +140,7 @@ netperf::docker() {
   echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
   docker run --runtime=$runtime --rm \
    tgraf/netperf /usr/bin/netperf $netperf_args 2>&1 \
-  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
+  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$psize-$num.dat"
 )
 }
 
@@ -159,7 +161,7 @@ netperf::docker-nc() {
   echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
   docker run --runtime=$runtime --rm $img \
    netperf.nabla $netperf_args 2>&1 \
-  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$size-$num.dat"
+  | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$psize-$num.dat"
 )
 }
 
