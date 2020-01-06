@@ -4,7 +4,7 @@ Create graph
 
 
 
-To create the gnuplto data files, 1 clone source data
+To create the gnuplot data files, 1 clone source data
 
 - mkdir git
 - cd git
