@@ -25,7 +25,7 @@ To create the gnuplto data files, 1 clone source data
 3 Create gnuplot dat file from the linux source
 
 - cd git/linux-github
-- git log --date=iso --no-merges --pretty="%H %cd %s" --numstat --since="2008-01-01 00:00:00" net/ > ../../linux-num-stat-under-net-since-2008.txt
+- git log --date=iso --no-merges --pretty="%H %cd %s" --numstat --since="2008-01-01 00:00:00" net/ > ../../linux-numstat-under-net-since-2008.txt
   - save the git log output to a file
 - cd ../..
 - ./parse-git.py -u year linux-numstat-under-net-since-2008.txt > linux-numstat-under-net-since-2008.dat
