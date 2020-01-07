@@ -1,37 +1,69 @@
 
-set terminal pdf enhanced color fontscale 0.72
+set terminal pdf enhanced color
 set output "graph-netdev-items-cumulative.pdf"
 
-set size ratio 0.6
+set multiplot
+
+#set size ratio 0.6
+set size 1.0,0.5
 
 set xdata time
 set timefmt "%Y-%m-%d"
 
-set key below box
 
-set xtics format "%Y/%m"
-set xtics rotate by -45
-set xtics offset -0.5,0.0
-#set xtics 3600 * 24 * 31 * 6
-set xrange ["2008-01-01 00:00":"2019-12-01 00:00"]
+set xrange ["2002-01-01 00:00":"2020-01-01 00:00"]
 
-#set ylabel "# of changes at netdev \n(cumulative)"
-set ylabel "# of changes (cumulative)"
-
-set y2tics
-set y2label "# of commits to linux/net/\nper year"
-set y2label "# of commits per year"
-set y2range [0:7000]
-set y2tics 1000
+set xtics format ""
+set xtics scale 0
+set ylabel "# of commits"
+set yrange [0:6000]
+set ytics 2000
+set key left top reverse Left
+#unset key
 
 set grid front
 
+set lmargin screen 0.15
+set rmargin screen 0.9
+set tmargin screen 0.95
+set bmargin screen 0.5
+
+plot	    \
+	"linux-numstat-since-2002.dat"	\
+	using 1:4 \
+	with l lw 3 title "linux/net" , \
+	"gvisor-numstat-since-2017.dat"	\
+	using 1:4 \
+	with l lw 3 title "gvisor" , \
+	"seastar-numstat-since-2015.dat"	\
+	using 1:4 \
+	with l lw 3 title "seastar" , \
+	"netbsd-numstat-since-2002.dat"	\
+	using 1:4 \
+	with l lw 3 title "netbsd(net*)" , \
+	"lwip-numstat-since-2002.dat"	\
+	using 1:4 \
+	with l lw 3 title "lwip"
+
+set lmargin screen 0.15
+set rmargin screen 0.9
+set tmargin screen 0.5
+set bmargin screen 0.1
+
+set xtics format "%Y"
+set xtics offset -0.5,0.0
+#set xtics 3600 * 24 * 31 * 6
+
+set ylabel "# of changes"
+set yrange [0:7000]
+set ytics 2000
+
+set key left top
+
 plot	"netdev-pull-items.dat"	\
-	using 1:2 axis x1y1 \
+	using 1:2 \
 	with filledcurves x1 lw 0 lc "gray40" title "All changes", \
 	"netdev-pull-items.dat" \
-	using 1:3 axis x1y1 \
-	with filledcurves x1 lw 0 lc "gray10" title "Fixes",	\
-	"linux-numstat-under-net-since-2008.dat"	\
-	using 1:4 axis x1y2 \
-	with lp lw 3 lc "gray20" lt 1 title "commits"
+	using 1:3 \
+	with filledcurves x1 lw 0 lc "gray10" title "Fixes"
+

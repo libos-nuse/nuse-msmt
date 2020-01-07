@@ -40,7 +40,7 @@ def parse(args):
 
     result = {} # { unit: (+, -, # of commit) }
 
-    with open(args.gitlog, "r") as f:
+    with open(args.gitlog, "r", encoding='utf-8', errors='ignore') as f:
         for line in f:
 
             line = line.strip()
