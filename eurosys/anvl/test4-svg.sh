@@ -18,6 +18,13 @@ do
 
 <svg xmlns="http://www.w3.org/2000/svg" width="1500" height="210" viewBox="0 0 1500 200">
 
+
+<defs>
+  <pattern id="no_test" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse" viewBox="0 0 20 20">
+    <path d="M 0,0 l 20,20 M 20,0 l -20,20" stroke="black" stroke-width="2" />
+  </pattern>
+</defs>
+
 <g text-anchor="left" dominant-baseline="central" font-size="15">
   <text x="0" y="50" transform="translate(0, 100) rotate(270)">($test)</text>
   <text x="0" y="10">lwip</text>
@@ -55,13 +62,13 @@ EOF
 	    elif [ "${columns[$idx]}" == "!FAILED!" ] ; then
 		result[$idx]="red"
 	    elif [ "${columns[$idx]}" == "!NO_RESPONSE!" ] ; then
-		result[$idx]="pink"
+		result[$idx]="black"
 	    elif [ "${columns[$idx]}" == "_" ] ; then
-		result[$idx]="green"
+		result[$idx]="#00f200"
 	    elif [ "${columns[$idx]}" == "n/a" ] ; then
-		result[$idx]="gray"
+		result[$idx]="white"
 	    elif [ "${columns[$idx]}" == "" ] ; then
-		result[$idx]="green"
+		result[$idx]="#00f200"
 	    fi
 	done
 	cat <<EOF >> ${OUTPUT}/$test.svg
@@ -115,3 +122,25 @@ convert -transparent white ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
 inkscape ${OUTPUT}/$test.svg -E ${OUTPUT}/$test.eps --export-ignore-filters --export-ps-level=3
 done
 
+# generate legend information
+cat <<EOF > ${OUTPUT}/legend.svg
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 100 30">
+
+<g text-anchor="left" dominant-baseline="central" font-size="15">
+  <rect x="0"   y="10" width='20' height='20' fill="#00f200" />
+  <text x="30"  y="20">Pass</text>
+  <rect x="80"  y="10" width='20' height='20' fill="red" />
+  <text x="110" y="20">Fail</text>
+  <rect x="150" y="10" width='20' height='20' fill="yellow" />
+  <text x="180" y="20">Inconclusive</text>
+  <rect x="280" y="10" width='20' height='20' fill="white" stroke="black" />
+  <text x="310" y="20">No Test</text>
+  <rect x="380" y="10" width='20' height='20' fill="black" />
+  <text x="410" y="20">Error</text>
+</g>
+</svg>
+EOF
+
+convert -transparent white ${OUTPUT}/legend.svg ${OUTPUT}/legend.png
+inkscape ${OUTPUT}/legend.svg -E ${OUTPUT}/legend.eps --export-ignore-filters --export-ps-level=3
