@@ -1,5 +1,5 @@
 
-set terminal pdf enhanced color
+set terminal pdf enhanced color fontscale 0.65
 set output "graph-netdev-items-cumulative.pdf"
 
 set multiplot
@@ -24,29 +24,27 @@ set key left top reverse Left
 set grid front
 
 set lmargin screen 0.15
-set rmargin screen 0.9
-set tmargin screen 0.95
+set rmargin screen 0.97
+set tmargin screen 0.97
 set bmargin screen 0.5
 
 plot	    \
 	"linux-numstat-since-2002.dat"	\
 	using 1:4 \
-	with l lw 3 title "linux/net" , \
+	with l lw 3 lc "red" title "linux/net" , \
 	"gvisor-numstat-since-2017.dat"	\
 	using 1:4 \
-	with l lw 3 title "gvisor" , \
+	with l lw 3 dt 2 lc "blue" title "gvisor" , \
 	"seastar-numstat-since-2015.dat"	\
 	using 1:4 \
-	with l lw 3 title "seastar" , \
+	with l lw 3 dt 3 lc "black" title "seastar" , \
 	"netbsd-numstat-since-2002.dat"	\
 	using 1:4 \
-	with l lw 3 title "netbsd(net*)" , \
+	with l lw 3 dt 4 lc "green" title "netbsd(net*)" , \
 	"lwip-numstat-since-2002.dat"	\
 	using 1:4 \
-	with l lw 3 title "lwip"
+	with l lw 3 dt 5 lc "purple" title "lwip"
 
-set lmargin screen 0.15
-set rmargin screen 0.9
 set tmargin screen 0.5
 set bmargin screen 0.1
 

@@ -125,7 +125,7 @@ done
 # generate legend information
 cat <<EOF > ${OUTPUT}/legend.svg
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="100" height="30" viewBox="0 0 100 30">
+<svg xmlns="http://www.w3.org/2000/svg" width="210" height="60" viewBox="0 0 210 60">
 
 <g text-anchor="left" dominant-baseline="central" font-size="15">
   <rect x="0"   y="10" width='20' height='20' fill="#00f200" />
@@ -133,11 +133,11 @@ cat <<EOF > ${OUTPUT}/legend.svg
   <rect x="80"  y="10" width='20' height='20' fill="red" />
   <text x="110" y="20">Fail</text>
   <rect x="150" y="10" width='20' height='20' fill="yellow" />
-  <text x="180" y="20">Inconclusive</text>
-  <rect x="280" y="10" width='20' height='20' fill="white" stroke="black" />
-  <text x="310" y="20">No Test</text>
-  <rect x="380" y="10" width='20' height='20' fill="black" />
-  <text x="410" y="20">Error</text>
+  <text x="180" y="20">Fail (Inconclusive)</text>
+  <rect x="0" y="40" width='20' height='20' fill="black" />
+  <text x="30" y="50">Error</text>
+  <rect x="80" y="40" width='20' height='20' fill="white" stroke="black" />
+  <text x="110" y="50">No Test</text>
 </g>
 </svg>
 EOF
