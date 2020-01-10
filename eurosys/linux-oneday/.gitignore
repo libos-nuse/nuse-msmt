@@ -2,3 +2,5 @@
 git
 *-numstat-*.dat
 *-numstat-*.txt
+*.log
+num-linux-options.dat
