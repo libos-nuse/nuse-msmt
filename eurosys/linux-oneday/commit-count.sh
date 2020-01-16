@@ -13,6 +13,7 @@ git clone $URL git/$REPO || true
 (
     cd git/$REPO
 
+    git fetch origin 'refs/replace/*:refs/replace/*'
     git log --date=iso --no-merges --pretty="%H %cd %s" --numstat --since="$START-01-01 00:00:00" \
 	$FILTER > ../../$REPO-numstat-since-$START.txt
 

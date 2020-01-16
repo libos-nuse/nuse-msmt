@@ -45,4 +45,19 @@ do
 
 done
 
+## commit count
+TMPD=$(mktemp -d)
+git checkout master
+git log --date=format:"%Y" --pretty="%ad" | \
+    sort | uniq -c | awk '{print $2 " " $1}' \
+			 > $TMPD/all.dat
+git log --date=format:"%Y" --pretty="%ad" --grep="Fixes:" | \
+    sort | uniq -c | awk '{print $2 " " $1}' \
+			 > $TMPD/fixes.dat
+join -a1 -o '0,1.2,2.2' -e 0 \
+     $TMPD/all.dat $TMPD/fixes.dat > $OUTPUT/linux-commits.dat
+rm -rf $TMPD
+
+cd $OUTPUT
+
 sh $OUTPUT/config-opt-plot.sh
