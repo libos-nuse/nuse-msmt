@@ -35,6 +35,7 @@ do
   <text x="0" y="110">rump</text>
   <text x="0" y="130">linux</text>
   <text x="0" y="150">lkl</text>
+  <text x="0" y="170">lkl-osx</text>
 EOF
 
   if [ -n "$PRINT_NZ" ] ; then
@@ -97,14 +98,17 @@ EOF
 <rect y="140" x="$x" width='20' height='20' fill="${result[8]}">
   <title>lkl: ${columns[0]}</title>
 </rect>
+<rect y="160" x="$x" width='20' height='20' fill="${result[9]}">
+  <title>lkl-osx: ${columns[0]}</title>
+</rect>
 EOF
 
   if [ -n "$PRINT_NZ" ] ; then
 	cat <<EOF >> ${OUTPUT}/$test.svg
-<rect y="160" x="$x" width='20' height='20' fill="${result[9]}">
+<rect y="180" x="$x" width='20' height='20' fill="${result[10]}">
   <title>linux-nozebra: ${columns[0]}</title>
 </rect>
-<rect y="180" x="$x" width='20' height='20' fill="${result[10]}">
+<rect y="200" x="$x" width='20' height='20' fill="${result[11]}">
   <title>lkl-nozebra: ${columns[0]}</title>
 </rect>
 EOF
@@ -119,7 +123,7 @@ EOF
 EOF
 
 convert -transparent white ${OUTPUT}/$test.svg ${OUTPUT}/$test.png
-inkscape ${OUTPUT}/$test.svg -E ${OUTPUT}/$test.eps --export-ignore-filters --export-ps-level=3
+inkscape ${OUTPUT}/$test.svg -E ${OUTPUT}/$test.eps --export-ignore-filters
 done
 
 # generate legend information
@@ -143,4 +147,4 @@ cat <<EOF > ${OUTPUT}/legend.svg
 EOF
 
 convert -transparent white ${OUTPUT}/legend.svg ${OUTPUT}/legend.png
-inkscape ${OUTPUT}/legend.svg -E ${OUTPUT}/legend.eps --export-ignore-filters --export-ps-level=3
+inkscape ${OUTPUT}/legend.svg -E ${OUTPUT}/legend.eps --export-ignore-filters

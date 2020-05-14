@@ -6,12 +6,12 @@
 SCRIPT_DIR="$(dirname "${BASH_SOURCE[0]}")"
 OUTPUT=${OUTPUT:-`date "+%Y-%m-%d-%H"`}
 export OUTPUT
-DUT_HOST=192.168.39.2
+DUT_HOST=10.0.39.2
 DUT_ROOTDIR=$HOME/work/nuse-msmt/eurosys/anvl/anvl-dut
 SLACK_CH=log
 
-STACKS4=${STACKS4:-"linux lwip osv gvisor lkl mtcp seastar rump linux-nozebra lkl-nozebra"}
-STACKS6=${STACKS6:-"linux lwip lkl rump linux-nozebra lkl-nozebra"}
+STACKS4=${STACKS4:-"linux lwip osv gvisor lkl mtcp seastar rump linux-nozebra lkl-nozebra lkl-osx"}
+STACKS6=${STACKS6:-"linux lwip lkl rump linux-nozebra lkl-nozebra lkl-osx"}
 
 TESTS4=${TESTS4:-"arp ip icmp ipgw"}
 # available TESTS="icmpv6 ipv6 ipv6-autoconfig ipv6-ndp ipv6-pmtu ipv6-rtralert ipv6cp ipv6ov4"
