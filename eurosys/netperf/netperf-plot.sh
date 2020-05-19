@@ -311,20 +311,19 @@ set size 1.0,0.7
 
 plot \
    '${OUTPUT}/tx/tcp-rr-runc-latency.dat' usin (0):(\$1):(\$2) w boxerrorbar fill patter 2 lt 1 lc rgb "green" title "runc" ,\
-   '' usi (0):(\$1):(\$1) w labels offset 0,2, \
+   '' usi (0):(\$1):(\$1) w labels notitle offset 0,2, \
    '${OUTPUT}/tx/tcp-rr-kata-runtime-latency.dat' usin (1):(\$1):(\$2) w boxerrorbar fill patter 1 lt 1 lc rgb "gray" title "kata" ,\
-   '' usi (1):(\$1):(\$1) w labels offset 0,2, \
+   '' usi (1):(\$1):(\$1) w labels notitle offset 0,2, \
    '${OUTPUT}/tx/tcp-rr-runsc-ptrace-user-latency.dat' usin (2):(\$1):(\$2) w boxerrorbar fill patter 4 lt 1 lc rgb "blue" title "gvisor" ,\
-   '' usi (2):(\$1):(\$1) w labels offset 0,2, \
+   '' usi (2):(\$1):(\$1) w labels notitle offset 0,2, \
    '${OUTPUT}/tx/tcp-rr-runnc-latency.dat' usin (3):(\$1):(\$2) w boxerrorbar fill patter 6 lt 1 lc rgb "cyan" title "nabla" ,\
-   '' usi (3):(\$1):(\$1) w labels offset 0,2, \
+   '' usi (3):(\$1):(\$1) w labels notitle offset 0,2, \
    '${OUTPUT}/tx/tcp-rr-lkl-latency.dat' usin (4):(\$1):(\$2) w boxerrorbar fill patter 3 lt 1 lc rgb "cyan" title "ukontainer" ,\
-   '' usi (4):(\$1):(\$1) w labels offset 0,2, \
+   '' usi (4):(\$1):(\$1) w labels notitle offset 0,2, \
    '${OUTPUT}/tx/tcp-rr-native-latency.dat' usin (5):(\$1):(\$2) w boxerrorbar fill patter 0 lt 1 lc rgb "red" title "native" ,\
-   '' usi (5):(\$1):(\$1) w labels offset 0,2
+   '' usi (5):(\$1):(\$1) w labels notitle offset 0,2
 
 set terminal png lw 3 14 crop
-set key font ",14"
 set output "${OUTPUT}/out/tcp-rr-latency.png"
 replot
 
