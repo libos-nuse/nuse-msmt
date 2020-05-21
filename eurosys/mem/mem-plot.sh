@@ -21,15 +21,15 @@ RUNU_DAT=""
 for prog in $PROG
 do
 
-RUNU=$(cat ${OUTPUT}/mem-runu-$prog.log | grep -v docker |grep -v tee| grep -v grep | awk '{print $6}')
-GVISOR=$(cat ${OUTPUT}/mem-gvisor-$prog.log | grep runsc-sandbox | grep -v grep | awk '{print $6}')
-KATA=$(cat ${OUTPUT}/mem-kata-$prog.log | grep qemu-lite-system | grep -v grep | awk '{print $6}')
-RUNC=$(cat ${OUTPUT}/mem-runc-$prog.log | grep -v docker |grep -v tee | grep -v grep | awk '{print $6}')
+RUNU=$(cat ${OUTPUT}/mem-runu-$prog.log | grep -v docker |grep -v tee| grep -v grep | awk '{print $6/1000}')
+GVISOR=$(cat ${OUTPUT}/mem-gvisor-$prog.log | grep runsc-sandbox | grep -v grep | awk '{printf "%.3f", $6/1000}')
+KATA=$(cat ${OUTPUT}/mem-kata-$prog.log | grep qemu-lite-system | grep -v grep | awk '{printf "%.3f", $6/1000}')
+RUNC=$(cat ${OUTPUT}/mem-runc-$prog.log | grep -v docker |grep -v tee | grep -v grep | awk '{print $6/1000}')
 
-RUNU_ALL=$(cat ${OUTPUT}/mem-runu-$prog.log |grep -v tee | awk '{sum += $6}END{print sum}')
-GVISOR_ALL=$(cat ${OUTPUT}/mem-gvisor-$prog.log | grep -v tee | awk '{sum += $6}END{print sum}')
-KATA_ALL=$(cat ${OUTPUT}/mem-kata-$prog.log | grep -v tee | awk '{sum += $6}END{print sum}')
-RUNC_ALL=$(cat ${OUTPUT}/mem-runc-$prog.log | grep -v tee | awk '{sum += $6}END{print sum}')
+RUNU_ALL=$(cat ${OUTPUT}/mem-runu-$prog.log |grep -v tee | awk '{sum += $6}END{print sum/1000}')
+GVISOR_ALL=$(cat ${OUTPUT}/mem-gvisor-$prog.log | grep -v tee | awk '{sum += $6}END{print sum/1000}')
+KATA_ALL=$(cat ${OUTPUT}/mem-kata-$prog.log | grep -v tee | awk '{sum += $6}END{print sum/1000}')
+RUNC_ALL=$(cat ${OUTPUT}/mem-runc-$prog.log | grep -v tee | awk '{sum += $6}END{print sum/1000}')
 
 
 # for latex table
@@ -72,9 +72,9 @@ set xrange [-0.5:3.5]
 set xtics nomirror
 
 plot \
-   '${OUTPUT}/mem-footprint.dat' usi (\$0-0.3):(\$2/1000) w boxes lt 1 lc rgb "green" fill pattern 2 title "hello", \
-   '' usi (\$0):(\$3/1000) w boxes lt 1 lc rgb "blue" fill pattern 1 title "nginx", \
-   '' usi (\$0+0.3):(\$4/1000) w boxes lt 1 lc rgb "red" fill pattern 4 title "python"
+   '${OUTPUT}/mem-footprint.dat' usi (\$0-0.3):(\$2) w boxes lt 1 lc rgb "green" fill pattern 2 title "hello", \
+   '' usi (\$0):(\$3) w boxes lt 1 lc rgb "blue" fill pattern 1 title "nginx", \
+   '' usi (\$0+0.3):(\$4) w boxes lt 1 lc rgb "red" fill pattern 4 title "python"
   
 set terminal png lw 3 14 crop
 #set xtics nomirror rotate by -45
