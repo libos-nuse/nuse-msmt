@@ -33,7 +33,7 @@ mem::lkl() {
 	 --name=hello \
 	 -e LKL_BOOT_CMDLINE="mem=4m" --rm \
 	 $TEST_DOCKER_IMG \
-	 /root/hello
+	 /root/hello.runu
   sleep 1
   ps auxw |grep -E "[h]ello|[r]unu" | tee "$OUTPUT/mem-runu-hello.log"
   docker kill hello
