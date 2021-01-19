@@ -56,8 +56,9 @@ initialize() {
 }
 
 netperf::run() {
-  ssh $DEST_ADDR killall netserver
+  ssh $DEST_ADDR killall -9 netserver
   ssh $DEST_ADDR /home/tazaki/work/netperf2/native/src/netserver -D -f &
+  sleep 2
   netperf::lkl    "$@"
   netperf::native "$@"
   netperf::docker "$@" "runc"
@@ -65,6 +66,7 @@ netperf::run() {
   netperf::docker "$@" "runsc-ptrace-user"
   #netperf::docker "$@" "runsc-kvm-user"
   netperf::docker-nc "$@" "runnc" "thehajime/nabla-netperf:0.1"
+  netperf::docker-graphene "$@" "graphene" "graphene-u1804"
 }
 
 netperf::lkl() {
@@ -162,6 +164,29 @@ netperf::docker-nc() {
   docker run --runtime=$runtime --rm $img \
    netperf.nabla $netperf_args 2>&1 \
   | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$psize-$num.dat"
+)
+}
+
+netperf::docker-graphene() {
+(
+  local test=$1
+  local num=$2
+  local psize="$3"
+  local ex_arg="$4"
+  local runtime="$5"
+  local img="$6"
+  local duration=10
+  if [[ "$test" == "TCP_RR" ]] ; then
+	  duration=$RR_DURATION
+  fi
+  local netperf_args="-H $DEST_ADDR -t $test -l $duration -- -o $ex_arg"
+
+  echo "$(tput bold)== docker ($runtime) ($test-$num-p${ex_arg})  ==$(tput sgr0)"
+  TMP_WD=`pwd`
+  cd /home/tazaki/work/graphene/Examples/curl
+  ./pal_loader ./netperf $netperf_args 2>&1 \
+    | tee "$OUTPUT/$PREFIX-$test-$runtime-ps$psize-$num.dat"
+  cd $TMP_WD
 )
 }
 

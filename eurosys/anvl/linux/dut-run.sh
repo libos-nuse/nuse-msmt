@@ -18,8 +18,8 @@ else
     sudo ip ad add 10.2.0.70/24 dev z2-host
 fi
 
-sudo LD_LIBRARY_PATH=`pwd`/../quagga/dest/usr/local/lib/ \
-     ./dest/usr/local/sbin/zebra -f $ZEBRA_CONF -i /tmp/zebra.pid 
+sudo LD_LIBRARY_PATH=`pwd`/../anvl-dut/quagga/dest/usr/local/lib/ \
+     ../anvl-dut/quagga/dest/usr/local/sbin/zebra -f $ZEBRA_CONF -i /tmp/zebra.pid 
 
 if [ -z $NO_ZEBRA ] ; then
     echo ""

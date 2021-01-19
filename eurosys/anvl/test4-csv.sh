@@ -53,28 +53,33 @@ q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,CASE when r.c1 is NULL then 'n/a' el
   from - l \
   left join ${OUTPUT}/rump-$test.csv r \
   on l.c1==r.c1" | \
-# join all + linux
+# join all + graphene
 q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+  from - l \
+  left join ${OUTPUT}/graphene-$test.csv r \
+  on l.c1==r.c1" | \
+# join all + linux
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join ${OUTPUT}/linux-$test.csv r \
   on l.c1==r.c1" | \
 # join all + lkl
-q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join ${OUTPUT}/lkl-$test.csv r \
   on l.c1==r.c1" | \
 # join all + lkl-osx
-q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join ${OUTPUT}/lkl-osx-$test.csv r \
   on l.c1==r.c1" | \
 # join all + linux-nozebra
-q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,l.c11,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join ${OUTPUT}/linux-nozebra-$test.csv r \
   on l.c1==r.c1" | \
 # join all + lkl-nozebra
-q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,l.c11,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
+q -d, "select l.c1,l.c2,l.c3,l.c4,l.c5,l.c6,l.c7,l.c8,l.c9,l.c10,l.c11,l.c12,CASE when r.c1 is NULL then 'n/a' else r.c2 END \
   from - l \
   left join ${OUTPUT}/lkl-nozebra-$test.csv r \
   on l.c1==r.c1" | \

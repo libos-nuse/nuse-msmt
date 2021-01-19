@@ -20,7 +20,7 @@ set xtics format ""
 set xtics scale 0
 set grid front
 
-set xrange ["1991-01-01 00:00":"2020-04-01 00:00"]
+set xrange ["1990-01-01 00:00":"2021-01-01 00:00"]
 
 set ylabel "# of config options" offset +0.5 font "Helvetica,18"
 set yrange [0:21000]
@@ -42,7 +42,7 @@ plot \
       "" using 1:4:(stringcolumn(2) eq "v3.0" ? stringcolumn(2) : 1/0) w labels offset 0,1 notitle ,\
       "" using 1:4:(stringcolumn(2) eq "v4.0" ? stringcolumn(2) : 1/0) w labels offset 0,1 notitle ,\
       "" using 1:4:(stringcolumn(2) eq "v4.17" ? stringcolumn(2) : 1/0) w labels offset -1,1 notitle ,\
-      "" using 1:4:(stringcolumn(2) eq "v5.6" ? stringcolumn(2) : 1/0) w labels offset 0,1.6 notitle
+      "" using 1:4:(stringcolumn(2) eq "v5.9" ? stringcolumn(2) : 1/0) w labels offset 0,1.4 notitle
 
 #      "$FILENAME" using 1:3 w l title "mk config" ,\
 #      "" using 2:3:1 w labels notitle

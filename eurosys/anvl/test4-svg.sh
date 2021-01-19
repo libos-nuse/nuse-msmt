@@ -33,9 +33,10 @@ do
   <text x="0" y="70">gvisor</text>
   <text x="0" y="90">mtcp</text>
   <text x="0" y="110">rump</text>
-  <text x="0" y="130">linux</text>
-  <text x="0" y="150">lkl</text>
-  <text x="0" y="170">lkl-osx</text>
+  <text x="0" y="130">graphene</text>
+  <text x="0" y="150">linux</text>
+  <text x="0" y="170">lkl</text>
+  <text x="0" y="190">lkl-osx</text>
 EOF
 
   if [ -n "$PRINT_NZ" ] ; then
@@ -93,22 +94,25 @@ EOF
   <title>rump: ${columns[0]}</title>
 </rect>
 <rect y="120" x="$x" width='20' height='20' fill="${result[7]}">
-  <title>linux: ${columns[0]}</title>
+  <title>graphene: ${columns[0]}</title>
 </rect>
 <rect y="140" x="$x" width='20' height='20' fill="${result[8]}">
-  <title>lkl: ${columns[0]}</title>
+  <title>linux: ${columns[0]}</title>
 </rect>
 <rect y="160" x="$x" width='20' height='20' fill="${result[9]}">
+  <title>lkl: ${columns[0]}</title>
+</rect>
+<rect y="180" x="$x" width='20' height='20' fill="${result[10]}">
   <title>lkl-osx: ${columns[0]}</title>
 </rect>
 EOF
 
   if [ -n "$PRINT_NZ" ] ; then
 	cat <<EOF >> ${OUTPUT}/$test.svg
-<rect y="180" x="$x" width='20' height='20' fill="${result[10]}">
+<rect y="180" x="$x" width='20' height='20' fill="${result[11]}">
   <title>linux-nozebra: ${columns[0]}</title>
 </rect>
-<rect y="200" x="$x" width='20' height='20' fill="${result[11]}">
+<rect y="200" x="$x" width='20' height='20' fill="${result[12]}">
   <title>lkl-nozebra: ${columns[0]}</title>
 </rect>
 EOF

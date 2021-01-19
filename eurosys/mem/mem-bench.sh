@@ -21,6 +21,7 @@ mem::run() {
   mem::gvisor "$@"
   mem::kata "$@"
   mem::runc "$@"
+  mem::graphene "$@"
 }
 
 mem::lkl() {
@@ -31,11 +32,12 @@ mem::lkl() {
 
   docker run -i -d --runtime=$runtime \
 	 --name=hello \
+	 -e RUNU_AUX_DIR=/home/tazaki/work/ukontainer/frankenlibc/rump-tiny/lib/ \
 	 -e LKL_BOOT_CMDLINE="mem=4m" --rm \
 	 $TEST_DOCKER_IMG \
 	 /root/hello.runu
   sleep 1
-  ps auxw |grep -E "[h]ello|[r]unu" | tee "$OUTPUT/mem-runu-hello.log"
+  ps auxw |grep -E "[h]ello.runu|[r]unu" | tee "$OUTPUT/mem-runu-hello.log"
   docker kill hello
 
   echo "$(tput bold)== lkl-nginx ==$(tput sgr0)"
@@ -44,7 +46,7 @@ mem::lkl() {
 	 -e LKL_ROOTFS=imgs/data.iso \
 	 -e LKL_BOOT_CMDLINE="mem=4m" \
 	 --name=nginx -d \
-	 thehajime/runu-nginx:0.3 nginx
+	 ukontainer/runu-nginx:0.4-slim nginx
 
   sleep 1
   ps auxw |grep -E "[n]ginx|[r]unu" | tee "$OUTPUT/mem-runu-nginx.log"
@@ -55,7 +57,7 @@ mem::lkl() {
   docker run -i --runtime=$runtime --rm \
 	 -e LKL_BOOT_CMDLINE="mem=8m" \
 	 --name=python -d \
-	 thehajime/runu-python:0.3 \
+	 ukontainer/runu-python:0.4-slim \
 	 python -c "import time; time.sleep(5)"
 
   sleep 1
@@ -107,7 +109,7 @@ mem::kata() {
 	 $TEST_DOCKER_IMG \
 	 /root/hello
   sleep 1
-  ps auxw |grep -E "[k]ata|[q]emu|[h]ello" | tee "$OUTPUT/mem-kata-hello.log"
+  ps auxw |grep -E "[k]ata|[q]emu" | tee "$OUTPUT/mem-kata-hello.log"
   docker kill hello
 
   echo "$(tput bold)== kata-nginx ==$(tput sgr0)"
@@ -130,6 +132,39 @@ mem::kata() {
 )
 }
 
+mem::graphene() {
+(
+  runtime=graphene
+  echo "$(tput bold)== $runtime ==$(tput sgr0)"
+  TMP_WD=`pwd`
+  cd /home/tazaki/work/graphene/Examples/curl
+  ./pal_loader hello &
+  sleep 1
+  cd $TMP_WD
+  ps auxw |grep -E "pal-Linux" | tee "$OUTPUT/mem-$runtime-hello.log"
+  killall pal-Linux
+
+  echo "$(tput bold)== $runtime-nginx ==$(tput sgr0)"
+  cd /home/tazaki/work/graphene/Examples/curl
+  ./pal_loader nginx -p `pwd` -c ./nginx.conf &
+  sleep 1
+  cd $TMP_WD
+  ps auxw |grep -E "[n]ginx|pal-Linux" | tee "$OUTPUT/mem-$runtime-nginx.log"
+  killall pal-Linux
+
+  echo "$(tput bold)== $runtime-python ==$(tput sgr0)"
+  cd /home/tazaki/work/graphene/Examples/python-simple
+  ./pal_loader python -c "import time;time.sleep(5)" &
+  sleep 1
+  cd $TMP_WD
+  ps auxw |grep -E "([p]ython.*sleep)|pal-Linux" | tee "$OUTPUT/mem-$runtime-python.log"
+  killall pal-Linux
+
+)
+}
+
+
+
 mem::runc() {
 (
   echo "$(tput bold)== runc ==$(tput sgr0)"
@@ -140,7 +175,7 @@ mem::runc() {
 	 /root/hello
   sleep 1
   CID=`docker ps |grep hello |awk '{print $1}'`
-  ps auxw |grep -E "[h]ello|$CID" | tee "$OUTPUT/mem-runc-hello.log"
+  ps auxw |grep -E "/root/[h]ello|$CID" | tee "$OUTPUT/mem-runc-hello.log"
   docker kill hello
 
   echo "$(tput bold)== runc-nginx ==$(tput sgr0)"

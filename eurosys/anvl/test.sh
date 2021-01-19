@@ -12,6 +12,10 @@ do
   elif [[ $dir =~ "osv" ]] ; then
       sudo ip ad add 10.1.0.100/24 dev eth0
       sudo ip ad add 10.2.0.100/24 dev eth1
+  elif [[ $dir =~ "gvisor" ]] ; then
+      sudo ip route add 10.1.0.50/32 via 10.0.39.2
+  elif [[ $dir =~ "graphene" ]] ; then
+      sudo ip route add 10.1.0.100/32 via 10.0.39.2
   fi
 
   cd $dir
@@ -30,6 +34,10 @@ do
   if [[ $dir =~ "osv" ]] ; then
       sudo ip ad del 10.1.0.100/24 dev eth0
       sudo ip ad del 10.2.0.100/24 dev eth1
+  elif [[ $dir =~ "gvisor" ]] ; then
+      sudo ip route del 10.1.0.50/32 via 10.0.39.2
+  elif [[ $dir =~ "graphene" ]] ; then
+      sudo ip route delete 10.1.0.100/32 via 10.0.39.2
   fi
   unset NO_ZEBRA
 
